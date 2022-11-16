@@ -17,6 +17,7 @@ const swaggerOptions = {
         info: {
             title: "HTQLDTKH API",
             description: "HTQLDTKH API Description",
+            version: ""
         }
     },
     apis: ["src/routes/*.route.js"],
