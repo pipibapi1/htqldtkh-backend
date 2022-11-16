@@ -1,7 +1,7 @@
 # HTQLDTKH - backend
 # Technologies:
 ### Nodejs + Expressjs + Typescript
-### Packages: dotenv, concurrently, nodemon, ...
+### Packages: dotenv, concurrently, nodemon, swagger-jsdoc, swagger-ui-express ...
 
 ## 1 Setup
 
