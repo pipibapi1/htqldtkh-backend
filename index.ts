@@ -1,4 +1,4 @@
-import express, { Express} from 'express';
+import express, {Express} from 'express';
 import dotenv from 'dotenv';
 import {testRouter} from './src/routes/test.route';
 
