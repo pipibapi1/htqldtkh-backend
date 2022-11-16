@@ -1,9 +1,7 @@
 # HTQLDTKH - backend
 # Technologies:
-## Nodejs for server environment
-## Expressjs
-## Typescript
-## Packages: dotenv, concurrently, nodemon, ...
+### Nodejs + Expressjs + Typescript
+### Packages: dotenv, concurrently, nodemon, ...
 
 ## 1 Setup
 
