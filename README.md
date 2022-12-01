@@ -8,6 +8,7 @@
 #### nodemon: this is to reflect changes immediately without to re-run the server
 #### swagger-jsdoc: to create a description swagger json file
 #### swagger-ui-express: to document api
+#### migrate-mongo: create mongodb migration
 
 ## 1 Setup
 
