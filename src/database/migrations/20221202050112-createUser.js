@@ -1,13 +1,13 @@
 module.exports = {
   async up(db, client) {
-    await db.createCollection('Student');
-    await db.createCollection('FacultySecretary');
-    await db.createCollection('FacultyViceDean');
+    await db.createCollection('student');
+    await db.createCollection('facultySecretary');
+    await db.createCollection('facultyViceDean');
   },
 
   async down(db, client) {
-    await db.dropCollection('Student');
-    await db.dropCollection("FacultySecretary");
-    await db.dropCollection("FacultyViceDean");
+    await db.dropCollection('ftudent');
+    await db.dropCollection("facultySecretary");
+    await db.dropCollection("facultyViceDean");
   }
 };
