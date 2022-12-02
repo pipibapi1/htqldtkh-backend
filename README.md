@@ -9,6 +9,7 @@
 #### swagger-jsdoc: to create a description swagger json file
 #### swagger-ui-express: to document api
 #### migrate-mongo: create mongodb migration
+#### mongoose: to connect to mongo database
 
 ## 1 Setup
 
