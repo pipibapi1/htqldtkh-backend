@@ -15,7 +15,7 @@
 ### 1. Setup packages
 Run command
 ```bash
-cp .env_example .env
+cp .env_setup .env
 ```
 
 ```bash
