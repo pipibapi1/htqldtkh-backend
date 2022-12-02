@@ -1,12 +1,15 @@
 // In this file you can configure migrate-mongo
-
+const dotenv = require('dotenv');
+dotenv.config({ path: `${__dirname}/../../.env` });
+const dbUrl = process.env.DB_URL;
+const dbName = process.env.DB_NAME;
 const config = {
   mongodb: {
     // TODO Change (or review) the url to your MongoDB:
-    url: "mongodb://localhost:27017",
+    url: dbUrl,
 
     // TODO Change this to your database name:
-    databaseName: "htqldtkh_db",
+    databaseName: dbName,
 
     options: {
       useNewUrlParser: true, // removes a deprecation warning when connecting
