@@ -10,6 +10,7 @@
 #### swagger-ui-express: to document api
 #### migrate-mongo: create mongodb migration
 #### mongoose: to connect to mongo database
+#### zod: Schema Validation
 
 ## 1 Setup
 

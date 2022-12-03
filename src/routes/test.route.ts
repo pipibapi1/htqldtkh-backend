@@ -5,14 +5,31 @@ import { testController } from '../controllers/test.controller';
 const router: Router = express.Router();
 
 /**
- * @swagger
- * /:
- *   get:
- *    description: This is a test api
- *    responses:
- *      '200':
- *        description: Successfull response 'Express + TypeScript Server'
- */
+  * @openapi
+  * /api/test:
+  *  get:
+  *     tags:
+  *     - test
+  *     summary: Test api
+  *     description: Return a test response
+  *     requestBody:
+  *      required: true
+  *      content:
+  *        application/json:
+  *           schema:
+  *              $ref: '#/components/schemas/CreateUserInput'
+  *     responses:
+  *      200:
+  *        description: Success
+  *        content:
+  *          application/json:
+  *            schema:
+  *              $ref: '#/components/schemas/CreateUserResponse'
+  *      409:
+  *        description: Conflict
+  *      400:
+  *        description: Bad request
+  */
 router.get('/', awaitHandler(testController.getTest));
 
 export const testRouter: Router = router;

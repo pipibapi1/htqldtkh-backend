@@ -1,34 +1,22 @@
 import express, {Express} from 'express';
 import dotenv from 'dotenv';
 import {testRouter} from './src/routes/test.route';
-import swaggerJsDoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
 // connect database
 import './src/database/db-connection';
+import swaggerDocs from './src/utils/swagger.util';
+
 dotenv.config();
-
 const app: Express = express();
-const port = process.env.PORT;
+const port = process.env.PORT || '5000';
 
+// The express.json() function is a built-in middleware function in Express. 
+// It parses incoming requests with JSON payloads and is based on body-parser
+app.use(express.json());
 
-// use swagger for api documents
-const swaggerOptions: swaggerJsDoc.Options = {
-  swaggerDefinition:{
-    info:{
-      title: "HTQLDTKH API",
-      description: "HTQLDTKH API Description",
-      version: ""
-    }
-  },
-  apis: ["src/routes/*.route.ts"],
-};
+app.use('/api/test', testRouter);
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
-//api swagger route
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-app.use('/', testRouter);
+// generate swagger api docs
+swaggerDocs(app, port);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
