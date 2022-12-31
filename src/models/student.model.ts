@@ -6,21 +6,73 @@ import { StudentAccountStatusEnum } from '../enums/studentAccountStatus.enum';
 const Schema = mongoose.Schema;
 
 const studentSchema = new Schema({
-    id: {type: String},
-    fmName: {type: String},
-    name: {type: String},
-    gender: {type: GenderTypeEnum},
-    phoneNumber: {type: String},
-    email: {type: String},
-    role: {type: RoleTypeEnum},
-    username: {type: String},
-    password: {type: String},
-    image: {type: String},
-    studentId: {type: String},
-    educationType: {type: EducationTypeEnum},
-    accountStatus: {type: StudentAccountStatusEnum},
-    accountCreationDate: {type: Date},
-    birthDate: {type: Date}
+    lastModifiedAt: {
+        type: Date,
+        require: true
+    },
+    fmName: {
+        type: String,
+        require: true,
+        min: 1
+    },
+    name: {
+        type: String,
+        min: 1
+    },
+    gender: {
+        type: GenderTypeEnum,
+        require: true
+    },
+    phoneNumber: {
+        type: String,
+        min: 9,
+        max: 13
+    },
+    email: {
+        type: String,
+        require: true
+    },
+    role: {
+        type: RoleTypeEnum,
+        default: "sinh viên"
+    },
+    username: {
+        type: String,
+        require: true,
+        min: 1,
+        max: 50
+    },
+    password: {
+        type: String,
+        require: true,
+        min: 8,
+        max: 30
+    },
+    image: {
+        type: String,
+        require: false
+    },
+    studentId: {
+        type: String,
+        require: true,
+        min: 1
+    },
+    educationType: {
+        type: EducationTypeEnum,
+        require: true
+    },
+    accountStatus: {
+        type: StudentAccountStatusEnum,
+        default: "chờ duyệt"
+    },
+    accountCreationDate: {
+        type: Date,
+        require: true
+    },
+    birthDate: {
+        type: Date,
+        require: true
+    }
 })
 
 let studentModel = mongoose.model('student', studentSchema);

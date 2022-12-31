@@ -29,6 +29,10 @@ const router: Router = express.Router();
   *        description: Conflict
   *      400:
   *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
   */
 router.get('/', awaitHandler(testController.getTest));
 
