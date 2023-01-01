@@ -46,7 +46,7 @@ const instructorSchema = new Schema({
     },
 })
 
-let instructorModel = mongoose.model('student', instructorSchema);
+let instructorModel = mongoose.model('instructor', instructorSchema);
 
 module.exports = {
     instructorModel,

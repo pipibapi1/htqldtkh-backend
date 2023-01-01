@@ -80,7 +80,7 @@ const topicSchema = new Schema({
     }
 })
 
-let topicModel = mongoose.model('student', topicSchema);
+let topicModel = mongoose.model('topic', topicSchema);
 
 module.exports = {
     topicModel,
