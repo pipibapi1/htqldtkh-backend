@@ -3,6 +3,7 @@ import { TopicTypeEnum } from '../enums/topicType.num';
 import { TopicStatusEnum } from '../enums/topicStatus.enum';
 import { TopicResultEnum } from '../enums/topicResult.enum';
 const Schema = mongoose.Schema;
+const otherMemberSchema = require('./otherMember.schema');
 
 const topicSchema = new Schema({
     name: {
@@ -69,6 +70,14 @@ const topicSchema = new Schema({
         type: TopicResultEnum,
         default: TopicResultEnum.WAITING
     },
+    instructorsId: {
+        type: [String],
+        default: []
+    },
+    otherMembers: {
+        type: [otherMemberSchema],
+        default: []
+    }
 })
 
 let topicModel = mongoose.model('student', topicSchema);

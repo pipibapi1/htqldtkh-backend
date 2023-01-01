@@ -46,8 +46,6 @@ const otherMemberSchema = new Schema({
     }
 })
 
-let otherMemberModel = mongoose.model('student', otherMemberSchema);
-
 module.exports = {
-    otherMemberModel,
+    otherMemberSchema,
 }
