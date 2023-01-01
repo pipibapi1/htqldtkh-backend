@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { TopicTypeEnum } from '../enums/topicType.num';
+import { TopicTypeEnum } from '../enums/topicType.enum';
 import { TopicStatusEnum } from '../enums/topicStatus.enum';
 import { TopicResultEnum } from '../enums/topicResult.enum';
 const Schema = mongoose.Schema;
