@@ -3,7 +3,7 @@ import { CouncilTypeEnum } from '../enums/councilType.enum';
 const Schema = mongoose.Schema;
 const CouncilMemberSchema = require('./councilMember.schema');
 
-const topicSchema = new Schema({
+const councilSchema = new Schema({
     name: {
         type: String,
         require: true
@@ -42,8 +42,8 @@ const topicSchema = new Schema({
     }
 })
 
-let topicModel = mongoose.model('council', topicSchema);
+let councilModel = mongoose.model('council', councilSchema);
 
 module.exports = {
-    topicModel,
+    councilModel,
 }
