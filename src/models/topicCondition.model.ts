@@ -8,7 +8,8 @@ const topicConditionSchema = new Schema({
         require: true
     },
     type: {
-        type: TopicTypeEnum,
+        type: String,
+        enum: Object.values(TopicTypeEnum),
         require: true
     },
     expressionId: {

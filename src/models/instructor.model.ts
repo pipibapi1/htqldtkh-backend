@@ -21,7 +21,8 @@ const instructorSchema = new Schema({
         min: 1
     },
     gender: {
-        type: GenderTypeEnum,
+        type: String,
+        enum: Object.values(GenderTypeEnum),
         require: true,
     },
     email: {
@@ -37,7 +38,8 @@ const instructorSchema = new Schema({
         require: true,
     },
     academyRank: {
-        type: AcademyRankEnum,
+        type: String,
+        enum: Object.values(AcademyRankEnum),
         require: true
     },
     degree: {

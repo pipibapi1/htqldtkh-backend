@@ -12,7 +12,8 @@ const facultyViceDeanSchema = new Schema({
         require: true
     },
     gender: {
-        type: GenderTypeEnum,
+        type: String,
+        enum: Object.values(GenderTypeEnum),
         require: true
     },
     email: {
@@ -27,6 +28,7 @@ const facultyViceDeanSchema = new Schema({
         type: String,
         require: true,
         min: 6,
+        unique: true
     },
     password: {
         type: String,

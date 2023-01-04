@@ -9,7 +9,8 @@ const councilSchema = new Schema({
         require: true
     },
     type: {
-        type: CouncilTypeEnum,
+        type: String,
+        enum: Object.values(CouncilTypeEnum),
         require: true
     },
     period: {

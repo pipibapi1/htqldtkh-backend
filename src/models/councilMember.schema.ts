@@ -19,7 +19,8 @@ const councilMemberSchema = new Schema({
         require: true
     },
     gender: {
-        type: GenderTypeEnum,
+        type: String,
+        enum: Object.values(GenderTypeEnum),
         require: true
     },
     phoneNumber: {
@@ -27,7 +28,8 @@ const councilMemberSchema = new Schema({
         default: ""
     },
     academyRank: {
-        type: AcademyRankEnum,
+        type: String,
+        enum: Object.values(AcademyRankEnum),
         require: false
     },
     degree: {
@@ -39,7 +41,8 @@ const councilMemberSchema = new Schema({
         require: false
     },
     role: {
-        type: CouncilRoleEnum,
+        type: String,
+        enum: Object.values(CouncilRoleEnum),
         require: true
     }
 })

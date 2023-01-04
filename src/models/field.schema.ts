@@ -16,7 +16,8 @@ const fieldSchema = new Schema({
         require: false
     },
     dataType: {
-        type: DataTypeEnum,
+        type: String,
+        enum: Object.values(DataTypeEnum),
         require: true
     },
 })
