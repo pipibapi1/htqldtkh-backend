@@ -44,7 +44,23 @@ import { RoleTypeEnum } from "../enums/roleType.enum";
   *        role:
   *          type: string
   *          example: sinh viên
-  *    SignUpResponse:
+  *    SignInInput:
+  *      type: object
+  *      required:
+  *        - email
+  *        - password
+  *        - role
+  *      properties:
+  *        email:
+  *          type: string
+  *          example: jane.doe@exa.com
+  *        password:
+  *          type: string
+  *          example: stringPassword123
+  *        role:
+  *          type: string
+  *          example: sinh viên
+  *    AuthResponse:
   *      type: object
   *      properties:
   *        email:

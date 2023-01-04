@@ -14,18 +14,16 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
             }
             else {
                 const currDate: Date = new Date();
-                let hashPasswod = await hash(req.body.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
-                console.log(hashPasswod);
+                let hashPassword = await hash(req.body.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
                 const body = {
                     ...req.body,
-                    password: hashPasswod,
+                    password: hashPassword,
                     lastModifiedAt: currDate,
                     accountCreationDate: currDate,
                     accountStatus: StudentAccountStatusEnum.waiting
                 };
                 const student = new StudentModel(body);
                 const user = await student.save();
-                console.log(user)
                 const token = sign({
                     role: RoleTypeEnum.Student,
                     _id: user._id,
@@ -34,14 +32,12 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
                 }, process.env.JWT_SECRET as string, {
                     expiresIn: "2h"
                 })
+                delete user.username;
+                delete user.password;
                 const result = {
-                    fmName: user.fmName,
-                    name: user.name,
+                    ...user,
                     token: token,
-                    _id: user._id,
-                    studentId: user.studentId,
-                    email: user.email,
-                    image: user.image
+                    role: RoleTypeEnum.Student
                 }
                 res.status(200).send({user: result})
             }
