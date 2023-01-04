@@ -1,65 +1,39 @@
 module.exports = {
   async up(db, client) {
-    await db.createCollection('student')
-      .then(() => {
-        console.log("Collection student has been created!!!");
+    const collections = ['allocatedExpense', 'announcement', 'relevantPaper',
+                        'council', 'expression', 'facultySecretary', 'facultyViceDean',
+                        'form', 'instructor', 'student', 'paperTemplate',
+                        'request', 'topic', 'topicCondition'] 
+    let i;
+    for (i = 0; i < collections.length; i++) {
+      await db.createCollection(collections[i])
+        .then(() => {
+          console.log(`Collection ${collections[i]} has been created!!!`);
           return Promise.resolve();
         })
-      .catch((err) => {
-        console.log(err);
+        .catch((err) => {
+          console.log(err);
           return err;
-        });
-
-    await db.createCollection('facultySecretary')
-      .then(() => {
-        console.log("Collection facultySecretary has been created!!!");
-          return Promise.resolve();
-        })
-      .catch((err) => {
-        console.log(err);
-          return err;
-        });
-
-    await db.createCollection('facultyViceDean')
-      .then(() => {
-        console.log("Collection facultyViceDean has been created!!!");
-          return Promise.resolve();
-        })
-      .catch((err) => {
-        console.log(err);
-          return err;
-        });
+        }); 
+    }
   },
 
   async down(db, client) {
-    await db.dropCollection('student')
-      .then(() => {
-        console.log("Collection student has been dropped!!!");
+    const collections = ['allocatedExpense', 'announcement', 'relevantPaper',
+                        'council', 'expression', 'facultySecretary', 'facultyViceDean',
+                        'form', 'instructor', 'student', 'paperTemplate',
+                        'request', 'topic', 'topicCondition'] 
+    let i;
+    for (i = 0; i < collections.length; i++) {
+      await db.dropCollection(collections[i])
+        .then(() => {
+          console.log(`Collection ${collections[i]} has been dropped!!!`);
           return Promise.resolve();
         })
-      .catch((err) => {
-        console.log(err);
+        .catch((err) => {
+          console.log(err);
           return err;
-        });
-
-    await db.dropCollection('facultySecretary')
-      .then(() => {
-        console.log("Collection facultySecretary has been dropped!!!");
-          return Promise.resolve();
-        })
-      .catch((err) => {
-        console.log(err);
-          return err;
-        });
-
-    await db.dropCollection('facultyViceDean')
-      .then(() => {
-        console.log("Collection facultyViceDean has been dropped!!!");
-          return Promise.resolve();
-        })
-      .catch((err) => {
-        console.log(err);
-          return err;
-        });
+        }); 
+    }
   }
 };
