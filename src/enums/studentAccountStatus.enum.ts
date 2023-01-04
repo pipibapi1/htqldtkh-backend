@@ -1,4 +1,4 @@
-export enum StudentAccountStatusEnum{
-    approved = "đã duyệt",
-    waiting = "chờ duyệt"
+export const StudentAccountStatusEnum = {
+    approved: "đã duyệt",
+    waiting: "chờ duyệt"
 }

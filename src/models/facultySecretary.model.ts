@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { GenderTypeEnum } from "../enums/genderType.enum";
 const Schema = mongoose.Schema;
 
-const facultyStaffSchema = new Schema({
+const facultySecretarySchema = new Schema({
     fmName: {
         type: String,
         require: true
@@ -12,7 +12,8 @@ const facultyStaffSchema = new Schema({
         require: true
     },
     gender: {
-        type: GenderTypeEnum,
+        type: String,
+        enum: Object.values(GenderTypeEnum),
         require: true
     },
     email: {
@@ -27,6 +28,7 @@ const facultyStaffSchema = new Schema({
         type: String,
         require: true,
         min: 6,
+        unique: true
     },
     password: {
         type: String,
@@ -47,8 +49,8 @@ const facultyStaffSchema = new Schema({
     }
 })
 
-let facultyStaffModel = mongoose.model("facultyStaff", facultyStaffSchema);
+let facultySecretaryModel = mongoose.model("facultySecretary", facultySecretarySchema);
 
 module.exports={
-    facultyStaffModel,
+    facultySecretaryModel,
 }

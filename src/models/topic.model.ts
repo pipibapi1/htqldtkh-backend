@@ -11,7 +11,8 @@ const topicSchema = new Schema({
         min: 1
     },
     type: {
-        type: TopicTypeEnum,
+        type: String,
+        enum: Object.values(TopicTypeEnum),
         require: true
     },
     startTime: {
@@ -35,7 +36,8 @@ const topicSchema = new Schema({
         defaut: false
     },
     status: {
-        type: TopicStatusEnum,
+        type: String,
+        enum: Object.values(TopicStatusEnum),
         defaut: false
     },
     period: {
@@ -63,11 +65,13 @@ const topicSchema = new Schema({
         require: true
     },
     acceptanceResult: {
-        type: TopicResultEnum,
+        type: String,
+        enum: Object.values(TopicResultEnum),
         default: TopicResultEnum.WAITING
     },
     reviewResult: {
-        type: TopicResultEnum,
+        type: String,
+        enum: Object.values(TopicResultEnum),
         default: TopicResultEnum.WAITING
     },
     instructorsId: {

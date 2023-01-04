@@ -11,7 +11,8 @@ const allocatedExpenseSchema = new Schema({
     expense : {
         type: [{
             type: {
-                type: AllocatedExpenseTypeEnum,
+                type: String,
+                enum: Object.values(AllocatedExpenseTypeEnum),
                 require: true
             },
             totalExpense: {

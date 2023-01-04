@@ -1,4 +1,4 @@
-export enum GenderTypeEnum {
-    Male = "Nam",
-    Female = "Nữ"
+export const GenderTypeEnum = {
+    MALE: "Nam", 
+    FEMALE: "Nữ"
 }

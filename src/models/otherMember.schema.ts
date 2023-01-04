@@ -23,7 +23,8 @@ const otherMemberSchema = new Schema({
         min: 1
     },
     gender: {
-        type: GenderTypeEnum,
+        type: String,
+        enum: Object.values(GenderTypeEnum),
         require: true,
     },
     email: {

@@ -20,11 +20,13 @@ const studentSchema = new Schema({
         min: 1
     },
     gender: {
-        type: GenderTypeEnum,
+        type: String,
+        enum: Object.values(GenderTypeEnum),
         require: true
     },
     phoneNumber: {
         type: String,
+        require: false,
         min: 9,
         max: 13
     },
@@ -33,14 +35,16 @@ const studentSchema = new Schema({
         require: true
     },
     role: {
-        type: RoleTypeEnum,
-        default: "sinh viên"
+        type: String,
+        enum: Object.values(RoleTypeEnum),
+        default: RoleTypeEnum.Student
     },
     username: {
         type: String,
         require: true,
         min: 1,
-        max: 50
+        max: 50,
+        unique: true
     },
     password: {
         type: String,
@@ -55,28 +59,28 @@ const studentSchema = new Schema({
     studentId: {
         type: String,
         require: true,
-        min: 1
+        min: 1,
     },
     educationType: {
-        type: EducationTypeEnum,
+        type: String,
+        enum: Object.values(EducationTypeEnum),
         require: true
     },
     accountStatus: {
-        type: StudentAccountStatusEnum,
-        default: "chờ duyệt"
+        type: String,
+        enum: Object.values(StudentAccountStatusEnum),
+        default: StudentAccountStatusEnum.waiting
     },
     accountCreationDate: {
         type: Date,
         require: true
     },
     birthDate: {
-        type: Date,
+        type: String,
         require: true
     }
 })
 
 let studentModel = mongoose.model('student', studentSchema);
 
-module.exports = {
-    studentModel,
-}
+module.exports = studentModel

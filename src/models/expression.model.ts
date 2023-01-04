@@ -19,7 +19,8 @@ const expressionSchema = new Schema({
         require: true
     },
     operator: {
-        type: OperatorTypeEnum,
+        type: String,
+        enum: Object.values(OperatorTypeEnum),
         require: true
     },
     leftConditionId: {

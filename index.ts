@@ -1,6 +1,6 @@
 import express, {Express} from 'express';
 import dotenv from 'dotenv';
-import {testRouter} from './src/routes/test.route';
+import { fullRouter } from './src/routes';
 // connect database
 import './src/database/db-connection';
 import swaggerDocs from './src/utils/swagger.util';
@@ -13,7 +13,7 @@ const port = process.env.PORT || '5000';
 // It parses incoming requests with JSON payloads and is based on body-parser
 app.use(express.json());
 
-app.use('/api/test', testRouter);
+app.use('/api', fullRouter);
 
 // generate swagger api docs
 swaggerDocs(app, port);

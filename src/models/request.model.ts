@@ -9,11 +9,13 @@ const requestSchema = new Schema({
         require: true
     },
     status: {
-        type: RequestStatusEnum,
+        type: String,
+        enum: Object.values(RequestStatusEnum),
         require: true
     },
     type: {
-        type: RequestTypeEnum,
+        type: String,
+        enum: Object.values(RequestTypeEnum),
         require: true
     },
     studentId: {
