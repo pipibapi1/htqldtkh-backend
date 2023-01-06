@@ -1,6 +1,6 @@
 import express, {Router} from 'express';
-import signUp from '../controllers/signup';
-import signIn from '../controllers/signin';
+import signUpController from '../controllers/signup.controller';
+import signInController from '../controllers/signin.controller';
 
 const router: Router = express.Router();
 
@@ -61,7 +61,7 @@ const router: Router = express.Router();
   *      404:
   *        description: Not found
   */
-router.post('/signup', signUp)
-router.post('/signin', signIn)
+router.post('/signup', signUpController)
+router.post('/signin', signInController)
 
 export const authRouter: Router = router;

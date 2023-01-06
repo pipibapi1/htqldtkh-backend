@@ -5,7 +5,7 @@ let StudentModel = require("../models/student.model");
 import { sign } from "jsonwebtoken";
 import { hash } from "bcrypt";
 
-const signUp = async (req: Request, res: Response, next: NextFunction) => {
+const signUpController = async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (req.body.role == RoleTypeEnum.Student) {
             const existedStudent = await StudentModel.findOne({username : req.body.username});
@@ -50,4 +50,4 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-export default signUp;
+export default signUpController;

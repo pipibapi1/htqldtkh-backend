@@ -7,7 +7,7 @@ let FacultyViceDeanModel = require("../models/facultyViceDean.model");
 import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
 
-const signIn = async (req: Request, res: Response, next: NextFunction) => {
+const signInController = async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (req.body.role == RoleTypeEnum.Student) {
             const student = await StudentModel.findOne({username: req.body.username}).lean();
@@ -104,4 +104,4 @@ const signIn = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
-export default signIn;
+export default signInController;
