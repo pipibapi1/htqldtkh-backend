@@ -11,6 +11,7 @@ import { RoleTypeEnum } from "../enums/roleType.enum";
   *        - name
   *        - fmName
   *        - gender
+  *        - username
   *        - password
   *        - studentId
   *        - educationType
