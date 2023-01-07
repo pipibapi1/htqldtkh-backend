@@ -32,10 +32,11 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
                 }, process.env.JWT_SECRET as string, {
                     expiresIn: "2h"
                 })
-                delete user.username;
-                delete user.password;
+                delete body.username;
+                delete body.password;
                 const result = {
-                    ...user,
+                    ...body,
+                    _id: user._id,
                     token: token,
                     role: RoleTypeEnum.Student
                 }

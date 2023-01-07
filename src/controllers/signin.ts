@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
-import { StudentAccountStatusEnum } from "../enums/studentAccountStatus.enum";
 let StudentModel = require("../models/student.model");
 let FacultySecretaryModel = require("../models/facultySecretary.model");
 let FacultyViceDeanModel = require("../models/facultyViceDean.model");
@@ -47,7 +46,7 @@ const signIn = async (req: Request, res: Response, next: NextFunction) => {
                     const token = sign({
                         role: RoleTypeEnum.FS,
                         _id: secretary._id,
-                        studentId: secretary.studentId,
+                        staffId: secretary.studentId,
                         email: secretary.email,
                     }, process.env.JWT_SECRET as string, {
                         expiresIn: "2h"
@@ -77,7 +76,7 @@ const signIn = async (req: Request, res: Response, next: NextFunction) => {
                     const token = sign({
                         role: RoleTypeEnum.FS,
                         _id: viceDean._id,
-                        studentId: viceDean.studentId,
+                        staffId: viceDean.studentId,
                         email: viceDean.email,
                     }, process.env.JWT_SECRET as string, {
                         expiresIn: "2h"

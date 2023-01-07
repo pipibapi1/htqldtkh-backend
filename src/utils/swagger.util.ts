@@ -10,20 +10,6 @@ const swaggerOptions: swaggerJsDoc.Options = {
         description: ` This is a API Specifications of HTQLDTKH system`,
         version: "1.0.0"
       },
-      components: {
-        securitySchemas: {
-          bearerAuth: {
-            type: "http",
-            scheme: "bearer",
-            bearerFormat: "JWT",
-          },
-        },
-      },
-      security: [
-        {
-          bearerAuth: [],
-        },
-      ],
     },
     apis: ["./src/routes/*.route.ts", "./src/schemas/*.schema.ts"],
   };
