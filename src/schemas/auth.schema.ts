@@ -77,6 +77,13 @@ import { RoleTypeEnum } from "../enums/roleType.enum";
   *          type: string
   *        studentId:
   *          type: string
+  *    ResetPwInput:
+  *      type: object
+  *      properties:
+  *        email:
+  *          type: string
+  *        role:
+  *          type: string
   */
 
 export const SignUpSchema = object({

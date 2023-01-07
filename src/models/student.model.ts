@@ -49,8 +49,7 @@ const studentSchema = new Schema({
     password: {
         type: String,
         require: true,
-        min: 8,
-        max: 30
+        min: 1,
     },
     image: {
         type: String,
@@ -76,10 +75,10 @@ const studentSchema = new Schema({
         require: true
     },
     birthDate: {
-        type: String,
+        type: Date,
         require: true
     }
-})
+}, { collection: 'student'})
 
 let studentModel = mongoose.model('student', studentSchema);
 

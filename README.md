@@ -11,6 +11,8 @@
 #### migrate-mongo: create mongodb migration
 #### mongoose: to connect to mongo database
 #### zod: Schema Validation
+#### nodemailer: to send email from the system
+#### generate-password: to generate new password to reset password
 
 ## 1 Setup
 
