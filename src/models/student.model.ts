@@ -79,8 +79,8 @@ const studentSchema = new Schema({
         type: String,
         require: true
     }
-})
+}, {collection: "student"})
 
-let studentModel = mongoose.model('students', studentSchema);
+let studentModel = mongoose.model('student', studentSchema);
 
 module.exports = studentModel

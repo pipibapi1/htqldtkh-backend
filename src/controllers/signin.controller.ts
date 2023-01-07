@@ -99,6 +99,7 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
             }
         }
     } catch (error: any) {
+        console.log(error)
         res.status(400).send({err: error})
     }
 }

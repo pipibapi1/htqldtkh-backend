@@ -16,10 +16,8 @@ const topicConditionSchema = new Schema({
         type: String,
         require: true
     }
-})
+}, {collection: "topicCondition"})
 
-let topicConditionModel = mongoose.model("topicConditions", topicConditionSchema);
+let topicConditionModel = mongoose.model("topicCondition", topicConditionSchema);
 
-module.exports = {
-    topicConditionModel,
-}
+module.exports = topicConditionModel

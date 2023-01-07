@@ -39,10 +39,8 @@ const expressionSchema = new Schema({
         type: String,
         require: true
     }
-})
+}, {collection: "expression"})
 
-let expressionModel = mongoose.model("expressions", expressionSchema);
+let expressionModel = mongoose.model("expression", expressionSchema);
 
-module.exports = {
-    expressionModel,
-}
+module.exports = expressionModel
