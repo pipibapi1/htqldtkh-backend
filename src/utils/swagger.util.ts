@@ -4,12 +4,24 @@ import swaggerUi from 'swagger-ui-express';
 
 const swaggerOptions: swaggerJsDoc.Options = {
     swaggerDefinition:{
-      openapi: "3.0.0",
+      openapi: "3.0.1",
       info:{
         title: "HTQLDTKH API",
         description: ` This is a API Specifications of HTQLDTKH system`,
-        version: "1.0.0"
+        version: "1.0.0",
       },
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+          }
+        }
+      },
+      security: [{
+        bearerAuth: []
+      }]
     },
     apis: ["./src/routes/*.route.ts", "./src/schemas/*.schema.ts"],
   };

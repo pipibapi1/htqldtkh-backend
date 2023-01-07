@@ -20,7 +20,7 @@ const annoucementSchema = new Schema({
     }
 })
 
-let annoucementModel = mongoose.model("annoucement", annoucementSchema);
+let annoucementModel = mongoose.model("annoucements", annoucementSchema);
 
 module.exports = {
     annoucementModel,

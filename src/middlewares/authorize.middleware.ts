@@ -20,9 +20,10 @@ interface staff {
     email: string
 }
 
-export const authorization = async (req: Request, res: Response, next: NextFunction) => {
+export const authorizationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     try {
         let token = req.headers.authorization;
+        console.log(req.headers)
         if (token) {
             token = token.split(" ")[1];
             let author: student | staff = jwt.verify(token, process.env.JWT_SECRET as string);

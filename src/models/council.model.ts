@@ -43,7 +43,7 @@ const councilSchema = new Schema({
     }
 })
 
-let councilModel = mongoose.model('council', councilSchema);
+let councilModel = mongoose.model('councils', councilSchema);
 
 module.exports = {
     councilModel,

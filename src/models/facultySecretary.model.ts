@@ -49,7 +49,7 @@ const facultySecretarySchema = new Schema({
     }
 })
 
-let facultySecretaryModel = mongoose.model("facultySecretary", facultySecretarySchema);
+let facultySecretaryModel = mongoose.model("facultySecretarys", facultySecretarySchema);
 
 module.exports={
     facultySecretaryModel,

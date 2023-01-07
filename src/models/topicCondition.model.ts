@@ -18,7 +18,7 @@ const topicConditionSchema = new Schema({
     }
 })
 
-let topicConditionModel = mongoose.model("topicCondition", topicConditionSchema);
+let topicConditionModel = mongoose.model("topicConditions", topicConditionSchema);
 
 module.exports = {
     topicConditionModel,

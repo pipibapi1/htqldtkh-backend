@@ -32,7 +32,7 @@ const allocatedExpenseSchema = new Schema({
     }
 });
 
-let allocatedExpenseModel = mongoose.model("allocatedExpense", allocatedExpenseSchema);
+let allocatedExpenseModel = mongoose.model("allocatedExpenses", allocatedExpenseSchema);
 
 module.exports = {
     allocatedExpenseModel,

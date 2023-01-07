@@ -28,7 +28,7 @@ const relevantPaperSchema = new Schema({
     }
 })
 
-let relevantPaperModel = mongoose.model("relevantPaper", relevantPaperSchema);
+let relevantPaperModel = mongoose.model("relevantPapers", relevantPaperSchema);
 
 module.exports = {
     relevantPaperModel,

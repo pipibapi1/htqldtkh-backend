@@ -53,7 +53,7 @@ const facultyViceDeanSchema = new Schema({
     }
 })
 
-let facultyViceDeanModel = mongoose.model("facultyViceDean", facultyViceDeanSchema);
+let facultyViceDeanModel = mongoose.model("facultyViceDeans", facultyViceDeanSchema);
 
 module.exports={
     facultyViceDeanModel,

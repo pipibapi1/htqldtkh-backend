@@ -24,7 +24,7 @@ const paperTemplateSchema = new Schema({
     }
 })
 
-let paperTemplateModel = mongoose.model("paperTemplate", paperTemplateSchema);
+let paperTemplateModel = mongoose.model("paperTemplates", paperTemplateSchema);
 
 module.exports = {
     paperTemplateModel,

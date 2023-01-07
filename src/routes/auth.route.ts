@@ -1,6 +1,8 @@
 import express, {Router} from 'express';
 import signUpController from '../controllers/signup.controller';
 import signInController from '../controllers/signin.controller';
+import testAuth from '../controllers/testAuth.controller';
+import { authorizationMiddleware } from '../middlewares/authorize.middleware';
 
 const router: Router = express.Router();
 
@@ -67,14 +69,12 @@ const router: Router = express.Router();
   *     summary: Test authorization
   *     description: Test authorization
   *     security:
-  *      - bearerAuth: [eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2luaCB2acOqbiIsIl9pZCI6IjYzYjYzYzM3OWRkMDE0NjdjNGYwOTUwYSIsInN0dWRlbnRJZCI6IjE5MTI5MTYiLCJlbWFpbCI6Im1kdXlAZ21haWwuY29tIiwiaWF0IjoxNjcyODg3OTg0LCJleHAiOjE2NzI4OTUxODR9.es9-MNaKVVybCjM8qHYPvNmj2GotpaOiBcyDruKk3Hs]
+  *      - bearerAuth: []
   *     requestBody:
   *      required: false
   *     responses:
   *      200:
   *        description: Success
-  *        content:
-  *          application/json:
   *      409:
   *        description: Conflict
   *      400:
@@ -84,7 +84,8 @@ const router: Router = express.Router();
   *      404:
   *        description: Not found
   */
-router.post('/signup', signUpController)
-router.post('/signin', signInController)
+router.post('/signup', signUpController);
+router.post('/signin', signInController);
+router.post('/test', authorizationMiddleware, testAuth)
 
 export const authRouter: Router = router;

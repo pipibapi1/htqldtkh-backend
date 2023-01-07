@@ -21,7 +21,7 @@ const formSchema = new Schema({
     }
 })
 
-let formModel = mongoose.model('form', formSchema);
+let formModel = mongoose.model('forms', formSchema);
 
 module.exports = {
     formModel,

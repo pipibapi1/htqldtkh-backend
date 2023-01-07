@@ -84,7 +84,7 @@ const topicSchema = new Schema({
     }
 })
 
-let topicModel = mongoose.model('topic', topicSchema);
+let topicModel = mongoose.model('topics', topicSchema);
 
 module.exports = {
     topicModel,

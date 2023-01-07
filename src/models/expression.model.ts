@@ -41,7 +41,7 @@ const expressionSchema = new Schema({
     }
 })
 
-let expressionModel = mongoose.model("expression", expressionSchema);
+let expressionModel = mongoose.model("expressions", expressionSchema);
 
 module.exports = {
     expressionModel,
