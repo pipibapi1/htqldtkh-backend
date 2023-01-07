@@ -1,9 +1,9 @@
 module.exports = {
   async up(db, client) {
-    const collections = ['allocatedExpenses', 'announcements', 'relevantPapers',
-                        'councils', 'expressions', 'facultySecretarys', 'facultyViceDeans',
-                        'forms', 'instructors', 'students', 'paperTemplates',
-                        'requests', 'topics', 'topicConditions'] 
+    const collections = ['allocatedExpense', 'announcement', 'relevantPaper',
+                        'council', 'expression', 'facultySecretary', 'facultyViceDean',
+                        'form', 'instructor', 'student', 'paperTemplate',
+                        'request', 'topic', 'topicCondition'] 
     let i;
     for (i = 0; i < collections.length; i++) {
       await db.createCollection(collections[i])
@@ -19,10 +19,10 @@ module.exports = {
   },
 
   async down(db, client) {
-    const collections = ['allocatedExpenses', 'announcements', 'relevantPapers',
-                        'councils', 'expressions', 'facultySecretarys', 'facultyViceDeans',
-                        'forms', 'instructors', 'students', 'paperTemplates',
-                        'requests', 'topics', 'topicConditions'] 
+    const collections = ['allocatedExpense', 'announcement', 'relevantPaper',
+                        'council', 'expression', 'facultySecretary', 'facultyViceDean',
+                        'form', 'instructor', 'student', 'paperTemplate',
+                        'request', 'topic', 'topicCondition'] 
     let i;
     for (i = 0; i < collections.length; i++) {
       await db.dropCollection(collections[i])

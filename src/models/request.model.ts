@@ -26,10 +26,8 @@ const requestSchema = new Schema({
         type: String,
         require: true
     },
-})
+}, {collection: "request"})
 
-let requestModel = mongoose.model("requests", requestSchema);
+let requestModel = mongoose.model("request", requestSchema);
 
-module.exports = {
-    requestModel,
-}
+module.exports = requestModel

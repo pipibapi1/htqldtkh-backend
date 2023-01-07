@@ -27,9 +27,12 @@ import { RoleTypeEnum } from "../enums/roleType.enum";
   *        fmName:
   *          type: string
   *          example: Jane Doe
+  *        username:
+  *          type: string
+  *          example: mduypham
   *        password:
   *          type: string
-  *          example: stringPassword123
+  *          example: 12345678
   *        studentId:
   *          type: string
   *          example: 1912916

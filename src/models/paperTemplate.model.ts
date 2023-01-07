@@ -22,10 +22,8 @@ const paperTemplateSchema = new Schema({
         type: String,
         require: true
     }
-})
+}, {collection: "paperTemplate"})
 
-let paperTemplateModel = mongoose.model("paperTemplates", paperTemplateSchema);
+let paperTemplateModel = mongoose.model("paperTemplate", paperTemplateSchema);
 
-module.exports = {
-    paperTemplateModel,
-}
+module.exports = paperTemplateModel

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Collection } from "mongoose";
 import { GenderTypeEnum } from "../enums/genderType.enum";
 const Schema = mongoose.Schema;
 
@@ -41,16 +41,16 @@ const facultySecretarySchema = new Schema({
     },
     accountCreationDate: {
         type: Date,
-        require: true
+        require: false
     },
     birthDate: {
-        type: Date,
+        type: String,
         require: true
     }
+}, {
+    collection: "facultySecretary"
 })
 
-let facultySecretaryModel = mongoose.model("facultySecretarys", facultySecretarySchema);
+let facultySecretaryModel = mongoose.model("facultySecretary", facultySecretarySchema);
 
-module.exports={
-    facultySecretaryModel,
-}
+module.exports = facultySecretaryModel
