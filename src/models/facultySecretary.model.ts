@@ -24,7 +24,7 @@ const facultySecretarySchema = new Schema({
         type: String,
         require: false
     },
-    userName: {
+    username: {
         type: String,
         require: true,
         min: 6,

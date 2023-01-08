@@ -24,7 +24,7 @@ const facultyViceDeanSchema = new Schema({
         type: String,
         require: false
     },
-    userName: {
+    username: {
         type: String,
         require: true,
         min: 6,
@@ -45,7 +45,8 @@ const facultyViceDeanSchema = new Schema({
     },
     accountCreationDate: {
         type: Date,
-        require: true
+        require: true,
+        index: -1
     },
     birthDate: {
         type: String,

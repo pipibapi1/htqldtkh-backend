@@ -1,8 +1,0 @@
-###
-POST http://localhost:8000/api/auth/signin
-
-{
-  "username": "secretary",
-  "password": "12345678",
-  "role": "thư ký khoa"
-}
