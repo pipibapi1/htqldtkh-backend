@@ -46,7 +46,7 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
                     const token = sign({
                         role: RoleTypeEnum.FS,
                         _id: secretary._id,
-                        staffId: secretary.studentId,
+                        staffId: secretary.staffId,
                         email: secretary.email,
                     }, process.env.JWT_SECRET as string, {
                         expiresIn: "2h"
@@ -76,7 +76,7 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
                     const token = sign({
                         role: RoleTypeEnum.FS,
                         _id: viceDean._id,
-                        staffId: viceDean.studentId,
+                        staffId: viceDean.staffId,
                         email: viceDean.email,
                     }, process.env.JWT_SECRET as string, {
                         expiresIn: "2h"
