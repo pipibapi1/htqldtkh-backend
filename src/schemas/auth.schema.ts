@@ -80,6 +80,13 @@ import { object, string, TypeOf } from "zod";
   *          type: string
   *        studentId:
   *          type: string
+  *    ResetPwInput:
+  *      type: object
+  *      properties:
+  *        email:
+  *          type: string
+  *        role:
+  *          type: string
   */
 
 export const SignUpSchema = object({
