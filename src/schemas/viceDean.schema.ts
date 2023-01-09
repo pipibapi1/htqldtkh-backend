@@ -3,7 +3,7 @@ import { object, string, TypeOf, array } from "zod";
   * @openapi
   * components:
   *  schemas:
-  *    viceDeanInput:
+  *    ViceDeanInput:
   *      type: object
   *      required:
   *        - email
@@ -39,7 +39,7 @@ import { object, string, TypeOf, array } from "zod";
   *        birthDate:
   *          type: string
   *          example: 16/02/2001
-  *    viceDeanResponse:
+  *    ViceDeanResponse:
   *      type: object
   *      required:
   *        - _id
@@ -83,7 +83,7 @@ import { object, string, TypeOf, array } from "zod";
   *        accountCreationDate:
   *          type: string
   *          example: 01/01/2023
-  *    viceDeansListResponse:
+  *    ViceDeansListResponse:
   *      type: array
   *      items:
   *        refs: '#/components/schemas/viceDeanInput'

@@ -9,11 +9,14 @@ const router: Router = express.Router();
 
 /**
   * @openapi
+  * tags:
+  *   - name: auth
+  *     description: For authorization
   * /api/auth/signup:
   *  post:
   *     tags:
-  *     - Sign Up
-  *     summary: Sign up
+  *     - auth
+  *     summary: sign up
   *     description: student sign up
   *     requestBody:
   *      required: true
@@ -39,8 +42,8 @@ const router: Router = express.Router();
   * /api/auth/signin:
   *  post:
   *     tags:
-  *     - Sign In
-  *     summary: Sign in
+  *     - auth
+  *     summary: sign in
   *     description: user sign in
   *     requestBody:
   *      required: true
@@ -66,8 +69,8 @@ const router: Router = express.Router();
   * /api/auth/resetpw:
   *  put:
   *     tags:
-  *     - Reset Password
-  *     summary: Reset Password
+  *     - auth
+  *     summary: reset password
   *     description: user reset password
   *     requestBody:
   *      required: true
@@ -85,8 +88,8 @@ const router: Router = express.Router();
   * /api/auth/test:
   *  post:
   *     tags:
-  *     - authorization
-  *     summary: Test authorization
+  *     - auth
+  *     summary: test authorization
   *     description: Test authorization
   *     security:
   *      - bearerAuth: []

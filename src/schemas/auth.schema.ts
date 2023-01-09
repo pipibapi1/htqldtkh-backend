@@ -85,8 +85,10 @@ import { object, string, TypeOf } from "zod";
   *      properties:
   *        email:
   *          type: string
+  *          example: quan.tran.rikka@hcmut.edu.vn
   *        role:
   *          type: string
+  *          example: sinh viên
   */
 
 export const SignUpSchema = object({

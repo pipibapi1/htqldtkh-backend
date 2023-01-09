@@ -7,10 +7,13 @@ const router: Router = express.Router();
 
 /**
   * @openapi
+  * tags:
+  *   - name: vicedean
+  *     description: Everything about faculty vice dean
   * /api/vicedean:
   *  get:
   *     tags:
-  *     - get list vice dean account
+  *     - vicedean
   *     summary: get vice dean account list
   *     description: get vice dean account list
   *     requestBody:
@@ -32,7 +35,7 @@ const router: Router = express.Router();
   *        description: Not found
   *  post:
   *     tags:
-  *     - add a new faculty vice dean account
+  *     - vicedean
   *     summary: create new vice dean account 
   *     description: create new vice dean account
   *     requestBody:
@@ -62,7 +65,7 @@ const router: Router = express.Router();
   * /api/vicedean/{viceDeanId}:
   *  get:
   *     tags:
-  *     - get vice dean account detail
+  *     - vicedean
   *     summary: get vice dean account detail by vice dean id
   *     description: get vice dean account detail
   *     parameters:
@@ -91,7 +94,7 @@ const router: Router = express.Router();
   *        description: Not found
   *  put:
   *     tags:
-  *     - change vice dean account info
+  *     - vicedean
   *     summary: change vice dean account info
   *     description: change vice dean account info
   *     parameters:
@@ -127,7 +130,7 @@ const router: Router = express.Router();
   *        description: Not found
   *  delete:
   *     tags:
-  *     - delete vice dean account
+  *     - vicedean
   *     summary: delete vice dean account
   *     description: delete vice dean account 
   *     parameters:
