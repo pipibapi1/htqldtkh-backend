@@ -1,9 +1,9 @@
-import { object, string, TypeOf } from "zod";
+import { object, string, TypeOf, array } from "zod";
 /**
   * @openapi
   * components:
   *  schemas:
-  *    SignUpInput:
+  *    viceDeanInput:
   *      type: object
   *      required:
   *        - email
@@ -12,84 +12,84 @@ import { object, string, TypeOf } from "zod";
   *        - gender
   *        - username
   *        - password
-  *        - studentId
-  *        - educationType
+  *        - staffId
   *        - birthDate
-  *        - role
   *      properties:
   *        email:
   *          type: string
-  *          example: jane.doe@exa.com
+  *          example: vice.dean@exa.com
   *        name:
   *          type: string
-  *          example: Jane Doe
+  *          example: Dean
   *        fmName:
   *          type: string
-  *          example: Jane Doe
+  *          example: Vice
   *        username:
   *          type: string
-  *          example: mduypham
+  *          example: vicedean
   *        password:
   *          type: string
   *          example: 12345678
-  *        studentId:
+  *        staffId:
   *          type: string
-  *          example: 1912916
+  *          example: 12345678
   *        gender:
   *          type: string
   *          example: Nam
-  *        educationType:
-  *          type: string
-  *          example: chính quy
   *        birthDate:
   *          type: string
   *          example: 16/02/2001
-  *        role:
-  *          type: string
-  *          example: sinh viên
-  *    SignInInput:
+  *    viceDeanResponse:
   *      type: object
   *      required:
+  *        - _id
+  *        - email
+  *        - name
+  *        - fmName
+  *        - gender
   *        - username
   *        - password
-  *        - role
+  *        - staffId
+  *        - birthDate
+  *        - accountCreationDate
   *      properties:
+  *        _id:
+  *          type: string
+  *          example: vice.dean@exa.com
+  *        email:
+  *          type: string
+  *          example: vice.dean@exa.com
+  *        name:
+  *          type: string
+  *          example: Dean
+  *        fmName:
+  *          type: string
+  *          example: Vice
   *        username:
   *          type: string
-  *          example: mduypham
+  *          example: vicedean
   *        password:
   *          type: string
   *          example: 12345678
-  *        role:
+  *        staffId:
   *          type: string
-  *          example: sinh viên
-  *    AuthResponse:
-  *      type: object
-  *      properties:
-  *        email:
+  *          example: 12345678
+  *        gender:
   *          type: string
-  *        name:
+  *          example: Nam
+  *        birthDate:
   *          type: string
-  *        fmName:
+  *          example: 16/02/2001
+  *        accountCreationDate:
   *          type: string
-  *        token:
-  *          type: string
-  *        _id:
-  *          type: string
-  *        image:
-  *          type: string
-  *        studentId:
-  *          type: string
-  *    ResetPwInput:
-  *      type: object
-  *      properties:
-  *        email:
-  *          type: string
-  *        role:
-  *          type: string
+  *          example: 01/01/2023
+  *    viceDeansListResponse:
+  *      type: array
+  *      items:
+  *        refs: '#/components/schemas/viceDeanInput'
   */
 
-export const SignUpSchema = object({
+export const viceDeanSchema = object({
     body: object({
         name: string({
             required_error: "Name is required",
@@ -118,7 +118,7 @@ export const SignUpSchema = object({
     }),
 });
 
-export type SignUpInput = Omit<
-    TypeOf<typeof SignUpSchema>,
+export type viceDean = Omit<
+    TypeOf<typeof viceDeanSchema>,
     "body.password"
 >;

@@ -19,10 +19,8 @@ const formSchema = new Schema({
         type: [FieldSchema],
         default: []
     }
-})
+}, {collection: 'form'})
 
 let formModel = mongoose.model('form', formSchema);
 
-module.exports = {
-    formModel,
-}
+module.exports = formModel

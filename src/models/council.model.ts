@@ -41,10 +41,8 @@ const councilSchema = new Schema({
         type: Number,
         default: 0
     }
-})
+}, {collection: 'council'})
 
 let councilModel = mongoose.model('council', councilSchema);
 
-module.exports = {
-    councilModel,
-}
+module.exports = councilModel

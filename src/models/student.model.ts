@@ -78,7 +78,7 @@ const studentSchema = new Schema({
         type: Date,
         require: true
     }
-}, { collection: 'student'})
+}, {collection: "student"})
 
 let studentModel = mongoose.model('student', studentSchema);
 

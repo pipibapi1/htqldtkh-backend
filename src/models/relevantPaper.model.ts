@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Collection } from 'mongoose';
 const Schema = mongoose.Schema;
 
 const relevantPaperSchema = new Schema({
@@ -26,10 +26,8 @@ const relevantPaperSchema = new Schema({
         type: String,
         require: true
     }
-})
+}, {collection: "relevantPaper"})
 
 let relevantPaperModel = mongoose.model("relevantPaper", relevantPaperSchema);
 
-module.exports = {
-    relevantPaperModel,
-}
+module.exports = relevantPaperModel

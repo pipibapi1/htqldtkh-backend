@@ -24,7 +24,7 @@ const facultyViceDeanSchema = new Schema({
         type: String,
         require: false
     },
-    userName: {
+    username: {
         type: String,
         require: true,
         min: 6,
@@ -45,16 +45,15 @@ const facultyViceDeanSchema = new Schema({
     },
     accountCreationDate: {
         type: Date,
-        require: true
+        require: true,
+        index: -1
     },
     birthDate: {
-        type: Date,
+        type: String,
         require: true
     }
-})
+}, {collection: "facultyViceDean"})
 
 let facultyViceDeanModel = mongoose.model("facultyViceDean", facultyViceDeanSchema);
 
-module.exports={
-    facultyViceDeanModel,
-}
+module.exports=facultyViceDeanModel

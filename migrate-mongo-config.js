@@ -1,6 +1,6 @@
 // In this file you can configure migrate-mongo
 const dotenv = require('dotenv');
-dotenv.config({ path: `${__dirname}/../../.env` });
+dotenv.config({ path: `${__dirname}/.env` });
 const dbUrl = process.env.DB_URL;
 const dbName = process.env.DB_NAME;
 const config = {

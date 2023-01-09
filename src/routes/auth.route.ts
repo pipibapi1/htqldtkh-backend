@@ -2,6 +2,8 @@ import express, {Router} from 'express';
 import signUpController from '../controllers/signup.controller';
 import signInController from '../controllers/signin.controller';
 import resetpwController from '../controllers/resetpw.controller';
+import testAuth from '../controllers/testAuth.controller';
+import { authorizationMiddleware } from '../middlewares/authorize.middleware';
 
 const router: Router = express.Router();
 
@@ -25,7 +27,7 @@ const router: Router = express.Router();
   *        content:
   *          application/json:
   *            schema:
-  *              $ref: '#/components/schemas/SignUpResponse'
+  *              $ref: '#/components/schemas/AuthResponse'
   *      409:
   *        description: Conflict
   *      400:
@@ -80,9 +82,31 @@ const router: Router = express.Router();
   *        description: Bad request
   *      404:
   *        description: Email Not found
+  * /api/auth/test:
+  *  post:
+  *     tags:
+  *     - authorization
+  *     summary: Test authorization
+  *     description: Test authorization
+  *     security:
+  *      - bearerAuth: []
+  *     requestBody:
+  *      required: false
+  *     responses:
+  *      200:
+  *        description: Success
+  *      409:
+  *        description: Conflict
+  *      400:
+  *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
   */
 router.post('/signup', signUpController);
 router.post('/signin', signInController);
 router.put('/resetpw', resetpwController);
+router.post('/test', authorizationMiddleware, testAuth)
 
 export const authRouter: Router = router;

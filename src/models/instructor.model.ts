@@ -46,10 +46,8 @@ const instructorSchema = new Schema({
         type: DegreeEnum,
         require: true,
     },
-})
+}, {collection: 'instructor'})
 
 let instructorModel = mongoose.model('instructor', instructorSchema);
 
-module.exports = {
-    instructorModel,
-}
+module.exports = instructorModel

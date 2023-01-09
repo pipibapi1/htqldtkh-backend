@@ -82,10 +82,8 @@ const topicSchema = new Schema({
         type: [otherMemberSchema],
         default: []
     }
-})
+}, {collection: 'topic'})
 
 let topicModel = mongoose.model('topic', topicSchema);
 
-module.exports = {
-    topicModel,
-}
+module.exports = topicModel

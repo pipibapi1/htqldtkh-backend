@@ -18,10 +18,8 @@ const annoucementSchema = new Schema({
         type: File,
         require: true
     }
-})
+}, {collection: "annoucement"})
 
 let annoucementModel = mongoose.model("annoucement", annoucementSchema);
 
-module.exports = {
-    annoucementModel,
-}
+module.exports = annoucementModel
