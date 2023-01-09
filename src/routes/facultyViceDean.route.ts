@@ -24,7 +24,7 @@ const router: Router = express.Router();
   *        content:
   *          application/json:
   *            schema:
-  *              $ref: '#/components/schemas/viceDeansListResponse'
+  *              $ref: '#/components/schemas/ViceDeansListResponse'
   *      409:
   *        description: Conflict
   *      400:
@@ -46,14 +46,14 @@ const router: Router = express.Router();
   *            type: object
   *            properties:
   *              viceDean:
-  *                $ref: '#/components/schemas/viceDeanInput'
+  *                $ref: '#/components/schemas/ViceDeanInput'
   *     responses:
   *      200:
   *        description: Success
   *        content:
   *          application/json:
   *            schema:
-  *              $ref: '#/components/schemas/viceDeanResponse'
+  *              $ref: '#/components/schemas/ViceDeanResponse'
   *      409:
   *        description: Conflict
   *      400:
@@ -83,7 +83,7 @@ const router: Router = express.Router();
   *        content:
   *          application/json:
   *            schema:
-  *              $ref: '#/components/schemas/viceDeanResponse'
+  *              $ref: '#/components/schemas/ViceDeanResponse'
   *      409:
   *        description: Conflict
   *      400:
@@ -112,14 +112,14 @@ const router: Router = express.Router();
   *            type: object
   *            properties:
   *              viceDean:
-  *                $ref: '#/components/schemas/viceDeanInput'
+  *                $ref: '#/components/schemas/ViceDeanInput'
   *     responses:
   *      200:
   *        description: Success
   *        content:
   *          application/json:
   *            schema:
-  *              $ref: '#/components/schemas/viceDeanResponse'
+  *              $ref: '#/components/schemas/ViceDeanResponse'
   *      409:
   *        description: Conflict
   *      400:

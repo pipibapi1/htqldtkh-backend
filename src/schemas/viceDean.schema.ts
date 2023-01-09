@@ -86,7 +86,7 @@ import { object, string, TypeOf, array } from "zod";
   *    ViceDeansListResponse:
   *      type: array
   *      items:
-  *        refs: '#/components/schemas/viceDeanInput'
+  *        $ref: '#/components/schemas/ViceDeanInput'
   */
 
 export const viceDeanSchema = object({
