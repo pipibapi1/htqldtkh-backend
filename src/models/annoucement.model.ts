@@ -12,14 +12,23 @@ const annoucementSchema = new Schema({
     },
     createAt: {
         type: Date,
-        require: true
+        require: true,
+        index: -1
     },
     attachedFile: {
-        type: File,
+        type: String,
         require: true
-    }
-}, {collection: "annoucement"})
+    },
+    fileType: {
+        type: String,
+        require: true
+    },
+    fileName: {
+        type: String,
+        require: true
+    },
+}, {collection: "announcement"})
 
-let annoucementModel = mongoose.model("annoucement", annoucementSchema);
+let annoucementModel = mongoose.model("announcement", annoucementSchema);
 
 module.exports = annoucementModel
