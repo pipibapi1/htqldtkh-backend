@@ -45,7 +45,7 @@ import { object, string, TypeOf } from "zod";
   *          type: string
   *          example: chính quy
   *        birthDate:
-  *          type: string
+  *          type: Date
   *          example: 16/02/2001
   *        role:
   *          type: string

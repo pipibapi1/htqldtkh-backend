@@ -31,14 +31,8 @@ const router: Router = express.Router();
   *          application/json:
   *            schema:
   *              $ref: '#/components/schemas/AuthResponse'
-  *      409:
-  *        description: Conflict
   *      400:
   *        description: Bad request
-  *      403:
-  *        description: Not authorized
-  *      404:
-  *        description: Not found
   * /api/auth/signin:
   *  post:
   *     tags:
@@ -62,8 +56,6 @@ const router: Router = express.Router();
   *        description: Conflict
   *      400:
   *        description: Bad request
-  *      403:
-  *        description: Not authorized
   *      404:
   *        description: Not found
   * /api/auth/resetpw:
