@@ -4,6 +4,7 @@ import { fullRouter } from './src/routes';
 // connect database
 import './src/database/db-connection';
 import swaggerDocs from './src/utils/swagger.util';
+var cors = require('cors')
 
 dotenv.config();
 const app: Express = express();
@@ -17,6 +18,8 @@ app.use('/api', fullRouter);
 
 // generate swagger api docs
 swaggerDocs(app, port);
+
+app.use(cors());
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

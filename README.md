@@ -14,6 +14,8 @@
 #### nodemailer: to send email from the system
 #### generate-password: to generate new password to reset password
 
+#### cors: to enable cors
+
 ## 1 Setup
 
 ### 1. Setup packages
