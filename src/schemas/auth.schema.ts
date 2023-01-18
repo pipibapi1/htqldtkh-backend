@@ -20,6 +20,9 @@ import { object, string, TypeOf } from "zod";
   *        email:
   *          type: string
   *          example: jane.doe@exa.com
+  *        phoneNumber:
+  *          type: string
+  *          example: 0822456712
   *        name:
   *          type: string
   *          example: Jane Doe
