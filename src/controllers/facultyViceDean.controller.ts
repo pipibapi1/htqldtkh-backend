@@ -1,6 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
+import { hash } from "bcrypt";
 const FacultyViceDeanModel = require('../models/facultyViceDean.model');
+
+interface regex {
+    $regex: string,
+    $options: string
+}
 
 export const getAllFacultyViceDean = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -12,7 +18,16 @@ export const getAllFacultyViceDean = async (req: Request, res: Response, next: N
             if (req.query.limit) limit = parseInt(req.query.limit as string);
             const start: number = limit * (pageNum - 1);
             const end: number = limit * pageNum;
-            const viceDeansList = await FacultyViceDeanModel.find({})
+            let filter: {[k: string]: regex} = {};
+            const filterFields: string[] = ["name", "email", "phoneNumber", "staffId"]
+            filterFields.forEach((field) => {
+                if (req.query[field]) {
+                    filter[field] = {$regex: req.query[field] as string,
+                                        $options: 'i'}
+                }
+            })
+            const viceDeansList = await FacultyViceDeanModel.find(filter)
+                                            .select("name gender phoneNumber email staffId username password accountCreationDate")
                                             .limit(end)
                                             .lean()
                                             .sort({accountCreationDate: -1});
@@ -57,8 +72,10 @@ export const postAddFacultyViceDean = async (req: Request, res: Response, next: 
                 res.status(400).send({err: "Username existed"})
             }
             else {
+                let hashPassword = await hash(req.body.viceDean.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
                 const newViceDean = new FacultyViceDeanModel({
                     ...req.body.viceDean,
+                    password: hashPassword,
                     accountCreationDate: currentTime
                 });
                 const result = await newViceDean.save();
@@ -75,14 +92,17 @@ export const putUpdateAFacultyViceDean = async (req: Request, res: Response, nex
     try {
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS) {
-            const existedViceDean = await FacultyViceDeanModel.findById(req.params.viceDeanId).lean();
-            if (existedViceDean) {
-                const changableField: string[] = ['fmName', 'name', 'gender', 'email', 'phoneNumber',
+            const viceDean = await FacultyViceDeanModel.findById(req.params.viceDeanId);
+            if (viceDean) {
+                const changeableField: string[] = ['name', 'gender', 'email', 'phoneNumber',
                                             'username', 'password', 'image', 'staffId', 'birthDate']
-                let viceDean = await FacultyViceDeanModel.findOne({_id: req.params.viceDeanId});
-                for (let field in changableField){
-                    if (req.body.viceDean[changableField[field]]) {
-                        viceDean[changableField[field]] = req.body.viceDean[changableField[field]]
+                for (let field in changeableField){
+                    if (req.body.viceDean[changeableField[field]]) {
+                        if (field == 'password') {
+                            let hashPassword = await hash(req.body.viceDean.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
+                            viceDean.password = hashPassword
+                        }
+                        viceDean[changeableField[field]] = req.body.viceDean[changeableField[field]]
                     }
                 }
                 const currentViceDean = await viceDean.save();

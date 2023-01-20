@@ -8,7 +8,6 @@ import { object, string, TypeOf, array } from "zod";
   *      required:
   *        - email
   *        - name
-  *        - fmName
   *        - gender
   *        - username
   *        - password
@@ -21,9 +20,6 @@ import { object, string, TypeOf, array } from "zod";
   *        name:
   *          type: string
   *          example: Dean
-  *        fmName:
-  *          type: string
-  *          example: Vice
   *        username:
   *          type: string
   *          example: vicedean
@@ -45,7 +41,6 @@ import { object, string, TypeOf, array } from "zod";
   *        - _id
   *        - email
   *        - name
-  *        - fmName
   *        - gender
   *        - username
   *        - password
@@ -55,16 +50,13 @@ import { object, string, TypeOf, array } from "zod";
   *      properties:
   *        _id:
   *          type: string
-  *          example: vice.dean@exa.com
+  *          example: 00000101010101
   *        email:
   *          type: string
   *          example: vice.dean@exa.com
   *        name:
   *          type: string
-  *          example: Dean
-  *        fmName:
-  *          type: string
-  *          example: Vice
+  *          example: Vice Dean
   *        username:
   *          type: string
   *          example: vicedean

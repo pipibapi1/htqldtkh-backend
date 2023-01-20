@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
 const AnnouncementModel = require('../models/annoucement.model');
-import { readFile, unlink } from "fs";
-import { resolve } from "path";
+import { unlink } from "fs";
 
 export const postAddAnnouncement = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -30,6 +29,9 @@ export const postAddAnnouncement = async (req: Request, res: Response, next: Nex
             res.status(403).send({msg: 'Not authorized'})
         }
     } catch (error) {
+        if (req.file) {
+            unlink(req.file.path, ()=>{});
+        }
         res.status(400).send({err: error})
     }
 }
@@ -43,7 +45,7 @@ export const getListAnnouncement = async (req: Request, res: Response, next: Nex
         const start: number = limit * (pageNum - 1);
         const end: number = limit * pageNum;
         const announcementsList = await AnnouncementModel.find({})
-                                        .select("_id title content createAt fileType")
+                                        .select("_id title content createAt fileType fileName")
                                         .limit(end)
                                         .lean()
                                         .sort({createAt: -1});
@@ -51,8 +53,8 @@ export const getListAnnouncement = async (req: Request, res: Response, next: Nex
             res.status(200).send({ announcements: [] });
         }
         else {
-            const chosenAnnouncementss = announcementsList.slice(start, end);
-            res.status(200).send({ announcements: chosenAnnouncementss });
+            const chosenAnnouncements = announcementsList.slice(start, end);
+            res.status(200).send({ announcements: chosenAnnouncements });
         }
     } catch (error) {
         res.status(400).send({err: error})

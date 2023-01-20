@@ -16,6 +16,49 @@ const router: Router = express.Router();
   *     - vicedean
   *     summary: get vice dean account list
   *     description: get vice dean account list
+  *     parameters:
+  *       - in: query
+  *         name: page
+  *         schema:
+  *           type: string
+  *           example: 1
+  *         required: false
+  *         description: page num
+  *       - in: query
+  *         name: limit
+  *         schema:
+  *           type: string
+  *           example: 5
+  *         required: false
+  *         description: num item per page
+  *       - in: query
+  *         name: name
+  *         schema:
+  *           type: string
+  *           example: duy
+  *         required: false
+  *         description: name of vice dean, use for full text search
+  *       - in: query
+  *         name: email
+  *         schema:
+  *           type: string
+  *           example: duy@gmail.com
+  *         required: false
+  *         description: email of vice dean, use for full text search
+  *       - in: query
+  *         name: phoneNumber
+  *         schema:
+  *           type: string
+  *           example: 5
+  *         required: false
+  *         description: phoneNumber of vice dean, use for full text search
+  *       - in: query
+  *         name: staffId
+  *         schema:
+  *           type: string
+  *           example: 5
+  *         required: false
+  *         description: staffId of vice dean, use for search
   *     requestBody:
   *      required: false
   *     responses:
