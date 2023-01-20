@@ -29,9 +29,7 @@ const signUpController = async (req: Request, res: Response, next: NextFunction)
                     _id: user._id,
                     studentId: user.studentId,
                     email: user.email,
-                }, process.env.JWT_SECRET as string, {
-                    expiresIn: "2h"
-                })
+                }, process.env.JWT_SECRET as string)
                 delete body.username;
                 delete body.password;
                 const result = {

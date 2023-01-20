@@ -8,7 +8,6 @@ import { object, string, TypeOf } from "zod";
   *      required:
   *        - email
   *        - name
-  *        - fmName
   *        - gender
   *        - username
   *        - password
@@ -26,9 +25,6 @@ import { object, string, TypeOf } from "zod";
   *        name:
   *          type: string
   *          example: Jane Doe
-  *        fmName:
-  *          type: string
-  *          example: Jane Doe
   *        username:
   *          type: string
   *          example: mduypham
@@ -41,6 +37,7 @@ import { object, string, TypeOf } from "zod";
   *        gender:
   *          type: string
   *          example: Nam
+  *          enum: [Nam, Nữ]
   *        educationType:
   *          type: string
   *          example: chính quy
@@ -66,14 +63,13 @@ import { object, string, TypeOf } from "zod";
   *        role:
   *          type: string
   *          example: sinh viên
+  *          enum: [sinh viên, thư ký khoa, phó chủ nhiệm khoa]
   *    AuthResponse:
   *      type: object
   *      properties:
   *        email:
   *          type: string
   *        name:
-  *          type: string
-  *        fmName:
   *          type: string
   *        token:
   *          type: string

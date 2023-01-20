@@ -10,13 +10,9 @@ const studentSchema = new Schema({
         type: Date,
         require: true
     },
-    fmName: {
-        type: String,
-        require: true,
-        min: 1
-    },
     name: {
         type: String,
+        require: true,
         min: 1
     },
     gender: {
@@ -75,7 +71,7 @@ const studentSchema = new Schema({
         require: true
     },
     birthDate: {
-        type: Date,
+        type: String,
         require: true
     }
 }, {collection: "student"})

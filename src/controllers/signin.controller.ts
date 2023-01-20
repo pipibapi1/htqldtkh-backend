@@ -18,9 +18,7 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
                         _id: student._id,
                         studentId: student.studentId,
                         email: student.email,
-                    }, process.env.JWT_SECRET as string, {
-                        expiresIn: "2h"
-                    })
+                    }, process.env.JWT_SECRET as string)
                     delete student.username;
                     delete student.password;
                     const result = {
@@ -48,9 +46,7 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
                         _id: secretary._id,
                         staffId: secretary.staffId,
                         email: secretary.email,
-                    }, process.env.JWT_SECRET as string, {
-                        expiresIn: "2h"
-                    })
+                    }, process.env.JWT_SECRET as string)
                     delete secretary.username;
                     delete secretary.password;
                     const result = {
@@ -78,9 +74,7 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
                         _id: viceDean._id,
                         staffId: viceDean.staffId,
                         email: viceDean.email,
-                    }, process.env.JWT_SECRET as string, {
-                        expiresIn: "2h"
-                    })
+                    }, process.env.JWT_SECRET as string)
                     delete viceDean.username;
                     delete viceDean.password;
                     const result = {

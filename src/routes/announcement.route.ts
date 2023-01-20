@@ -55,6 +55,21 @@ const router: Router = express.Router();
   *     - announcement
   *     summary: get a list announcement
   *     description: get a list announcement. page=1 and limit=1 to get latest announcement
+  *     parameters:
+  *       - in: query
+  *         name: page
+  *         schema:
+  *           type: string
+  *           example: 1
+  *         required: false
+  *         description: page num
+  *       - in: query
+  *         name: limit
+  *         schema:
+  *           type: string
+  *           example: 5
+  *         required: false
+  *         description: num item per page
   *     requestBody:
   *      required: false
   *     responses:

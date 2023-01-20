@@ -3,13 +3,10 @@ import { GenderTypeEnum } from "../enums/genderType.enum";
 const Schema = mongoose.Schema;
 
 const facultyViceDeanSchema = new Schema({
-    fmName: {
-        type: String,
-        require: true
-    },
     name: {
         type: String,
-        require: true
+        require: true,
+        min: 1
     },
     gender: {
         type: String,
