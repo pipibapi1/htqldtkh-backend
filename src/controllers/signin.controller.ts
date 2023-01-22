@@ -80,7 +80,7 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
                     const result = {
                         ...viceDean,
                         token: token,
-                        role: RoleTypeEnum.Student
+                        role: RoleTypeEnum.FVD
                     }
                     res.status(200).send({user: result})
                 }

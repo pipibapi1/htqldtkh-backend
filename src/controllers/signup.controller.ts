@@ -17,6 +17,7 @@ const signUpController = async (req: Request, res: Response, next: NextFunction)
                 let hashPassword = await hash(req.body.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
                 const body = {
                     ...req.body,
+                    image: "",
                     password: hashPassword,
                     lastModifiedAt: currDate,
                     accountCreationDate: currDate,
