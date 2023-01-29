@@ -2,12 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
 import { hash } from "bcrypt";
 import { StudentAccountStatusEnum } from "../enums/studentAccountStatus.enum";
+import { regexInterface } from "../interface/general.interface";
 const StudentModel = require('../models/student.model');
-
-interface regex {
-    $regex: string,
-    $options: string
-}
 
 export const getListStudent = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -19,7 +15,7 @@ export const getListStudent = async (req: Request, res: Response, next: NextFunc
             if (req.query.limit) limit = parseInt(req.query.limit as string);
             const start: number = limit * (pageNum - 1);
             const end: number = limit * pageNum;
-            let filter: {[k: string]: regex | string} = {};
+            let filter: {[k: string]: regexInterface | string} = {};
             const filterFields: string[] = ["name", "status", "email", "phoneNumber", "studentId", "eduType"]
             filterFields.forEach((field) => {
                 if (req.query[field]) {
