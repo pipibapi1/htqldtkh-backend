@@ -1,12 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
 import { hash } from "bcrypt";
+import { regexInterface } from "../interface/general.interface";
 const FacultyViceDeanModel = require('../models/facultyViceDean.model');
-
-interface regex {
-    $regex: string,
-    $options: string
-}
 
 export const getAllFacultyViceDean = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -18,7 +14,7 @@ export const getAllFacultyViceDean = async (req: Request, res: Response, next: N
             if (req.query.limit) limit = parseInt(req.query.limit as string);
             const start: number = limit * (pageNum - 1);
             const end: number = limit * pageNum;
-            let filter: {[k: string]: regex} = {};
+            let filter: {[k: string]: regexInterface} = {};
             const filterFields: string[] = ["name", "email", "phoneNumber", "staffId"]
             filterFields.forEach((field) => {
                 if (req.query[field]) {

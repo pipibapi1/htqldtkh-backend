@@ -38,7 +38,8 @@ const otherMemberSchema = new Schema({
         min: 1
     },
     educationType: {
-        type: EducationTypeEnum,
+        type: String,
+        enum: Object.values(EducationTypeEnum),
         require: true,
     },
     birthDate: {

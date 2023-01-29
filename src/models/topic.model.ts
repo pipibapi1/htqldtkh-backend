@@ -33,7 +33,7 @@ const topicSchema = new Schema({
     },
     expense: {
         type: Number,
-        defaut: false
+        defaut: 0
     },
     status: {
         type: String,
@@ -41,11 +41,11 @@ const topicSchema = new Schema({
         defaut: false
     },
     period: {
-        type: Date,
+        type: String,
         require: true
     },
-    product: {
-        type: File,
+    productPath: {
+        type: String,
         require: false
     },
     studentId: {
