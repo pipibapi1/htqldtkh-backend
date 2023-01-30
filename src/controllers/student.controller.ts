@@ -114,7 +114,7 @@ export const postAddAStudent = async (req: Request, res: Response, next: NextFun
 export const putUpdateAStudent = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;
-        if (author.role == RoleTypeEnum.FS) {
+        if (author.role == RoleTypeEnum.FS || (author.role == RoleTypeEnum.Student && author._id == req.params.studentId)) {
             const student = await StudentModel.findById(req.params.studentId);
             if (student) {
                 const changeableFields: string[] = ['name', 'gender', 'phoneNumber', 'email', 'username',
@@ -122,7 +122,7 @@ export const putUpdateAStudent = async (req: Request, res: Response, next: NextF
                                             'accountStatus', 'birthDate'];
                 for (let field in changeableFields) {
                     if (req.body.student[changeableFields[field]]){
-                        if (field == 'password') {
+                        if (changeableFields[field] == 'password') {
                             let hashPassword = await hash(req.body.student.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
                             student.password = hashPassword;
                         }

@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
 import { hash } from "bcrypt";
 import { regexInterface } from "../interface/general.interface";
-const FacultyViceDeanModel = require('../models/facultyViceDean.model');
+const FacultySecretaryModel = require('../models/facultySecretary.model')
 
-export const getAllFacultyViceDean = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllFacultySecretary = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS) {
@@ -22,17 +22,17 @@ export const getAllFacultyViceDean = async (req: Request, res: Response, next: N
                                         $options: 'i'}
                 }
             })
-            const viceDeansList = await FacultyViceDeanModel.find(filter)
+            const secretarysList = await FacultySecretaryModel.find(filter)
                                             .select("name gender phoneNumber email staffId username password accountCreationDate")
                                             .limit(end)
                                             .lean()
                                             .sort({accountCreationDate: -1});
-            if (end <= 0 || start >= viceDeansList.length) {
-                res.status(200).send({ viceDeans: [] });
+            if (end <= 0 || start >= secretarysList.length) {
+                res.status(200).send({ secretarys: [] });
             } 
             else {
-                const chosenViceDeans = viceDeansList.slice(start, end);
-                res.status(200).send({ viceDeans: chosenViceDeans });
+                const chosenSecretarys = secretarysList.slice(start, end);
+                res.status(200).send({ secretarys: chosenSecretarys });
             }
         }
         else res.status(403).send({err: "You not have authorization"})
@@ -41,16 +41,16 @@ export const getAllFacultyViceDean = async (req: Request, res: Response, next: N
     }
 }
 
-export const getFacultyViceDeanById = async (req: Request, res: Response, next: NextFunction) => {
+export const getFacultySecretaryById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS) {
-            const viceDean = await FacultyViceDeanModel.findById(req.params.viceDeanId)
+            const secretary = await FacultySecretaryModel.findById(req.params.secretaryId)
                                                 .lean();
-            if (viceDean) {
-                res.status(200).send({ viceDean: viceDean })
+            if (secretary) {
+                res.status(200).send({ secretary: secretary })
             }
-            else res.status(404).send({ msg: 'Vice Dean not found' })
+            else res.status(404).send({ msg: 'Secretary not found' })
         }
         else res.status(403).send({err: "You not have authorization"})
     } catch (error) {
@@ -58,24 +58,24 @@ export const getFacultyViceDeanById = async (req: Request, res: Response, next: 
     }
 }
 
-export const postAddFacultyViceDean = async (req: Request, res: Response, next: NextFunction) => {
+export const postAddFacultySecretary = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS) {
             const currentTime: Date = new Date();
-            const existedViceDean = await FacultyViceDeanModel.findOne({username: req.body.viceDean.username});
-            if (existedViceDean) {
+            const existedSecretary = await FacultySecretaryModel.findOne({username: req.body.secretary.username});
+            if (existedSecretary) {
                 res.status(400).send({err: "Username existed"})
             }
             else {
-                let hashPassword = await hash(req.body.viceDean.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
-                const newViceDean = new FacultyViceDeanModel({
-                    ...req.body.viceDean,
+                let hashPassword = await hash(req.body.secretary.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
+                const newSecretary = new FacultySecretaryModel({
+                    ...req.body.secretary,
                     password: hashPassword,
                     accountCreationDate: currentTime
                 });
-                const result = await newViceDean.save();
-                res.status(200).send({viceDean: result})
+                const result = await newSecretary.save();
+                res.status(200).send({secretary: result})
             }
         }
         else res.status(403).send({err: "You not have authorization"})
@@ -84,28 +84,28 @@ export const postAddFacultyViceDean = async (req: Request, res: Response, next: 
     }
 }
 
-export const putUpdateAFacultyViceDean = async (req: Request, res: Response, next: NextFunction) => {
+export const putUpdateAFacultySecretary = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;
-        if (author.role == RoleTypeEnum.FS || (author.role == RoleTypeEnum.FVD && (author._id == req.params.viceDeanId))) 
-        {
-            const viceDean = await FacultyViceDeanModel.findById(req.params.viceDeanId);
-            if (viceDean) {
+        if (author.role == RoleTypeEnum.FS) {
+            const secretary = await FacultySecretaryModel.findById(req.params.secretaryId);
+            if (secretary) {
                 const changeableField: string[] = ['name', 'gender', 'email', 'phoneNumber',
                                             'username', 'password', 'image', 'staffId', 'birthDate']
                 for (let field in changeableField){
-                    if (req.body.viceDean[changeableField[field]]) {
+                    if (req.body.secretary[changeableField[field]]) {
                         if (changeableField[field] == 'password') {
-                            let hashPassword = await hash(req.body.viceDean.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
-                            viceDean.password = hashPassword
+                            let hashPassword = await hash(req.body.secretary.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
+                            console.log(hashPassword);
+                            secretary.password = hashPassword
                         }
                         else {
-                            viceDean[changeableField[field]] = req.body.viceDean[changeableField[field]]
+                            secretary[changeableField[field]] = req.body.secretary[changeableField[field]]
                         }
                     }
                 }
-                const currentViceDean = await viceDean.save();
-                res.status(200).send({viceDean: currentViceDean})
+                const currentSecretary = await secretary.save();
+                res.status(200).send({secretary: currentSecretary})
             }
             else {
                 res.status(400).send({err: "Account not existed"})
@@ -117,17 +117,22 @@ export const putUpdateAFacultyViceDean = async (req: Request, res: Response, nex
     }
 }
 
-export const deleteRemoveAFacultyViceDean = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteRemoveAFacultySecretary = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS) {
-            const existedViceDean = await FacultyViceDeanModel.findById(req.params.viceDeanId).lean();
-            if (existedViceDean) {
-                await FacultyViceDeanModel.deleteOne({_id: req.params.viceDeanId})
-                res.status(200).send({msg: "Success"})
+            if (req.params.secretaryId != author._id) {
+                const existedSecretary = await FacultySecretaryModel.findById(req.params.secretaryId);
+                if (existedSecretary) {
+                    await FacultySecretaryModel.deleteOne({_id: req.params.secretaryId})
+                    res.status(200).send({msg: "Success"})
+                }
+                else {
+                    res.status(400).send({err: "Account not existed"})
+                }
             }
             else {
-                res.status(400).send({err: "Account not existed"})
+                res.status(409).send({msg: "Your authorization cannot delete this account"})
             }
         }
         else res.status(403).send({err: "You not have authorization"})

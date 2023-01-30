@@ -6,9 +6,11 @@ import { facultyViceDeanRouter } from './facultyViceDean.route';
 import { announcementRouter } from './announcement.route';
 import { studentRouter } from './student.route';
 import { allocatedExpenseRouter } from './allocatedExpense.route';
+import { facultySecretaryRouter } from './facultySecretary.route';
 
 router.use("/auth", authRouter);
 router.use("/vicedean", facultyViceDeanRouter);
+router.use("/secretary", facultySecretaryRouter);
 router.use('/announcement', announcementRouter);
 router.use('/student', studentRouter);
 router.use('/expense', allocatedExpenseRouter);
