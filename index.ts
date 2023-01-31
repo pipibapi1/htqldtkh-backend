@@ -11,6 +11,8 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || '5000';
 
+app.use(cors());
+
 //for multer, use for upload file
 
 app.set('view engine', 'pug');
@@ -30,8 +32,6 @@ app.use('/api', fullRouter);
 
 // generate swagger api docs
 swaggerDocs(app, port);
-
-app.use(cors());
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

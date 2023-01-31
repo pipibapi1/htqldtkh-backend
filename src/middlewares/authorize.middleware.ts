@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { string } from "zod";
 import { RoleTypeEnum } from "../enums/roleType.enum";
 let StudentModel = require("../models/student.model");
 let FacultySecretaryModel = require("../models/facultySecretary.model");

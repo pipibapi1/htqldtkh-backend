@@ -61,7 +61,9 @@ export const getStudentById = async (req: Request, res: Response, next: NextFunc
     try {
         const studentId: string = req.params.studentId;
         const author = req.body.author;
-        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD || author._id == studentId) {
+        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD 
+            || (author.role == RoleTypeEnum.Student && author._id == req.params.studentId)) 
+        {
             const studentInfo = await StudentModel.findById(studentId).lean();
             if (studentInfo) {
                 res.status(200).send({student: studentInfo});

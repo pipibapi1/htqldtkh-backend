@@ -96,7 +96,6 @@ export const putUpdateAFacultySecretary = async (req: Request, res: Response, ne
                     if (req.body.secretary[changeableField[field]]) {
                         if (changeableField[field] == 'password') {
                             let hashPassword = await hash(req.body.secretary.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
-                            console.log(hashPassword);
                             secretary.password = hashPassword
                         }
                         else {

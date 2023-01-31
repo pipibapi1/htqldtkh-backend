@@ -128,21 +128,20 @@ export const putUpdateAllocatedExpense = async (req: Request, res: Response, nex
         if (author.role == RoleTypeEnum.FS) {
             const allocatedExpense = await AllocatedExpenseModel.findById(req.params.expenseId);
             if (allocatedExpense) {
-                const update: updateExpenseInterface = {};
                 if (req.body.expense.totalExpense) {
-                    update.totalExpense = parseInt(req.body.expense.totalExpense);
+                    allocatedExpense.totalExpense = parseInt(req.body.expense.totalExpense);
                 }
                 if (req.body.expense.generalExpense) {
-                    update.generalExpense = parseInt(req.body.expense.generalExpense);
+                    allocatedExpense.generalExpense = parseInt(req.body.expense.generalExpense);
                 }
                 if ((req.body.expense.allocated as allocatedExpenseForType[]).length >= 0) {
-                    update.allocated = req.body.expense.allocated;
+                    allocatedExpense.allocated = req.body.expense.allocated;
                 }
                 if (req.body.expense.note) {
-                    update.note = req.body.expense.note;
+                    allocatedExpense.note = req.body.expense.note;
                 }
-                update.lastModified = (new Date()).toString();
-                const updatedExpense: expenseInterface = await AllocatedExpenseModel.findOneAndUpdate({_id: req.params.expenseId}, update)
+                allocatedExpense.lastModified = (new Date()).toString();
+                const updatedExpense: expenseInterface = await allocatedExpense.save();
                 res.status(200).send({expense: updatedExpense})
             }
             else {

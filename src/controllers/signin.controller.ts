@@ -70,7 +70,7 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
                 const isMatchPassword = await compare(req.body.password, viceDean.password);
                 if (isMatchPassword){
                     const token = sign({
-                        role: RoleTypeEnum.FS,
+                        role: RoleTypeEnum.FVD,
                         _id: viceDean._id,
                         staffId: viceDean.staffId,
                         email: viceDean.email,
@@ -93,7 +93,6 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
             }
         }
     } catch (error: any) {
-        console.log(error)
         res.status(400).send({err: error})
     }
 }

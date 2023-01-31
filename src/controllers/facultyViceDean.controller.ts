@@ -44,7 +44,7 @@ export const getAllFacultyViceDean = async (req: Request, res: Response, next: N
 export const getFacultyViceDeanById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;
-        if (author.role == RoleTypeEnum.FS) {
+        if (author.role == RoleTypeEnum.FS || (author.role == RoleTypeEnum.FVD && author._id == req.params.viceDeanId)) {
             const viceDean = await FacultyViceDeanModel.findById(req.params.viceDeanId)
                                                 .lean();
             if (viceDean) {

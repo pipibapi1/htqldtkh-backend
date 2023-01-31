@@ -123,7 +123,7 @@ const router: Router = express.Router();
   *         required: true
   *         scheme:
   *           type: string
-  *         description: id of that faculty by secretary id
+  *         description: _id of that faculty secretary in MongoDB
   *     requestBody:
   *      required: false
   *     responses:
@@ -155,7 +155,7 @@ const router: Router = express.Router();
   *         required: true
   *         scheme:
   *           type: string
-  *         description: id of that faculty secretary
+  *         description: _id of that faculty secretary in MongoDB
   *     requestBody:
   *      required: true
   *      content:

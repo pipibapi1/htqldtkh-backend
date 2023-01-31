@@ -120,7 +120,7 @@ const router: Router = express.Router();
   *         required: true
   *         scheme:
   *           type: string
-  *         description: id of that faculty vice dean
+  *         description: _id of that faculty vice dean in MongoDB
   *     requestBody:
   *      required: false
   *     responses:
@@ -149,7 +149,7 @@ const router: Router = express.Router();
   *         required: true
   *         scheme:
   *           type: string
-  *         description: id of that faculty vice dean
+  *         description: _id of that faculty vice dean in MongoDB
   *     requestBody:
   *      required: true
   *      content:
@@ -185,7 +185,7 @@ const router: Router = express.Router();
   *         required: true
   *         scheme:
   *           type: string
-  *         description: id of that faculty vice dean
+  *         description: _id of that faculty vice dean in MongoDB
   *     requestBody:
   *      required: false
   *     responses:

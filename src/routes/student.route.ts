@@ -129,7 +129,7 @@ const router: Router = express.Router();
   *         required: true
   *         scheme:
   *           type: string
-  *         description: id of student
+  *         description: _id of student in mongoDB 
   *     requestBody:
   *      required: false
   *     responses:
@@ -161,7 +161,7 @@ const router: Router = express.Router();
   *         required: true
   *         scheme:
   *           type: string
-  *         description: id of student
+  *         description: _id of student in mongoDB
   *     requestBody:
   *      required: true
   *      content:
@@ -200,7 +200,7 @@ const router: Router = express.Router();
   *         required: true
   *         scheme:
   *           type: string
-  *         description: id of student
+  *         description: _id of student in mongoDB
   *     requestBody:
   *      required: false
   *     responses:
