@@ -1,21 +1,21 @@
 import express, {Router} from 'express';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
-import { getAllFacultyViceDean, getFacultyViceDeanById, postAddFacultyViceDean, putUpdateAFacultyViceDean,
-deleteRemoveAFacultyViceDean} from '../controllers/facultyViceDean.controller';
+import { getAllFacultySecretary, getFacultySecretaryById, postAddFacultySecretary,
+putUpdateAFacultySecretary, deleteRemoveAFacultySecretary } from '../controllers/facultySecretary.controller';
 
 const router: Router = express.Router();
 
 /**
   * @openapi
   * tags:
-  *   - name: vicedean
-  *     description: Everything about faculty vice dean
-  * /api/vicedean:
+  *   - name: secretary
+  *     description: Everything about faculty secretary
+  * /api/secretary:
   *  get:
   *     tags:
-  *     - vicedean
-  *     summary: get vice dean account list
-  *     description: get vice dean account list
+  *     - secretary
+  *     summary: get secretary account list
+  *     description: get secretary account list
   *     parameters:
   *       - in: query
   *         name: page
@@ -37,28 +37,28 @@ const router: Router = express.Router();
   *           type: string
   *           example: duy
   *         required: false
-  *         description: name of vice dean, use for full text search
+  *         description: name of secretary, use for full text search
   *       - in: query
   *         name: email
   *         schema:
   *           type: string
   *           example: duy@gmail.com
   *         required: false
-  *         description: email of vice dean, use for full text search
+  *         description: email of secretary, use for full text search
   *       - in: query
   *         name: phoneNumber
   *         schema:
   *           type: string
   *           example: 5
   *         required: false
-  *         description: phoneNumber of vice dean, use for full text search
+  *         description: phoneNumber of secretary, use for full text search
   *       - in: query
   *         name: staffId
   *         schema:
   *           type: string
   *           example: 5
   *         required: false
-  *         description: staffId of vice dean, use for search
+  *         description: staffId of secretary, use for search
   *     requestBody:
   *      required: false
   *     responses:
@@ -69,8 +69,8 @@ const router: Router = express.Router();
   *            schema:
   *              type: object
   *              properties:
-  *                viceDeans:
-  *                  $ref: '#/components/schemas/ViceDeansListResponse'
+  *                secretarys:
+  *                  $ref: '#/components/schemas/SecretarysListResponse'
   *      409:
   *        description: Conflict
   *      400:
@@ -81,9 +81,9 @@ const router: Router = express.Router();
   *        description: Not found
   *  post:
   *     tags:
-  *     - vicedean
-  *     summary: create new vice dean account 
-  *     description: create new vice dean account
+  *     - secretary
+  *     summary: create new secretary account 
+  *     description: create new secretary account
   *     requestBody:
   *      required: true
   *      content:
@@ -91,15 +91,18 @@ const router: Router = express.Router();
   *          schema:
   *            type: object
   *            properties:
-  *              viceDean:
-  *                $ref: '#/components/schemas/ViceDeanInput'
+  *              secretary:
+  *                $ref: '#/components/schemas/SecretaryInput'
   *     responses:
   *      200:
   *        description: Success
   *        content:
   *          application/json:
   *            schema:
-  *              $ref: '#/components/schemas/ViceDeanResponse'
+  *              type: object
+  *              properties:
+  *                secretary:
+  *                  $ref: '#/components/schemas/SecretaryResponse'
   *      409:
   *        description: Conflict
   *      400:
@@ -108,19 +111,19 @@ const router: Router = express.Router();
   *        description: Not authorized
   *      404:
   *        description: Not found
-  * /api/vicedean/{viceDeanId}:
+  * /api/secretary/{secretaryId}:
   *  get:
   *     tags:
-  *     - vicedean
-  *     summary: get vice dean account detail by vice dean id
-  *     description: get vice dean account detail
+  *     - secretary
+  *     summary: get secretary account detail 
+  *     description: get secretary account detail by secretary id
   *     parameters:
   *       - in: path
-  *         name: viceDeanId
+  *         name: secretaryId
   *         required: true
   *         scheme:
   *           type: string
-  *         description: id of that faculty vice dean
+  *         description: id of that faculty by secretary id
   *     requestBody:
   *      required: false
   *     responses:
@@ -129,7 +132,10 @@ const router: Router = express.Router();
   *        content:
   *          application/json:
   *            schema:
-  *              $ref: '#/components/schemas/ViceDeanResponse'
+  *              type: object
+  *              properties:
+  *                secretary:
+  *                  $ref: '#/components/schemas/SecretaryResponse'
   *      409:
   *        description: Conflict
   *      400:
@@ -140,16 +146,16 @@ const router: Router = express.Router();
   *        description: Not found
   *  put:
   *     tags:
-  *     - vicedean
-  *     summary: change vice dean account info
-  *     description: change vice dean account info
+  *     - secretary
+  *     summary: change secretary account info
+  *     description: change secretary account info
   *     parameters:
   *       - in: path
-  *         name: viceDeanId
+  *         name: secretaryId
   *         required: true
   *         scheme:
   *           type: string
-  *         description: id of that faculty vice dean
+  *         description: id of that faculty secretary
   *     requestBody:
   *      required: true
   *      content:
@@ -157,8 +163,8 @@ const router: Router = express.Router();
   *          schema:
   *            type: object
   *            properties:
-  *              viceDean:
-  *                $ref: '#/components/schemas/ViceDeanInput'
+  *              secretary:
+  *                $ref: '#/components/schemas/SecretaryInput'
   *     responses:
   *      200:
   *        description: Success
@@ -176,16 +182,16 @@ const router: Router = express.Router();
   *        description: Not found
   *  delete:
   *     tags:
-  *     - vicedean
-  *     summary: delete vice dean account
-  *     description: delete vice dean account 
+  *     - secretary
+  *     summary: delete secretary account
+  *     description: delete secretary account 
   *     parameters:
   *       - in: path
-  *         name: viceDeanId
+  *         name: secretaryId
   *         required: true
   *         scheme:
   *           type: string
-  *         description: id of that faculty vice dean
+  *         description: id of that faculty secretary
   *     requestBody:
   *      required: false
   *     responses:
@@ -201,10 +207,10 @@ const router: Router = express.Router();
   *        description: Not found
   */
 
-router.get('/:viceDeanId', authorizationMiddleware, getFacultyViceDeanById);
-router.get('/', authorizationMiddleware, getAllFacultyViceDean);
-router.post('/', authorizationMiddleware, postAddFacultyViceDean);
-router.put('/:viceDeanId', authorizationMiddleware, putUpdateAFacultyViceDean);
-router.delete('/:viceDeanId', authorizationMiddleware, deleteRemoveAFacultyViceDean);
+router.get('/:secretaryId', authorizationMiddleware, getFacultySecretaryById);
+router.get('/', authorizationMiddleware, getAllFacultySecretary);
+router.post('/', authorizationMiddleware, postAddFacultySecretary);
+router.put('/:secretaryId', authorizationMiddleware, putUpdateAFacultySecretary);
+router.delete('/:secretaryId', authorizationMiddleware, deleteRemoveAFacultySecretary);
 
-export const facultyViceDeanRouter: Router = router;
+export const facultySecretaryRouter: Router = router;

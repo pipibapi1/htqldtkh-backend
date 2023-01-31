@@ -15,6 +15,10 @@ const topicConditionSchema = new Schema({
     expressionId: {
         type: String,
         require: true
+    },
+    createAt: {
+        type: Date,
+        require: true
     }
 }, {collection: "topicCondition"})
 
