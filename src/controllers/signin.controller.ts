@@ -37,6 +37,7 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
             }
         }
         else if (req.body.role == RoleTypeEnum.FS) {
+            console.log(req.body)
             const secretary = await FacultySecretaryModel.findOne({username: req.body.username}).lean();
             if (secretary) {
                 const isMatchPassword = await compare(req.body.password, secretary.password);
@@ -93,6 +94,7 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
             }
         }
     } catch (error: any) {
+        console.log(error);
         res.status(400).send({err: error})
     }
 }

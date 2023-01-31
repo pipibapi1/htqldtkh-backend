@@ -1,12 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import g, { Grid } from 'gridfs-stream';
 
 dotenv.config();
-
-declare global {
-    var gfs: Grid;
-}
 
 const connectionString = process.env.DB_CONNECTION_STRING;
 mongoose.Promise = global.Promise;
@@ -15,7 +10,6 @@ if(connectionString){
     .then(
         () => {
                 console.log("Database is connected !!!");
-                globalThis.gfs = g(mongoose.connection.db, mongoose.mongo);
             },
         )
     .catch(

@@ -2,6 +2,7 @@ import express, {Express} from 'express';
 import dotenv from 'dotenv';
 import { fullRouter } from './src/routes';
 // connect database
+import "./db-connection"
 import swaggerDocs from './src/utils/swagger.util';
 var cors = require('cors')
 import bodyParser from 'body-parser';
@@ -17,7 +18,6 @@ app.use(cors());
 app.set('view engine', 'pug');
 app.set('views', './views');
 
-app.use(bodyParser({limit: '50mb'}));
 
 // for parsing application/json
 app.use(bodyParser.json()); 
