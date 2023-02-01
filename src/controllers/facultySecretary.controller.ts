@@ -3,6 +3,8 @@ import { RoleTypeEnum } from "../enums/roleType.enum";
 import { hash } from "bcrypt";
 import { regexInterface } from "../interface/general.interface";
 const FacultySecretaryModel = require('../models/facultySecretary.model')
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const getAllFacultySecretary = async (req: Request, res: Response, next: NextFunction) => {
     try {

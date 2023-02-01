@@ -4,6 +4,8 @@ let StudentModel = require("../models/student.model");
 let FacultySecretaryModel = require("../models/facultySecretary.model");
 let FacultyViceDeanModel = require("../models/facultyViceDean.model");
 let jwt = require('jsonwebtoken');
+import dotenv from 'dotenv';
+dotenv.config();
 
 interface student {
     role:string, 

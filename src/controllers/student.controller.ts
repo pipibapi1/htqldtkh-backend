@@ -4,6 +4,8 @@ import { hash } from "bcrypt";
 import { StudentAccountStatusEnum } from "../enums/studentAccountStatus.enum";
 import { regexInterface } from "../interface/general.interface";
 const StudentModel = require('../models/student.model');
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const getListStudent = async (req: Request, res: Response, next: NextFunction) => {
     try {

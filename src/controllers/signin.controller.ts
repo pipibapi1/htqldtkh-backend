@@ -5,6 +5,8 @@ let FacultySecretaryModel = require("../models/facultySecretary.model");
 let FacultyViceDeanModel = require("../models/facultyViceDean.model");
 import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const signInController = async (req: Request, res: Response, next: NextFunction) => {
     try {
