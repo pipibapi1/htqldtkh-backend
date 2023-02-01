@@ -117,7 +117,7 @@ const router: Router = express.Router();
   *        description: Not authorized
   *      404:
   *        description: Not found
-  * /api/student/{studentId}:
+  * /api/student/{_id}:
   *  get:
   *     tags:
   *     - student
@@ -125,7 +125,7 @@ const router: Router = express.Router();
   *     description: get student detail
   *     parameters:
   *       - in: path
-  *         name: studentId
+  *         name: _id
   *         required: true
   *         scheme:
   *           type: string
@@ -157,7 +157,7 @@ const router: Router = express.Router();
   *     description: update student detail
   *     parameters:
   *       - in: path
-  *         name: studentId
+  *         name: _id
   *         required: true
   *         scheme:
   *           type: string
@@ -196,7 +196,7 @@ const router: Router = express.Router();
   *     description: secretary and vice dean delete a student account
   *     parameters:
   *       - in: path
-  *         name: studentId
+  *         name: _id
   *         required: true
   *         scheme:
   *           type: string
@@ -217,9 +217,9 @@ const router: Router = express.Router();
   */
 
 router.get('/', authorizationMiddleware, getListStudent);
-router.get('/:studentId', authorizationMiddleware, getStudentById);
+router.get('/:_id', authorizationMiddleware, getStudentById);
 router.post('/', authorizationMiddleware, postAddAStudent);
-router.put('/:studentId', authorizationMiddleware, putUpdateAStudent);
-router.delete('/:studentId', authorizationMiddleware, deleteAStudent)
+router.put('/:_id', authorizationMiddleware, putUpdateAStudent);
+router.delete('/:_id', authorizationMiddleware, deleteAStudent)
 
 export const studentRouter: Router = router;

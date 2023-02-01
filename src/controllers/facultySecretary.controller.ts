@@ -45,7 +45,7 @@ export const getFacultySecretaryById = async (req: Request, res: Response, next:
     try {
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS) {
-            const secretary = await FacultySecretaryModel.findById(req.params.secretaryId)
+            const secretary = await FacultySecretaryModel.findById(req.params._id)
                                                 .lean();
             if (secretary) {
                 res.status(200).send({ secretary: secretary })
@@ -88,7 +88,7 @@ export const putUpdateAFacultySecretary = async (req: Request, res: Response, ne
     try {
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS) {
-            const secretary = await FacultySecretaryModel.findById(req.params.secretaryId);
+            const secretary = await FacultySecretaryModel.findById(req.params._id);
             if (secretary) {
                 const changeableField: string[] = ['name', 'gender', 'email', 'phoneNumber',
                                             'username', 'password', 'image', 'staffId', 'birthDate']
@@ -120,10 +120,10 @@ export const deleteRemoveAFacultySecretary = async (req: Request, res: Response,
     try {
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS) {
-            if (req.params.secretaryId != author._id) {
-                const existedSecretary = await FacultySecretaryModel.findById(req.params.secretaryId);
+            if (req.params._id != author._id) {
+                const existedSecretary = await FacultySecretaryModel.findById(req.params._id);
                 if (existedSecretary) {
-                    await FacultySecretaryModel.deleteOne({_id: req.params.secretaryId})
+                    await FacultySecretaryModel.deleteOne({_id: req.params._id})
                     res.status(200).send({msg: "Success"})
                 }
                 else {

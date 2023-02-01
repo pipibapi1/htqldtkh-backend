@@ -108,7 +108,7 @@ const router: Router = express.Router();
   *        description: Not authorized
   *      404:
   *        description: Not found
-  * /api/vicedean/{viceDeanId}:
+  * /api/vicedean/{_id}:
   *  get:
   *     tags:
   *     - vicedean
@@ -116,7 +116,7 @@ const router: Router = express.Router();
   *     description: get vice dean account detail
   *     parameters:
   *       - in: path
-  *         name: viceDeanId
+  *         name: _id
   *         required: true
   *         scheme:
   *           type: string
@@ -145,7 +145,7 @@ const router: Router = express.Router();
   *     description: change vice dean account info
   *     parameters:
   *       - in: path
-  *         name: viceDeanId
+  *         name: _id
   *         required: true
   *         scheme:
   *           type: string
@@ -181,7 +181,7 @@ const router: Router = express.Router();
   *     description: delete vice dean account 
   *     parameters:
   *       - in: path
-  *         name: viceDeanId
+  *         name: _id
   *         required: true
   *         scheme:
   *           type: string
@@ -201,10 +201,10 @@ const router: Router = express.Router();
   *        description: Not found
   */
 
-router.get('/:viceDeanId', authorizationMiddleware, getFacultyViceDeanById);
+router.get('/:_id', authorizationMiddleware, getFacultyViceDeanById);
 router.get('/', authorizationMiddleware, getAllFacultyViceDean);
 router.post('/', authorizationMiddleware, postAddFacultyViceDean);
-router.put('/:viceDeanId', authorizationMiddleware, putUpdateAFacultyViceDean);
-router.delete('/:viceDeanId', authorizationMiddleware, deleteRemoveAFacultyViceDean);
+router.put('/:_id', authorizationMiddleware, putUpdateAFacultyViceDean);
+router.delete('/:_id', authorizationMiddleware, deleteRemoveAFacultyViceDean);
 
 export const facultyViceDeanRouter: Router = router;
