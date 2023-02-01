@@ -13,8 +13,10 @@ const port = process.env.PORT || '5000';
 
 app.use(cors());
 
-//for multer, use for upload file
+//limit for body request
+app.use(bodyParser.urlencoded({limit: '50mb'})); 
 
+//for multer, use for upload file
 app.set('view engine', 'pug');
 app.set('views', './views');
 
