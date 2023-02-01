@@ -8,6 +8,7 @@ import { studentRouter } from './student.route';
 import { allocatedExpenseRouter } from './allocatedExpense.route';
 import { facultySecretaryRouter } from './facultySecretary.route';
 
+
 router.use("/auth", authRouter);
 router.use("/vicedean", facultyViceDeanRouter);
 router.use("/secretary", facultySecretaryRouter);

@@ -31,6 +31,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 //route
+// For testing
+import testAuth from './src/controllers/testAuth.controller';
+app.get("/", testAuth);
 app.use('/api', fullRouter);
 
 // generate swagger api docs
