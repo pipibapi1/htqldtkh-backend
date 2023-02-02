@@ -4,10 +4,6 @@ import { RequestStatusEnum } from '../enums/requestStatus.enum';
 const Schema = mongoose.Schema;
 
 const requestSchema = new Schema({
-    id: {
-        type: String,
-        require: true
-    },
     status: {
         type: String,
         enum: Object.values(RequestStatusEnum),
@@ -26,6 +22,15 @@ const requestSchema = new Schema({
         type: String,
         require: true
     },
+    extensionTime: {
+        type: String,
+        require: false
+    },
+    createAt: {
+        type: Date,
+        require: true,
+        index: -1
+    }
 }, {collection: "request"})
 
 let requestModel = mongoose.model("request", requestSchema);
