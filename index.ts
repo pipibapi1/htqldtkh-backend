@@ -13,8 +13,10 @@ const port = process.env.PORT || '5000';
 
 app.use(cors());
 
-//for multer, use for upload file
+//limit for body request
+app.use(bodyParser({limit: '50mb'})); 
 
+//for multer, use for upload file
 app.set('view engine', 'pug');
 app.set('views', './views');
 
@@ -29,6 +31,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 //route
+// For testing
+import testAuth from './src/controllers/testAuth.controller';
+app.get("/", testAuth);
 app.use('/api', fullRouter);
 
 // generate swagger api docs

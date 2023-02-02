@@ -4,6 +4,8 @@ import { hash } from "bcrypt";
 import { StudentAccountStatusEnum } from "../enums/studentAccountStatus.enum";
 import { regexInterface } from "../interface/general.interface";
 const StudentModel = require('../models/student.model');
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const getListStudent = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -59,12 +61,12 @@ export const getListStudent = async (req: Request, res: Response, next: NextFunc
 
 export const getStudentById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const studentId: string = req.params.studentId;
+        const _id: string = req.params._id;
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD 
-            || (author.role == RoleTypeEnum.Student && author._id == req.params.studentId)) 
+            || (author.role == RoleTypeEnum.Student && author._id == req.params._id)) 
         {
-            const studentInfo = await StudentModel.findById(studentId).lean();
+            const studentInfo = await StudentModel.findById(_id).lean();
             if (studentInfo) {
                 res.status(200).send({student: studentInfo});
             }
@@ -116,8 +118,8 @@ export const postAddAStudent = async (req: Request, res: Response, next: NextFun
 export const putUpdateAStudent = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;
-        if (author.role == RoleTypeEnum.FS || (author.role == RoleTypeEnum.Student && author._id == req.params.studentId)) {
-            const student = await StudentModel.findById(req.params.studentId);
+        if (author.role == RoleTypeEnum.FS || (author.role == RoleTypeEnum.Student && author._id == req.params._id)) {
+            const student = await StudentModel.findById(req.params._id);
             if (student) {
                 const changeableFields: string[] = ['name', 'gender', 'phoneNumber', 'email', 'username',
                                             'password', 'image', 'studentId', 'educationType', 
@@ -150,9 +152,9 @@ export const deleteAStudent = async (req: Request, res: Response, next: NextFunc
     try {
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS) {
-            const existedStudent = await StudentModel.findById(req.params.studentId);
+            const existedStudent = await StudentModel.findById(req.params._id);
             if (existedStudent) {
-                await StudentModel.deleteOne({_id: req.params.studentId})
+                await StudentModel.deleteOne({_id: req.params._id})
                 res.status(200).send({msg: "Success"})
             }
             else {

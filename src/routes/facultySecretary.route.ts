@@ -111,7 +111,7 @@ const router: Router = express.Router();
   *        description: Not authorized
   *      404:
   *        description: Not found
-  * /api/secretary/{secretaryId}:
+  * /api/secretary/{_id}:
   *  get:
   *     tags:
   *     - secretary
@@ -119,7 +119,7 @@ const router: Router = express.Router();
   *     description: get secretary account detail by secretary id
   *     parameters:
   *       - in: path
-  *         name: secretaryId
+  *         name: _id
   *         required: true
   *         scheme:
   *           type: string
@@ -151,7 +151,7 @@ const router: Router = express.Router();
   *     description: change secretary account info
   *     parameters:
   *       - in: path
-  *         name: secretaryId
+  *         name: _id
   *         required: true
   *         scheme:
   *           type: string
@@ -187,7 +187,7 @@ const router: Router = express.Router();
   *     description: delete secretary account 
   *     parameters:
   *       - in: path
-  *         name: secretaryId
+  *         name: _id
   *         required: true
   *         scheme:
   *           type: string
@@ -207,10 +207,10 @@ const router: Router = express.Router();
   *        description: Not found
   */
 
-router.get('/:secretaryId', authorizationMiddleware, getFacultySecretaryById);
+router.get('/:_id', authorizationMiddleware, getFacultySecretaryById);
 router.get('/', authorizationMiddleware, getAllFacultySecretary);
 router.post('/', authorizationMiddleware, postAddFacultySecretary);
-router.put('/:secretaryId', authorizationMiddleware, putUpdateAFacultySecretary);
-router.delete('/:secretaryId', authorizationMiddleware, deleteRemoveAFacultySecretary);
+router.put('/:_id', authorizationMiddleware, putUpdateAFacultySecretary);
+router.delete('/:_id', authorizationMiddleware, deleteRemoveAFacultySecretary);
 
 export const facultySecretaryRouter: Router = router;

@@ -3,6 +3,8 @@ import { RoleTypeEnum } from "../enums/roleType.enum";
 import { hash } from "bcrypt";
 import { regexInterface } from "../interface/general.interface";
 const FacultyViceDeanModel = require('../models/facultyViceDean.model');
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const getAllFacultyViceDean = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -44,8 +46,8 @@ export const getAllFacultyViceDean = async (req: Request, res: Response, next: N
 export const getFacultyViceDeanById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;
-        if (author.role == RoleTypeEnum.FS || (author.role == RoleTypeEnum.FVD && author._id == req.params.viceDeanId)) {
-            const viceDean = await FacultyViceDeanModel.findById(req.params.viceDeanId)
+        if (author.role == RoleTypeEnum.FS || (author.role == RoleTypeEnum.FVD && author._id == req.params._id)) {
+            const viceDean = await FacultyViceDeanModel.findById(req.params._id)
                                                 .lean();
             if (viceDean) {
                 res.status(200).send({ viceDean: viceDean })
@@ -87,9 +89,9 @@ export const postAddFacultyViceDean = async (req: Request, res: Response, next: 
 export const putUpdateAFacultyViceDean = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;
-        if (author.role == RoleTypeEnum.FS || (author.role == RoleTypeEnum.FVD && (author._id == req.params.viceDeanId))) 
+        if (author.role == RoleTypeEnum.FS || (author.role == RoleTypeEnum.FVD && (author._id == req.params._id))) 
         {
-            const viceDean = await FacultyViceDeanModel.findById(req.params.viceDeanId);
+            const viceDean = await FacultyViceDeanModel.findById(req.params._id);
             if (viceDean) {
                 const changeableField: string[] = ['name', 'gender', 'email', 'phoneNumber',
                                             'username', 'password', 'image', 'staffId', 'birthDate']
@@ -121,9 +123,9 @@ export const deleteRemoveAFacultyViceDean = async (req: Request, res: Response, 
     try {
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS) {
-            const existedViceDean = await FacultyViceDeanModel.findById(req.params.viceDeanId).lean();
+            const existedViceDean = await FacultyViceDeanModel.findById(req.params._id).lean();
             if (existedViceDean) {
-                await FacultyViceDeanModel.deleteOne({_id: req.params.viceDeanId})
+                await FacultyViceDeanModel.deleteOne({_id: req.params._id})
                 res.status(200).send({msg: "Success"})
             }
             else {

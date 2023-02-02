@@ -1,11 +1,21 @@
 import { Request, Response, NextFunction } from "express";
+import { RoleTypeEnum } from "../enums/roleType.enum";
+import { hash } from "bcrypt";
+import { StudentAccountStatusEnum } from "../enums/studentAccountStatus.enum";
+import { regexInterface } from "../interface/general.interface";
+const StudentModel = require('../models/student.model');
 
-const testAuth = async (req: Request, res: Response, next: NextFunction) => {
+export const testAuth = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.status(200).send({result: req.body})
-    } catch (e:any) {
-        res.status(400).send({err: e})
+        if (true) {
+            
+            const studentsList = await StudentModel.find();
+            res.status(200).send({ students: studentsList});
+        }
+
+    } catch (error) {
+        res.status(400).send({err: error})
     }
-};
+}
 
 export default testAuth;

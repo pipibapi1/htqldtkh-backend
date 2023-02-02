@@ -4,6 +4,8 @@ import { StudentAccountStatusEnum } from "../enums/studentAccountStatus.enum";
 let StudentModel = require("../models/student.model");
 import { sign } from "jsonwebtoken";
 import { hash } from "bcrypt";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const signUpController = async (req: Request, res: Response, next: NextFunction) => {
     try {
