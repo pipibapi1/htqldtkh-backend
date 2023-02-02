@@ -7,6 +7,7 @@ import { announcementRouter } from './announcement.route';
 import { studentRouter } from './student.route';
 import { allocatedExpenseRouter } from './allocatedExpense.route';
 import { facultySecretaryRouter } from './facultySecretary.route';
+import { topicRouter } from './topic.route';
 
 
 router.use("/auth", authRouter);
@@ -15,5 +16,6 @@ router.use("/secretary", facultySecretaryRouter);
 router.use('/announcement', announcementRouter);
 router.use('/student', studentRouter);
 router.use('/expense', allocatedExpenseRouter);
+router.use("/topic", topicRouter);
 
 export const fullRouter: Router = router;

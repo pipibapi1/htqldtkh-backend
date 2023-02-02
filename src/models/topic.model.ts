@@ -62,7 +62,8 @@ const topicSchema = new Schema({
     },
     creationDate: {
         type: Date,
-        require: true
+        require: true,
+        index: -1
     },
     acceptanceResult: {
         type: String,
