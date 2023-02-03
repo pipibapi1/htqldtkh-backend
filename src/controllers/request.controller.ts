@@ -3,7 +3,7 @@ import { RoleTypeEnum } from "../enums/roleType.enum";
 import { regexInterface } from "../interface/general.interface";
 import { requestInfoInterface } from "../interface/request.interface";
 const RequestModel = require('../models/request.model');
-const StudentModel = require('../models/student.model');
+const StudentModel = require('../models/student.model'); 
 
 export const getListRequest = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -27,7 +27,7 @@ export const getListRequest = async (req: Request, res: Response, next: NextFunc
                                                                 .select(chosenFields.join(" "))
                                                                 .limit(end)
                                                                 .lean()
-                                                                .sort({accountCreationDate: -1});
+                                                                .sort({createAt: -1});
             if (end <= 0 || start >= requestList.length) {
                 res.status(200).send({ requests: [] });
             }
