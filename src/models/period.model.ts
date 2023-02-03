@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { RegisterPeriodStatusEnum } from '../enums/registerPeriodStatus.enum';
+import { PeriodStatusEnum } from '../enums/periodStatus.enum';
 const Schema = mongoose.Schema;
 
 const registerPeriodSchema = new Schema({
@@ -9,7 +9,7 @@ const registerPeriodSchema = new Schema({
     },
     status: {
         type: String,
-        enum: Object.values(RegisterPeriodStatusEnum),
+        enum: Object.values(PeriodStatusEnum),
         require: true
     },
     createAt: {
