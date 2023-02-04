@@ -13,7 +13,7 @@ export const getListTopic = async (req: Request, res: Response, next: NextFuncti
             (author.role == RoleTypeEnum.Student && req.query.student && author._id == req.query.student)) 
         {
             let pageNum: number = 1;
-            let limit: number = 10;
+            let limit: number = 999999;
             if (req.query.page) pageNum = parseInt(req.query.page as string);
             if (req.query.limit) limit = parseInt(req.query.limit as string);
             const start: number = limit * (pageNum - 1);
@@ -35,14 +35,16 @@ export const getListTopic = async (req: Request, res: Response, next: NextFuncti
                 filter.studentId = req.query.student as string;
             }
             const chosenField: string[] = ["_id", "name", "type", "startTime", "endTime", "isExtended", "extensionTime",
-                                            "status", "period", "productPath", "studentId", "creationDate"];
+                                            "status", "period", "productPath", "studentId", "creationDate", "topicGivenId", "expense"];
+            const fullList: topicGeneralInterface[] = await TopicModel.find(filter);
+            const totalPage = fullList.length % limit === 0 ? (fullList.length / limit) : (Math.floor(fullList.length / limit) + 1);
             const topicsList: topicGeneralInterface[] = await TopicModel.find(filter)
                                             .select(chosenField.join(" "))
                                             .limit(end)
                                             .lean()
                                             .sort({creationDate: -1});
             if (end <= 0 || start >= topicsList.length) {
-                res.status(200).send({ topics: [] });
+                res.status(200).send({ topics: [], metadata:{totalPage: totalPage} });
             }
             else {
                 const chosenTopics = topicsList.slice(start, end);
@@ -60,7 +62,7 @@ export const getListTopic = async (req: Request, res: Response, next: NextFuncti
                     else checkStudentValid = false
                 }
                 if (checkStudentValid) {
-                    res.status(200).send({topics: topicResultList});
+                    res.status(200).send({topics: topicResultList, metadata:{totalPage: totalPage}});
                 }
                 else {
                     res.status(404).send({msg: "some student not found"})

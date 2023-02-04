@@ -82,6 +82,10 @@ const topicSchema = new Schema({
     otherMembers: {
         type: [otherMemberSchema],
         default: []
+    },
+    topicGivenId: {
+        type: String,
+        min: 1
     }
 }, {collection: 'topic'})
 
