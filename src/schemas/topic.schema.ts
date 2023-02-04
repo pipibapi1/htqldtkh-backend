@@ -38,6 +38,9 @@ import { object, string, TypeOf, boolean, number } from "zod";
   *        extensionTime:
   *          type: number
   *          example: 3
+  *        expense:
+  *          type: number
+  *          example: 5000000
   *        status:
   *          type: string
   *          example: Tạo mới
@@ -47,6 +50,9 @@ import { object, string, TypeOf, boolean, number } from "zod";
   *        studentId:
   *          type: string
   *          example: 1234567
+  *        topicGivenId:
+  *          type: string
+  *          example: TPH60523
   *        student:
   *          type: array
   *          items: 

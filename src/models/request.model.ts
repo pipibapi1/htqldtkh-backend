@@ -23,13 +23,18 @@ const requestSchema = new Schema({
         require: true
     },
     extensionTime: {
-        type: String,
+        type: Number,
+        defaut: 0,
         require: false
     },
     createAt: {
         type: Date,
         require: true,
         index: -1
+    },
+    period: {
+        type: String,
+        require: true
     }
 }, {collection: "request"})
 

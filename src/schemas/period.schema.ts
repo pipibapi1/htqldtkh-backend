@@ -25,4 +25,12 @@
   *      type: array
   *      items:
   *        $ref: '#/components/schemas/Period'
+  *    PeriodInput:
+  *      type: object
+  *      required:
+  *        - period
+  *      properties:
+  *        period:
+  *          type: date
+  *          example: 06/2023
   */

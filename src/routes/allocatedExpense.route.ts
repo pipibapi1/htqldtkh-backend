@@ -1,7 +1,7 @@
 import express, {Router} from 'express';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
 import { getAllocatedExpenseList, getAllocatedExpenseDetail, postAllocatedExpense,
-putUpdateAllocatedExpense, deleteAllocatedExpense } from '../controllers/allocatedExpense.controller';
+putUpdateAllocatedExpense, deleteAllocatedExpense, getAllocatedExpenseDetailByPeriod } from '../controllers/allocatedExpense.controller';
 const router: Router = express.Router();
 
 /**
@@ -76,6 +76,39 @@ const router: Router = express.Router();
   *                 type: array
   *                 items:
   *                   $ref: '#/components/schemas/ExpenseGeneralInfo'
+  *      409:
+  *        description: Conflict
+  *      400:
+  *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
+  * /api/expense/findByPeriod/{periodId}:
+  *  get:
+  *     tags:
+  *     - allocated expense
+  *     summary: get allocated expense detail by period
+  *     description: secretary get allocated expense detail by period
+  *     parameters:
+  *       - in: path
+  *         name: periodId
+  *         required: true
+  *         scheme:
+  *           type: string
+  *         description: id of allocated expense
+  *     requestBody:
+  *      required: false
+  *     responses:
+  *      200:
+  *        description: Success
+  *        content:
+  *          application/json:
+  *            schema:
+  *             type: object
+  *             properties:
+  *               expense:
+  *                 $ref: '#/components/schemas/AllocatedExpenseResponse'
   *      409:
   *        description: Conflict
   *      400:
@@ -185,6 +218,7 @@ const router: Router = express.Router();
 
 router.get('/', authorizationMiddleware, getAllocatedExpenseList);
 router.post('/', authorizationMiddleware, postAllocatedExpense);
+router.get('/findByPeriod/:periodId', authorizationMiddleware, getAllocatedExpenseDetailByPeriod);
 router.get('/:expenseId', authorizationMiddleware, getAllocatedExpenseDetail);
 router.put('/:expenseId', authorizationMiddleware, putUpdateAllocatedExpense);
 router.delete('/:expenseId', authorizationMiddleware, deleteAllocatedExpense);

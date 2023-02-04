@@ -17,5 +17,6 @@ export interface topicGeneralInterface {
     studentId: string,
     student?: {_id: string, name: string}
     creationDate: string,
-    productPath: string
+    productPath: string,
+    topicGivenId: string,
 }

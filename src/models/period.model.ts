@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { PeriodStatusEnum } from '../enums/periodStatus.enum';
 const Schema = mongoose.Schema;
 
-const registerPeriodSchema = new Schema({
+const periodSchema = new Schema({
     period:{
         type: Date,
         require: true
@@ -17,8 +17,8 @@ const registerPeriodSchema = new Schema({
         require: true,
         index: -1
     }
-}, {collection: "registerPeriod"})
+}, {collection: "period"})
 
-let requestModel = mongoose.model("registerPeriod", registerPeriodSchema);
+let periodModel = mongoose.model("period", periodSchema);
 
-module.exports = requestModel
+module.exports = periodModel
