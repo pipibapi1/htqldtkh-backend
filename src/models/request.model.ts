@@ -23,8 +23,9 @@ const requestSchema = new Schema({
         require: true
     },
     extensionTime: {
-        type: String,
-        require: false
+        type: Number,
+        require: false,
+        min: 0
     },
     createAt: {
         type: Date,

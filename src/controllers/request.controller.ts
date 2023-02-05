@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
+import { RequestStatusEnum } from "../enums/requestStatus.enum";
 import { regexInterface } from "../interface/general.interface";
 import { requestInfoInterface } from "../interface/request.interface";
 const RequestModel = require('../models/request.model');
 const StudentModel = require('../models/student.model');
+const TopicModel = require('../models/topic.model')
 
 export const getListRequest = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -54,6 +56,84 @@ export const getListRequest = async (req: Request, res: Response, next: NextFunc
         }
         else {
             res.status(403).send({msg: 'Not authorized'})
+        }
+    } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
+
+export const postNewRequest = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const author = req.body.author;
+        if (author.role == RoleTypeEnum.Student) {
+            const requestData: requestInfoInterface = req.body.request;
+            const topic: {_id: string, studentId: string} = await TopicModel.findById(requestData.topicId)
+                                                                            .select("studentId")
+                                                                            .lean();
+            if (topic) {
+                if (topic.studentId == author._id) {
+                    requestData.studentId = author._id;
+                    requestData.status = RequestStatusEnum.WAIT_APPROVAL;
+                    requestData.createAt = (new Date()).toString();
+                    const requestDoc = new RequestModel(requestData);
+                    const newRequest = await requestDoc.save();
+                    res.status(200).send({request: newRequest})
+                }
+                else {
+                    res.status(403).send({msg: "Not authorized"})
+                }
+            }
+            else {
+                res.status(404).send({msg: "Topic not found"})
+            }
+        }
+        else {
+            res.status(403).send({msg: 'Not authorized'})
+        }
+        
+    } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
+
+export const putUpdateRequest = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const author = req.body.author;
+        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD) {
+            const request = await RequestModel.findById(req.params.requestId);
+            if (request) {
+                if (req.body.request.status) {
+                    request.status = req.body.request.status
+                };
+                const updatedRequest = await request.save();
+                res.status(200).send({request: updatedRequest})
+            }
+            else {
+                res.status(404).send({msg: "Request not found"})
+            }
+        }
+        else {
+            res.status(403).send({msg: 'Not authorized'})
+        }
+    } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
+
+export const getRequestDetail = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const author = req.body.author;
+        const request = await RequestModel.findById(req.params.requestId).lean();
+        if (request) {
+            if (author.role == RoleTypeEnum.Student && author._id != request.studentId) {
+                res.status(403).send({msg: "Not authorized"})
+            }
+            else {
+                res.status(200).send({request: request})
+            }
+        }
+        else {
+            res.status(404).send({msg: "Request not found"})
         }
     } catch (error) {
         res.status(400).send({err: error})

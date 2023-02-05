@@ -1,6 +1,7 @@
 import express, {Router} from 'express';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
-import { getListRequest } from '../controllers/request.controller';
+import { getListRequest, getRequestDetail, postNewRequest, putUpdateRequest }
+ from '../controllers/request.controller';
 
 const router: Router = express.Router();
 /**
@@ -53,6 +54,35 @@ const router: Router = express.Router();
   *             properties:
   *               requests:
   *                 $ref: '#/components/schemas/RequestGeneralInfoList'
+  *      409:
+  *        description: Conflict
+  *      400:
+  *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
+  *  post:
+  *     tags:
+  *     - request
+  *     summary: post new request
+  *     description: student create request
+  *     requestBody:
+  *      required: true
+  *      content:
+  *        application/json:
+  *           schema:
+  *             type: object
+  *             properties:
+  *               student:
+  *                 $ref: '#/components/schemas/RequestInput'
+  *     responses:
+  *      200:
+  *        description: Success
+  *        content:
+  *          application/json:
+  *            schema:
+  *              $ref: '#/components/schemas/RequestGeneralInfo'
   *      409:
   *        description: Conflict
   *      400:
