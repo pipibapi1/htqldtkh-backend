@@ -5,6 +5,7 @@ export interface requestInfoInterface {
     studentId: string,
     studentName?: string,
     topicId: string,
+    topicName: string,
     extensionTime?: number,
     createAt: string
 }

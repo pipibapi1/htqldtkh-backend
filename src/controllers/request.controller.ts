@@ -5,7 +5,7 @@ import { regexInterface } from "../interface/general.interface";
 import { requestInfoInterface } from "../interface/request.interface";
 const RequestModel = require('../models/request.model');
 const StudentModel = require('../models/student.model');
-const TopicModel = require('../models/topic.model')
+const TopicModel = require('../models/topic.model');
 
 export const getListRequest = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -18,6 +18,9 @@ export const getListRequest = async (req: Request, res: Response, next: NextFunc
             const start: number = limit * (pageNum - 1);
             const end: number = limit * pageNum;
             let filter: {[k: string]: regexInterface | string} = {};
+            if (req.query.period) {
+                filter.period = req.query.period as string;
+            }
             if (req.query.type) {
                 filter.type = req.query.type as string;
             }
@@ -29,7 +32,7 @@ export const getListRequest = async (req: Request, res: Response, next: NextFunc
                                                                 .select(chosenFields.join(" "))
                                                                 .limit(end)
                                                                 .lean()
-                                                                .sort({accountCreationDate: -1});
+                                                                .sort({createAt: -1});
             if (end <= 0 || start >= requestList.length) {
                 res.status(200).send({ requests: [] });
             }
@@ -42,14 +45,24 @@ export const getListRequest = async (req: Request, res: Response, next: NextFunc
                     const student:{_id?: string, name: string} = await StudentModel.findById(request.studentId)
                                                                         .select("name")
                                                                         .lean();
+                    const topic: {_id?: string, name: string} = await TopicModel.findById(request.topicId)
+                                                                        .select("name")
+                                                                        .lean();
                     if (student) {
                         request.studentName = student.name;
-                        resultRequestList = resultRequestList.concat([request]);
                     }
                     else {
                         request.studentName = "";
-                        resultRequestList = resultRequestList.concat([request]);
                     }
+                    if (topic) {
+                        request.topicName = topic.name;
+
+                    }
+                    else {
+                        request.topicName = "";
+                    }
+                    resultRequestList = resultRequestList.concat([request]);
+
                 }
                 res.status(200).send({requests: resultRequestList});
             }

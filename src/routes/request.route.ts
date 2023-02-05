@@ -29,6 +29,12 @@ const router: Router = express.Router();
   *         required: false
   *         description: num item per page
   *       - in: query
+  *         name: period
+  *         schema:
+  *           type: string
+  *         required: false
+  *         description: period id, use for filter
+  *       - in: query
   *         name: type
   *         schema:
   *           type: string

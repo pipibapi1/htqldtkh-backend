@@ -101,6 +101,44 @@ export const getAllocatedExpenseDetail = async (req: Request, res: Response, nex
     }
 }
 
+export const getAllocatedExpenseDetailByPeriod = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const author = req.body.author;
+        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD) {
+            const allocatedExpenseArray: expenseInterface[] = await AllocatedExpenseModel.find({period: req.params.periodId})
+                                                            .lean();
+            const allocatedExpense: expenseInterface = allocatedExpenseArray[0];
+            if (allocatedExpense) {
+                allocatedExpense.usedExpense = 0;
+                allocatedExpense.used = {};
+                const period = allocatedExpense.period;
+                const topicExpense: topicExpenseInterface[] = await TopicModel.find({period: period})
+                                                                .select("type expense")
+                                                                .lean();
+                for (let index: number = 0; index < topicExpense.length; index++) {
+                    const currTopic: topicExpenseInterface = topicExpense[index];
+                    allocatedExpense.usedExpense += currTopic.expense;
+                    if (allocatedExpense.used[currTopic.type]){
+                        allocatedExpense.used[currTopic.type] += currTopic.expense;
+                    }
+                    else {
+                        allocatedExpense.used[currTopic.type] = currTopic.expense;
+                    }
+                }
+                res.status(200).send({expense: allocatedExpense})
+            }
+            else {
+                res.status(404).send({msg: "Not found"})
+            }
+        }
+        else {
+            res.status(403).send({msg: 'Not authorized'})
+        }
+    } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
+
 export const deleteAllocatedExpense = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;

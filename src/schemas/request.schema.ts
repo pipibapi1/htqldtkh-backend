@@ -1,4 +1,3 @@
-import { object, string, TypeOf } from "zod";
 /**
   * @openapi
   * components:
@@ -30,6 +29,9 @@ import { object, string, TypeOf } from "zod";
   *        topicId:
   *          type: string
   *          example: id in mongoDB
+  *        topicName:
+  *          type: string
+  *          example: Hệ thống quản lý đề tài khoa học cấp sinh viên
   *        extensionTime:
   *          type: number
   *          example: 3
