@@ -2,23 +2,22 @@ import mongoose from 'mongoose';
 import { TopicTypeEnum } from '../enums/topicType.enum';
 const Schema = mongoose.Schema;
 
+
+
 const topicConditionSchema = new Schema({
-    id: {
-        type: String,
-        require: true
-    },
     type: {
         type: String,
         enum: Object.values(TopicTypeEnum),
         require: true
     },
-    expressionId: {
-        type: String,
-        require: true
-    },
     createAt: {
         type: Date,
-        require: true
+        require: true,
+        index: -1
+    },
+    expression: {
+        type: Object,
+        default: {}
     }
 }, {collection: "topicCondition"})
 

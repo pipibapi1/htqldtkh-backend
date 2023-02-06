@@ -10,6 +10,7 @@ import { facultySecretaryRouter } from './facultySecretary.route';
 import { requestRouter } from './request.route';
 import { topicRouter } from './topic.route';
 import { periodRouter } from './period.route';
+import { topicConditionRouter } from './topicCondition.route';
 
 router.use("/auth", authRouter);
 router.use("/vicedean", facultyViceDeanRouter);
@@ -20,5 +21,6 @@ router.use('/expense', allocatedExpenseRouter);
 router.use("/request", requestRouter);
 router.use("/topic", topicRouter);
 router.use("/period", periodRouter);
+router.use("/topicCondition", topicConditionRouter);
 
 export const fullRouter: Router = router;
