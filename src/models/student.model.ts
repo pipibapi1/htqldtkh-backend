@@ -68,7 +68,7 @@ const studentSchema = new Schema({
     },
     accountCreationDate: {
         type: Date,
-        require: true
+        require: true 
     },
     birthDate: {
         type: String,

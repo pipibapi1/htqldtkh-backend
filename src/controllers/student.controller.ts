@@ -38,17 +38,19 @@ export const getListStudent = async (req: Request, res: Response, next: NextFunc
                     }
                 }
             })
+            const fullList = await StudentModel.find(filter);
+            const totalPage = fullList.length % limit === 0 ? (fullList.length / limit) : (Math.floor(fullList.length / limit) + 1);
             const studentsList = await StudentModel.find(filter)
-                                            .select("_id name gender phoneNumber email studentId username password accountStatus accountCreationDate")
+                                            .select("_id name gender phoneNumber email studentId username birthDate password accountStatus accountCreationDate")
                                             .limit(end)
                                             .lean()
                                             .sort({accountCreationDate: -1});
             if (end <= 0 || start >= studentsList.length) {
-                res.status(200).send({ students: [] });
+                res.status(200).send({ students: [], metadata:{totalPage: totalPage}  });
             }
             else {
                 const chosenStudents = studentsList.slice(start, end);
-                res.status(200).send({ students: chosenStudents });
+                res.status(200).send({ students: chosenStudents, metadata:{totalPage: totalPage}  });
             }
         }
         else {
