@@ -42,4 +42,22 @@
   *      type: array
   *      items:
   *        $ref: '#/components/schemas/RequestGeneralInfo'
+  *    RequestInput:
+  *      type: object
+  *      required:
+  *        - type
+  *        - topicId
+  *      properties:
+  *        type:
+  *          type: string
+  *          example: Xin giấy chứng nhận
+  *        studentId:
+  *          type: string
+  *          example: id account in mongoDB
+  *        topicId:
+  *          type: string
+  *          example: id in mongoDB
+  *        extensionTime:
+  *          type: number
+  *          example: 3
   */
