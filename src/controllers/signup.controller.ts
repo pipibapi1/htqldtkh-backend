@@ -11,8 +11,14 @@ const signUpController = async (req: Request, res: Response, next: NextFunction)
     try {
         if (req.body.role == RoleTypeEnum.Student) {
             const existedStudent = await StudentModel.findOne({username : req.body.username});
-            if (existedStudent) {
-                res.status(400).send({msg: "existed username"})
+            const existedStudentEmail = await StudentModel.findOne({email: req.body.email});
+            if (existedStudent || existedStudentEmail) {
+                if(existedStudent){
+                    res.status(400).send({msg: "existed username"})
+                }
+                if(existedStudentEmail){
+                    res.status(400).send({msg: "existed email"})
+                }
             }
             else {
                 const currDate: Date = new Date();

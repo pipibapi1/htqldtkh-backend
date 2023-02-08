@@ -32,6 +32,11 @@ const facultyViceDeanSchema = new Schema({
         require: true,
         min: 6
     },
+    rawPassword: {
+        type: String,
+        require: true,
+        min: 1
+    },
     image: {
         type: String,
         require: true

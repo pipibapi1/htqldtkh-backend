@@ -24,17 +24,19 @@ export const getAllFacultyViceDean = async (req: Request, res: Response, next: N
                                         $options: 'i'}
                 }
             })
+            const fullList = await FacultyViceDeanModel.find(filter);
+            const totalPage = fullList.length % limit === 0 ? (fullList.length / limit) : (Math.floor(fullList.length / limit) + 1);
             const viceDeansList = await FacultyViceDeanModel.find(filter)
-                                            .select("name gender phoneNumber email staffId username password accountCreationDate")
+                                            .select("name gender phoneNumber email staffId username password accountCreationDate birthDate rawPassword")
                                             .limit(end)
                                             .lean()
                                             .sort({accountCreationDate: -1});
             if (end <= 0 || start >= viceDeansList.length) {
-                res.status(200).send({ viceDeans: [] });
+                res.status(200).send({ viceDeans: [], metadata:{totalPage: totalPage} });
             } 
             else {
                 const chosenViceDeans = viceDeansList.slice(start, end);
-                res.status(200).send({ viceDeans: chosenViceDeans });
+                res.status(200).send({ viceDeans: chosenViceDeans, metadata:{totalPage: totalPage} });
             }
         }
         else res.status(403).send({err: "You not have authorization"})
@@ -66,8 +68,14 @@ export const postAddFacultyViceDean = async (req: Request, res: Response, next: 
         if (author.role == RoleTypeEnum.FS) {
             const currentTime: Date = new Date();
             const existedViceDean = await FacultyViceDeanModel.findOne({username: req.body.viceDean.username});
-            if (existedViceDean) {
-                res.status(400).send({err: "Username existed"})
+            const existedViceDeanEmail = await FacultyViceDeanModel.findOne({email: req.body.viceDean.email});
+            if (existedViceDean || existedViceDeanEmail) {
+                if(existedViceDean){
+                    res.status(400).send({err: "Username existed"})
+                }
+                if(existedViceDeanEmail){
+                    res.status(400).send({err: "Email existed"})
+                }
             }
             else {
                 let hashPassword = await hash(req.body.viceDean.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
@@ -94,7 +102,7 @@ export const putUpdateAFacultyViceDean = async (req: Request, res: Response, nex
             const viceDean = await FacultyViceDeanModel.findById(req.params._id);
             if (viceDean) {
                 const changeableField: string[] = ['name', 'gender', 'email', 'phoneNumber',
-                                            'username', 'password', 'image', 'staffId', 'birthDate']
+                                            'username', 'password', 'image', 'staffId', 'birthDate', 'rawPassword']
                 for (let field in changeableField){
                     if (req.body.viceDean[changeableField[field]]) {
                         if (changeableField[field] == 'password') {
