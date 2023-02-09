@@ -7,11 +7,11 @@ export const getTopicCondition = async (req: Request, res: Response, next: NextF
     try {
         const typeTopic: string = req.query.type as string;
         if (typeTopic) {
-            const topicCondition: topicConditionIntf = await TopicConditionModel.find({type: typeTopic})
+            const topicCondition: topicConditionIntf[] = await TopicConditionModel.find({type: typeTopic})
                                                             .limit(1)
                                                             .sort({createAt: -1})
                                                             .lean();
-            res.status(200).send({topicCondition: topicCondition});
+            res.status(200).send({topicCondition: topicCondition[0]});
         }
         else {
             res.status(400).send({msg: "Not valid type"})
