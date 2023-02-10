@@ -1,5 +1,5 @@
 import express, {Router} from 'express';
-import { getListTopic } from '../controllers/topic.controller';
+import { getListTopic, getTopicDetail } from '../controllers/topic.controller';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
 
 const router: Router = express.Router();
@@ -80,7 +80,41 @@ const router: Router = express.Router();
   *        description: Not authorized
   *      404:
   *        description: Not found
+  * /api/topic/{_id}:
+  *  get:
+  *     tags:
+  *     - topic
+  *     summary: get topic detail
+  *     description: user get topic detail by _id
+  *     parameters:
+  *       - in: path
+  *         name: _id
+  *         schema:
+  *           type: string
+  *         required: true
+  *         description: _id of topic in mongoDB
+  *     requestBody:
+  *      required: false
+  *     responses:
+  *      200:
+  *        description: Success
+  *        content:
+  *          application/json:
+  *           schema:
+  *             type: object
+  *             properties:
+  *               topic:
+  *                 $ref: '#/components/schemas/TopicDetail'
+  *      409:
+  *        description: Conflict
+  *      400:
+  *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
   */
 router.get('/', authorizationMiddleware, getListTopic);
+router.get('/:topicId', authorizationMiddleware, getTopicDetail);
 
 export const topicRouter: Router = router;

@@ -3,4 +3,4 @@ export const objectTypeEnum = {
     OthersStudent: "Thành viên khác",
     Instructor: "GVHD",
     AllStudent: "Tất cả thành viên"
-}
+} as const;

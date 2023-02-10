@@ -2,4 +2,4 @@ export const TopicResultEnum = {
     QUALIFIED: "Đạt",
     NON_QUAFILIED: "Không đạt",
     WAITING: "Đang chờ"
-}
+} as const;

@@ -38,7 +38,8 @@ export const getListStudent = async (req: Request, res: Response, next: NextFunc
                     }
                 }
             })
-            const fullList = await StudentModel.find(filter);
+            const fullList = await StudentModel.find(filter)
+                                        .select("_id");
             const totalPage = fullList.length % limit === 0 ? (fullList.length / limit) : (Math.floor(fullList.length / limit) + 1);
             const studentsList = await StudentModel.find(filter)
                                             .select("_id name gender phoneNumber email studentId username birthDate password accountStatus accountCreationDate")
