@@ -10,11 +10,6 @@ const instructorSchema = new Schema({
         require: true,
         min: 1
     },
-    fmName: {
-        type: String,
-        require: true,
-        min: 1
-    },
     name: {
         type: String,
         require: true,

@@ -12,11 +12,6 @@ const otherMemberSchema = new Schema({
         type: String,
         require: true
     },
-    fmName: {
-        type: String,
-        require: true,
-        min: 1
-    },
     name: {
         type: String,
         require: true,
@@ -51,3 +46,4 @@ const otherMemberSchema = new Schema({
 module.exports = {
     otherMemberSchema,
 }
+

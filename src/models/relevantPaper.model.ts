@@ -25,6 +25,11 @@ const relevantPaperSchema = new Schema({
     templateId: {
         type: String,
         require: true
+    },
+    modifiedAt: {
+        type: Date,
+        require: true,
+        index: -1
     }
 }, {collection: "relevantPaper"})
 

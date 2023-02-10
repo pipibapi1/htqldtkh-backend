@@ -17,10 +17,6 @@ const paperTemplateSchema = new Schema({
     formId: {
         type: String,
         require: true
-    },
-    relevantPapersId: {
-        type: String,
-        require: true
     }
 }, {collection: "paperTemplate"})
 
