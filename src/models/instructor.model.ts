@@ -29,7 +29,7 @@ const instructorSchema = new Schema({
         require: true,
     },
     birthDate: {
-        type: Date,
+        type: String,
         require: true,
     },
     academyRank: {
@@ -38,7 +38,8 @@ const instructorSchema = new Schema({
         require: true
     },
     degree: {
-        type: DegreeEnum,
+        type: String,
+        enum: Object.values(DegreeEnum),
         require: true,
     },
 }, {collection: 'instructor'})

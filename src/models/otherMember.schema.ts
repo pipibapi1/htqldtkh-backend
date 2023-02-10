@@ -4,10 +4,6 @@ import { EducationTypeEnum } from '../enums/educationType.enum';
 const Schema = mongoose.Schema;
 
 const otherMemberSchema = new Schema({
-    topicId: {
-        type: String,
-        require: true
-    },
     studentId: {
         type: String,
         require: true
@@ -38,7 +34,7 @@ const otherMemberSchema = new Schema({
         require: true,
     },
     birthDate: {
-        type: Date,
+        type: String,
         require: true
     }
 })

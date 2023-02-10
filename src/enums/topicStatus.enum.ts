@@ -5,4 +5,4 @@ export const TopicStatusEnum = {
     FINISHED: "Đã hoàn thành",
     OUT_OF_DATE: "Trễ hạn",
     CANCELED: "Bị hủy"
-}
+} as const;

@@ -7,4 +7,4 @@ export const OperatorTypeEnum = {
     LESS: "Bé hơn",
     GT: "Lớn hơn hoặc bằng",
     LT: "Bé hơn hoặc bằng"
-}
+} as const;

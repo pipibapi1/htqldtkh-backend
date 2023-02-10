@@ -5,4 +5,4 @@ export const DataTypeEnum = {
     phoneNum: "số điện thoại",
     Date: "ngày tháng",
     Other: "khác",
-}
+} as const;

@@ -24,7 +24,8 @@ export const getAllFacultyViceDean = async (req: Request, res: Response, next: N
                                         $options: 'i'}
                 }
             })
-            const fullList = await FacultyViceDeanModel.find(filter);
+            const fullList = await FacultyViceDeanModel.find(filter)
+                                                    .select("_id");
             const totalPage = fullList.length % limit === 0 ? (fullList.length / limit) : (Math.floor(fullList.length / limit) + 1);
             const viceDeansList = await FacultyViceDeanModel.find(filter)
                                             .select("name gender phoneNumber email staffId username password accountCreationDate birthDate rawPassword")
