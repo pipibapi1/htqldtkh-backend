@@ -19,4 +19,32 @@ export interface topicGeneralInterface {
     creationDate: string,
     productPath: string,
     topicGivenId: string,
+    otherMembers?: otherMember[],
+    instructorsId?: string[],
+    instructors?: instructor[]
+}
+
+export interface otherMember {
+    _id?: string,
+    studentId: string,
+    fmName?: string
+    name: string,
+    gender: string,
+    email: string,
+    phoneNumber: string,
+    educationType: string,
+    birthDate: string
+}
+
+export interface instructor {
+    _id? : string,
+    staffId: string,
+    fmName?: string,
+    name: string,
+    gender: string,
+    email: string,
+    phoneNumber: string,
+    birthDate: string,
+    academyRank: string,
+    degree: string
 }

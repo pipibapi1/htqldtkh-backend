@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
+
+import { regexInterface } from "../interface/general.interface";
+import { topicGeneralInterface, instructor } from "../interface/topic.interface";
+
 const TopicModel = require('../models/topic.model');
 const StudentModel = require('../models/student.model');
-import { regexInterface } from "../interface/general.interface";
-import { topicGeneralInterface } from "../interface/topic.interface";
+const InstructorModel = require('../models/instructor.model');
 
 
 export const getListTopic = async (req: Request, res: Response, next: NextFunction) => {
@@ -36,7 +39,8 @@ export const getListTopic = async (req: Request, res: Response, next: NextFuncti
             }
             const chosenField: string[] = ["_id", "name", "type", "startTime", "endTime", "isExtended", "extensionTime",
                                             "status", "period", "productPath", "studentId", "creationDate", "topicGivenId", "expense"];
-            const fullList: topicGeneralInterface[] = await TopicModel.find(filter);
+            const fullList: topicGeneralInterface[] = await TopicModel.find(filter)
+                                                                    .select("_id");
             const totalPage = fullList.length % limit === 0 ? (fullList.length / limit) : (Math.floor(fullList.length / limit) + 1);
             const topicsList: topicGeneralInterface[] = await TopicModel.find(filter)
                                             .select(chosenField.join(" "))
@@ -71,6 +75,39 @@ export const getListTopic = async (req: Request, res: Response, next: NextFuncti
         }
         else {
             res.status(403).send({msg: 'Not authorized'})
+        }
+    } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
+
+export const getTopicDetail = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const author = req.body.author;
+        const topicId: string = req.params.topicId;
+        const chosenField: string[] = ["_id", "name", "type", "startTime", "endTime", "isExtended", "extensionTime",
+                                        "status", "period", "productPath", "studentId", "creationDate", "topicGivenId",
+                                        "expense", "instructorsId", "otherMembers"];
+        const topic: topicGeneralInterface = await TopicModel.findById(topicId)
+                                                .select(chosenField.join(" "))
+                                                .lean();
+        if (author.role === RoleTypeEnum.Student && author._id !== topic.studentId) {
+            res.status(403).send({msg: "Not authorization"});
+        }
+        else {
+            const student: {_id: string, name: string} = await StudentModel.findById(topic.studentId)
+                                                                            .select("name")
+                                                                            .lean();
+            topic.student = student;
+            topic.instructors = [];
+            const instructorIdList = topic.instructorsId as string[];
+            for (let index in instructorIdList) {
+                const instructorId = instructorIdList[index];
+                const instructor: instructor = await InstructorModel.findById(instructorId)
+                                                            .lean();
+                topic.instructors = topic.instructors.concat([instructor]);
+            }
+            res.status(200).send({topic: topic});
         }
     } catch (error) {
         res.status(400).send({err: error})
