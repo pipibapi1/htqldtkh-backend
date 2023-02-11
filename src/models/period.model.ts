@@ -16,6 +16,14 @@ const periodSchema = new Schema({
         type: Date,
         require: true,
         index: -1
+    },
+    title: {
+        type: String,
+        require: true
+    },
+    year: {
+        type: String,
+        require: true
     }
 }, {collection: "period"})
 

@@ -1,6 +1,6 @@
 import express, {Router} from 'express';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
-import { getAllPeriod, postAddAPeriod } from '../controllers/period.controller';
+import { getAllPeriod, postAddAPeriod, putUpdateAPeriod } from '../controllers/period.controller';
 
 const router: Router = express.Router();
 /**
@@ -55,9 +55,48 @@ const router: Router = express.Router();
   *        description: Bad request
   *      403:
   *        description: Not authorized
+  * /api/period/{_id}:
+  *  put:
+  *     tags:
+  *     - period
+  *     summary: update period detail
+  *     description: update period detail
+  *     parameters:
+  *       - in: path
+  *         name: _id
+  *         required: true
+  *         scheme:
+  *           type: string
+  *         description: _id of period in mongoDB
+  *     requestBody:
+  *      required: true
+  *      content:
+  *        application/json:
+  *           schema:
+  *             type: object
+  *             properties:
+  *               student:
+  *                 $ref: '#/components/schemas/PeriodInput'
+  *     responses:
+  *      200:
+  *        description: Success
+  *      content:
+  *        application/json:
+  *           schema:
+  *             type: object
+  *             properties:
+  *               student:
+  *                 $ref: '#/components/schemas/Period'
+  *      400:
+  *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
   */
 
 router.get('/', authorizationMiddleware, getAllPeriod);
 router.post('/', authorizationMiddleware, postAddAPeriod);
+router.put('/:_id', authorizationMiddleware, putUpdateAPeriod);
 
 export const periodRouter: Router = router;
