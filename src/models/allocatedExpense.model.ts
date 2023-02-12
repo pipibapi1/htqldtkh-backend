@@ -48,6 +48,10 @@ const allocatedExpenseSchema = new Schema({
         default: 0,
         min: 0
     },
+    usedExpense: {
+        type: Number,
+        min: 0
+    },
     note: {
         type: String,
         require: false

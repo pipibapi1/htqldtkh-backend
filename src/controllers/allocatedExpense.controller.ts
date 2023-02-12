@@ -71,7 +71,6 @@ export const getAllocatedExpenseDetail = async (req: Request, res: Response, nex
             const allocatedExpense: expenseInterface = await AllocatedExpenseModel.findById(req.params.expenseId)
                                                             .lean();
             if (allocatedExpense) {
-                allocatedExpense.usedExpense = 0;
                 allocatedExpense.used = {};
                 const period = allocatedExpense.period;
                 const topicExpense: topicExpenseInterface[] = await TopicModel.find({period: period})
@@ -79,7 +78,6 @@ export const getAllocatedExpenseDetail = async (req: Request, res: Response, nex
                                                                 .lean();
                 for (let index: number = 0; index < topicExpense.length; index++) {
                     const currTopic: topicExpenseInterface = topicExpense[index];
-                    allocatedExpense.usedExpense += currTopic.expense;
                     if (allocatedExpense.used[currTopic.type]){
                         allocatedExpense.used[currTopic.type] += currTopic.expense;
                     }
@@ -105,11 +103,9 @@ export const getAllocatedExpenseDetailByPeriod = async (req: Request, res: Respo
     try {
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD) {
-            const allocatedExpenseArray: expenseInterface[] = await AllocatedExpenseModel.find({period: req.params.periodId})
+            const allocatedExpense: expenseInterface = await AllocatedExpenseModel.findOne({period: req.params.periodId})
                                                             .lean();
-            const allocatedExpense: expenseInterface = allocatedExpenseArray[0];
             if (allocatedExpense) {
-                allocatedExpense.usedExpense = 0;
                 allocatedExpense.used = {};
                 const period = allocatedExpense.period;
                 const topicExpense: topicExpenseInterface[] = await TopicModel.find({period: period})
@@ -117,7 +113,6 @@ export const getAllocatedExpenseDetailByPeriod = async (req: Request, res: Respo
                                                                 .lean();
                 for (let index: number = 0; index < topicExpense.length; index++) {
                     const currTopic: topicExpenseInterface = topicExpense[index];
-                    allocatedExpense.usedExpense += currTopic.expense;
                     if (allocatedExpense.used[currTopic.type]){
                         allocatedExpense.used[currTopic.type] += currTopic.expense;
                     }
