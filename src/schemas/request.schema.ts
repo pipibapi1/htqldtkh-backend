@@ -59,5 +59,8 @@
   *          example: id in mongoDB
   *        extensionTime:
   *          type: number
-  *          example: 3
+  *          example: 0
+  *        status:
+  *          type: string
+  *          example: Chờ xét duyệt
   */

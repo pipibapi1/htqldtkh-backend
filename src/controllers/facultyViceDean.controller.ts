@@ -119,7 +119,7 @@ export const putUpdateAFacultyViceDean = async (req: Request, res: Response, nex
                 res.status(200).send({viceDean: currentViceDean})
             }
             else {
-                res.status(400).send({err: "Account not existed"})
+                res.status(404).send({err: "Account not existed"})
             }
         }
         else res.status(403).send({err: "You not have authorization"})
@@ -138,7 +138,7 @@ export const deleteRemoveAFacultyViceDean = async (req: Request, res: Response, 
                 res.status(200).send({msg: "Success"})
             }
             else {
-                res.status(400).send({err: "Account not existed"})
+                res.status(404).send({err: "Account not existed"})
             }
         }
         else res.status(403).send({err: "You not have authorization"})

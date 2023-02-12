@@ -7,5 +7,7 @@ export interface requestInfoInterface {
     topicId: string,
     topicName: string,
     extensionTime?: number,
-    createAt: string
+    createAt: string,
+    period: string,
+    periodValue: string
 }
