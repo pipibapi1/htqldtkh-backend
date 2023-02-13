@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
-const AnnouncementModel = require('../models/annoucement.model');
 import { unlink } from "fs";
+const AnnouncementModel = require('../models/annoucement.model');
 
 export const postAddAnnouncement = async (req: Request, res: Response, next: NextFunction) => {
     try {

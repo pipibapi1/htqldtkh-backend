@@ -5,10 +5,27 @@ const paperTemplateSchema = new Schema({
     id: {
         type: String,
         require: true
+    }, 
+    name: {
+        type: String, 
+        require: true
     },
-    templateFile: {
-        type: File,
-        require: false
+    createAt: {
+        type: Date,
+        require: true,
+        index: -1
+    },
+    templateAttachedFile: {
+        type: String,
+        require: true
+    },
+    templateFileType: {
+        type: String,
+        require: true
+    },
+    templateFileName: {
+        type: String,
+        require: true
     },
     forStudent: {
         type: Boolean,

@@ -21,7 +21,8 @@ export interface topicGeneralInterface {
     topicGivenId: string,
     otherMembers?: otherMember[],
     instructorsId?: string[],
-    instructors?: instructor[]
+    instructors?: instructor[],
+    periodValue: string;
 }
 
 export interface otherMember {

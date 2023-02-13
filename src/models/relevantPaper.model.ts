@@ -6,17 +6,22 @@ const relevantPaperSchema = new Schema({
         type: String,
         require: true
     },
-    name: {
+    createAt: {
+        type: Date,
+        require: true,
+        index: -1
+    },
+    paperAttachedFile: {
         type: String,
         require: true
     },
-    paperFile: {
-        type: File,
-        require: false
+    paperFileType: {
+        type: String,
+        require: true
     },
-    forStudent: {
-        type: Boolean,
-        default: true
+    paperFileName: {
+        type: String,
+        require: true
     },
     topicId: {
         type: String,

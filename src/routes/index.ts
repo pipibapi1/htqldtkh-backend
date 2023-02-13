@@ -13,6 +13,7 @@ import { periodRouter } from './period.route';
 import { staffRouter } from './staff.route';
 import { topicConditionRouter } from './topicCondition.route';
 import { statisticRouter } from './statistic.route';
+import { paperTemplateRouter } from './paperTemplate.route';
 
 router.use("/auth", authRouter);
 router.use("/vicedean", facultyViceDeanRouter);
@@ -26,5 +27,6 @@ router.use("/period", periodRouter);
 router.use("/staff", staffRouter);
 router.use("/topicCondition", topicConditionRouter);
 router.use("/statistic", statisticRouter);
+router.use("/template", paperTemplateRouter)
 
 export const fullRouter: Router = router;

@@ -7,6 +7,7 @@ import { topicGeneralInterface, instructor } from "../interface/topic.interface"
 const TopicModel = require('../models/topic.model');
 const StudentModel = require('../models/student.model');
 const InstructorModel = require('../models/instructor.model');
+const PeriodModel = require('../models/period.model')
 
 
 export const getListTopic = async (req: Request, res: Response, next: NextFunction) => {
@@ -59,8 +60,12 @@ export const getListTopic = async (req: Request, res: Response, next: NextFuncti
                     const student: {_id: string, name: string} = await StudentModel.findById(topic.studentId)
                                                                                     .select("name")
                                                                                     .lean();
-                    if (student) {
+                    const period: {_id: string, period: string} = await PeriodModel.findById(topic.period)
+                                                                                    .select("period")
+                                                                                    .lean();
+                    if (student && period) {
                         topic.student = student;
+                        topic.periodValue = period.period
                         topicResultList = topicResultList.concat([topic]);
                     }
                     else checkStudentValid = false
@@ -69,7 +74,7 @@ export const getListTopic = async (req: Request, res: Response, next: NextFuncti
                     res.status(200).send({topics: topicResultList, metadata:{totalPage: totalPage}});
                 }
                 else {
-                    res.status(404).send({msg: "some student not found"})
+                    res.status(404).send({msg: "some student or period not found"})
                 }
             }
         }
@@ -98,7 +103,11 @@ export const getTopicDetail = async (req: Request, res: Response, next: NextFunc
             const student: {_id: string, name: string} = await StudentModel.findById(topic.studentId)
                                                                             .select("name")
                                                                             .lean();
+            const period: {_id: string, period: string} = await PeriodModel.findById(topic.period)
+                                                                            .select("period")
+                                                                            .lean();                                                                
             topic.student = student;
+            topic.periodValue = period.period
             topic.instructors = [];
             const instructorIdList = topic.instructorsId as string[];
             for (let index in instructorIdList) {
