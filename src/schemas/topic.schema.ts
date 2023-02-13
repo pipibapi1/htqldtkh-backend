@@ -208,6 +208,49 @@ import { object, string, TypeOf, boolean, number } from "zod";
   *          type: array
   *          items:
   *            $ref: '#/components/schemas/instructorInfo'
+  *    TopicInput:
+  *      type: object
+  *      required:
+  *        - name
+  *        - type
+  *        - period
+  *        - student
+  *        - instructorId
+  *      properties:
+  *        name:
+  *          type: string
+  *          example: Hệ thống 1
+  *        type:
+  *          type: string
+  *          example: chính quy
+  *        expense:
+  *          type: number
+  *          example: 5000000
+  *        status:
+  *          type: string
+  *          example: Tạo mới
+  *        period:
+  *          type: string
+  *          example: HK232
+  *        studentId:
+  *          type: string
+  *          example: 1234567
+  *        student:
+  *          type: object
+  *          properties:
+  *            _id:
+  *              type: string
+  *              example: 12341234
+  *            name:
+  *              type: string
+  *              example: Minh Duy
+  *        otherMembers:
+  *          type: array
+  *          items:
+  *            $ref: '#/components/schemas/otherMemberInfo'
+  *        instructorId:
+  *          type: array
+  *          items: string
   *    TopicsGeneralListResponse:
   *      type: array
   *      items:
