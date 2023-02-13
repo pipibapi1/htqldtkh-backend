@@ -8,6 +8,7 @@ const instructorSchema = new Schema({
     staffId: {
         type: String,
         require: true,
+        index: 1,
         min: 1
     },
     name: {

@@ -1,5 +1,6 @@
 import express, {Router} from 'express';
-import { getListTopic, getTopicDetail } from '../controllers/topic.controller';
+import { getListTopic, getTopicDetail, postAddNewTopic,
+  putUpdateTopic, deleteTopic } from '../controllers/topic.controller';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
 
 const router: Router = express.Router();
@@ -80,6 +81,38 @@ const router: Router = express.Router();
   *        description: Not authorized
   *      404:
   *        description: Not found
+  *  post:
+  *     tags:
+  *     - topic
+  *     summary: post new topic
+  *     description: student create new topic
+  *     requestBody:
+  *      required: true
+  *      content:
+  *        application/json:
+  *           schema:
+  *             type: object
+  *             properties:
+  *               topic:
+  *                 $ref: '#/components/schemas/TopicInput'
+  *     responses:
+  *      200:
+  *        description: Success
+  *        content:
+  *          application/json:
+  *           schema:
+  *             type: object
+  *             properties:
+  *               topic:
+  *                 $ref: '#/components/schemas/TopicDetail'
+  *      409:
+  *        description: Conflict
+  *      400:
+  *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
   * /api/topic/{_id}:
   *  get:
   *     tags:
@@ -116,5 +149,8 @@ const router: Router = express.Router();
   */
 router.get('/', authorizationMiddleware, getListTopic);
 router.get('/:topicId', authorizationMiddleware, getTopicDetail);
+router.post('/', authorizationMiddleware, postAddNewTopic);
+router.put('/:topicId', authorizationMiddleware, putUpdateTopic);
+router.delete('/:topicId', authorizationMiddleware, deleteTopic);
 
 export const topicRouter: Router = router;

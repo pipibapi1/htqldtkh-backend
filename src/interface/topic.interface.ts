@@ -25,6 +25,37 @@ export interface topicGeneralInterface {
     periodValue: string;
 }
 
+export interface topicInputInterface {
+    name: string,
+    type: string,
+    startTime?: string,
+    endTime?: string,
+    status: string,
+    period: string,
+    studentId: string,
+    creationDate: string,
+    productPath: string,
+    topicGivenId: string,
+    otherMembers: otherMember[],
+    instructorsId: string[],
+}
+
+export interface updateTopicInputForFS {
+    name?: string,
+    type?: string,
+    period?: string,
+    topicGivenId?: string,
+    expense?: string,
+    startTime: string,
+    endTime: string
+}
+
+export interface updateTopicInputForStudent {
+    name?: string,
+    type?: string,
+    period?: string
+}
+
 export interface otherMember {
     _id?: string,
     studentId: string,

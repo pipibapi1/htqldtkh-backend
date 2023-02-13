@@ -17,11 +17,11 @@ const topicSchema = new Schema({
     },
     startTime: {
         type: Date,
-        require: true
+        require: false
     },
     endTime: {
         type: Date,
-        require: true
+        require: false
     },
     isExtended: {
         type: Boolean,

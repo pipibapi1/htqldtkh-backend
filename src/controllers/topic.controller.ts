@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
+import { TopicStatusEnum } from "../enums/topicStatus.enum";
 
 import { regexInterface } from "../interface/general.interface";
-import { topicGeneralInterface, instructor } from "../interface/topic.interface";
+import { topicGeneralInterface, instructor, topicInputInterface, 
+    updateTopicInputForFS, updateTopicInputForStudent } from "../interface/topic.interface";
 
 const TopicModel = require('../models/topic.model');
 const StudentModel = require('../models/student.model');
@@ -112,11 +114,133 @@ export const getTopicDetail = async (req: Request, res: Response, next: NextFunc
             const instructorIdList = topic.instructorsId as string[];
             for (let index in instructorIdList) {
                 const instructorId = instructorIdList[index];
-                const instructor: instructor = await InstructorModel.findById(instructorId)
+                const instructor: instructor = await InstructorModel.find({staffId: instructorId})
                                                             .lean();
                 topic.instructors = topic.instructors.concat([instructor]);
             }
             res.status(200).send({topic: topic});
+        }
+    } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
+
+export const postAddNewTopic = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const author = req.body.author;
+        if (author.role === RoleTypeEnum.FS || author.role === RoleTypeEnum.Student) {
+            const topicData: topicInputInterface = req.body.topic;
+            topicData.creationDate = (new Date()).toString();
+            topicData.productPath = "";
+            topicData.status = TopicStatusEnum.NEW;
+            topicData.startTime = "";
+            topicData.endTime = "";
+            if (author.role === RoleTypeEnum.Student) {
+                topicData.studentId = author._id
+            }
+            const topic = new TopicModel(topicData);
+            const newTopic = await topic.save();
+            res.status(200).send({topic: newTopic})
+        }
+        else {
+            res.status(403).send({msg: "Not authorization"})
+        }
+    } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
+
+export const deleteTopic = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const author = req.body.author;
+        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD) {
+            const existedTopic = await TopicModel.findById(req.params.topicId)
+                                                .select("_id")
+                                                .lean();
+            if (existedTopic) {
+                await TopicModel.deleteOne({_id: req.params.topicId})
+                res.status(200).send({msg: "Delete successful"})
+            }
+            else {
+                res.status(404).send({msg: "Topic not found"})
+            }
+        }
+        else {
+            res.status(403).send({msg: "Not authorization"})
+        }
+    } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
+
+export const putUpdateTopic = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const author = req.body.author;
+        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD) {
+            const existedTopic = await TopicModel.findById(req.params.topicId)
+                                                .select("_id")
+                                                .lean();
+            if (existedTopic) {
+                const update: updateTopicInputForFS = req.body.topic;
+                const updatedTopic = await TopicModel.findOneAndUpdate({_id: req.params.topicId}, update, 
+                                                                        {new : true})
+                                                    .lean();
+                res.status(200).send({topic : updatedTopic})
+            }
+            else {
+                res.status(404).send({msg: "Topic not found"})
+            }
+        }
+        else {
+            const existedTopic: {_id: string, studentId: string} = await TopicModel.findById(req.params.topicId)
+                                                .select("_id studentId")
+                                                .lean();
+            if (existedTopic.studentId === author._id) {
+                if (existedTopic) {
+                    const update: updateTopicInputForStudent = req.body.topic;
+                    const updatedTopic = await TopicModel.findOneAndUpdate({_id: req.params.topicId}, update, 
+                                                                            {new : true})
+                                                        .lean();
+                    res.status(200).send({topic : updatedTopic})
+                }
+                else {
+                    res.status(404).send({msg: "Topic not found"})
+                }
+            }
+            else {
+                res.status(403).send({msg: "Not authorization"})
+            }
+        }
+    } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
+
+export const postTopicRelevantFile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const author = req.body.author;
+        if (author.role == RoleTypeEnum.Student) {
+            const existedTopic: {_id: string, studentId: string} = await TopicModel.findById(req.params.topicId)
+                                                .select("_id studentId")
+                                                .lean();
+            if (existedTopic.studentId === author._id) {
+                if (existedTopic) {
+                    const update: updateTopicInputForStudent = req.body.topic;
+                    const updatedTopic = await TopicModel.findOneAndUpdate({_id: req.params.topicId}, update, 
+                                                                            {new : true})
+                                                        .lean();
+                    res.status(200).send({topic : updatedTopic})
+                }
+                else {
+                    res.status(404).send({msg: "Topic not found"})
+                }
+            }
+            else {
+                res.status(403).send({msg: "Not authorization"})
+            }
+        }
+        else {
+            res.status(403).send({msg: "Not authorization"})
         }
     } catch (error) {
         res.status(400).send({err: error})
