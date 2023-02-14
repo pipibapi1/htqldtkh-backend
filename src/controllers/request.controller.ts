@@ -3,6 +3,8 @@ import { RoleTypeEnum } from "../enums/roleType.enum";
 import { RequestStatusEnum } from "../enums/requestStatus.enum";
 import { regexInterface } from "../interface/general.interface";
 import { requestInfoInterface } from "../interface/request.interface";
+import { RequestTypeEnum } from "../enums/requestType.enum";
+import { TopicStatusEnum } from "../enums/topicStatus.enum";
 const RequestModel = require('../models/request.model');
 const StudentModel = require('../models/student.model');
 const TopicModel = require('../models/topic.model');
@@ -185,6 +187,55 @@ export const deleteRemoveARequest = async (req: Request, res: Response, next: Ne
                 await RequestModel.deleteOne({_id: req.params.requestId})
                 res.status(200).send({msg: "Success"})
             }
+            else {
+                res.status(404).send({err: "Request not existed"})
+            }
+        }
+        else res.status(403).send({err: "You not have authorization"})
+    } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
+
+export const putApproveARequest = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const author = req.body.author;
+        if (author.role == RoleTypeEnum.FVD) {
+            let existedRequest = await RequestModel.findById(req.params.requestId);
+            if (existedRequest) {
+                let chosenTopic = await TopicModel.findById(existedRequest.topicId);
+                if(existedRequest.type === RequestTypeEnum.CANCEL_PROJECT){
+                    chosenTopic.status = TopicStatusEnum.CANCELED
+
+                    const newTopic = await TopicModel.findOneAndUpdate({_id: existedRequest.topicId}, chosenTopic, 
+                        {new : true})
+                    existedRequest.status = RequestStatusEnum.APPROVED;
+                    const newRequest = await existedRequest.save();
+                    res.status(200).send({msg: "approve successfully"})
+                }
+                else if(existedRequest.type === RequestTypeEnum.EXTEND_PROJECT){
+                    chosenTopic.status = TopicStatusEnum.CARRY_OUT
+                    chosenTopic.isExtended = true
+                    chosenTopic.extensionTime = existedRequest.extensionTime
+                    const endTime = new Date(chosenTopic.endTime);
+                    const newEndTime = new Date(endTime.setMonth(endTime.getMonth() + existedRequest.extensionTime));
+                    chosenTopic.endTime = newEndTime
+
+                    const newTopic = await TopicModel.findOneAndUpdate({_id: existedRequest.topicId}, chosenTopic, 
+                        {new : true})
+                    existedRequest.status = RequestStatusEnum.APPROVED;
+                    const newRequest = await existedRequest.save();
+                    res.status(200).send({msg: "approve successfully"})
+                }
+                else{
+                    
+                    existedRequest.status = RequestStatusEnum.APPROVED;
+                    const newRequest = await existedRequest.save();
+                    res.status(200).send({msg: "approve successfully"})
+                }
+            
+            }
+    
             else {
                 res.status(404).send({err: "Request not existed"})
             }

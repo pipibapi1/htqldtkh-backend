@@ -51,24 +51,18 @@ export const getAllPaperTemplate = async (req: Request, res: Response, next: Nex
 
 export const downloadTemplateAttachedFile = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const author = req.body.author;
-        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD || 
-            author.role == RoleTypeEnum.Student){
-                const templateId: string = req.params.templateId;
-                const template = await PaperTemplateModel.findById(templateId)
-                                                            .select("templateAttachedFile templateFileName")
-                                                            .lean();
-                if (template) {
-                    const file: string = './uploads/templates/' + template.templateAttachedFile;
-                    res.status(200).download(file, template.templateFileName)
-                }
-                else {
-                    res.status(404).send({ msg: "Template not found" });
-                }
-            }
-        else {
-            res.status(403).send({msg: 'Not authorized'})
+        const templateId: string = req.params.templateId;
+        const template = await PaperTemplateModel.findById(templateId)
+                                                    .select("templateAttachedFile templateFileName")
+                                                    .lean();
+        if (template) {
+            const file: string = './uploads/templates/' + template.templateAttachedFile;
+            res.status(200).download(file, template.templateFileName)
         }
+        else {
+            res.status(404).send({ msg: "Template not found" });
+        }
+
     } catch (error) {
         console.log(error)
         res.status(400).send({err: error})

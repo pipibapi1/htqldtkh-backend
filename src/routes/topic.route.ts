@@ -146,10 +146,70 @@ const router: Router = express.Router();
   *        description: Not authorized
   *      404:
   *        description: Not found
+  *  put:
+  *     tags:
+  *     - topic
+  *     summary: update a topic detail
+  *     description: update topic detail by _id
+  *     parameters:
+  *       - in: path
+  *         name: _id
+  *         schema:
+  *           type: string
+  *         required: true
+  *         description: _id of topic in mongoDB
+  *     requestBody:
+  *      required: true
+  *      content:
+  *        application/json:
+  *          schema:
+  *            type: object
+  *            properties:
+  *              viceDean:
+  *                $ref: '#/components/schemas/TopicInput'
+  *     responses:
+  *      200:
+  *        description: Success
+  *        content:
+  *          application/json:
+  *           schema:
+  *             type: object
+  *             properties:
+  *               topic:
+  *                 $ref: '#/components/schemas/TopicDetail'
+  *      400:
+  *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
+  *  delete:
+  *     tags:
+  *     - topic
+  *     summary: delete a topic
+  *     description: delete a topic by id
+  *     parameters:
+  *       - in: path
+  *         name: _id
+  *         schema:
+  *           type: string
+  *         required: true
+  *         description: _id of topic in mongoDB
+  *     requestBody:
+  *      required: false
+  *     responses:
+  *      200:
+  *        description: Success
+  *      400:
+  *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
   */
 router.get('/', authorizationMiddleware, getListTopic);
-router.get('/:topicId', authorizationMiddleware, getTopicDetail);
 router.post('/', authorizationMiddleware, postAddNewTopic);
+router.get('/:topicId', authorizationMiddleware, getTopicDetail);
 router.put('/:topicId', authorizationMiddleware, putUpdateTopic);
 router.delete('/:topicId', authorizationMiddleware, deleteTopic);
 

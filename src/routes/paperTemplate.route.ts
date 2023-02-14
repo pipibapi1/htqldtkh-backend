@@ -99,6 +99,6 @@ const router: Router = express.Router();
   */
 router.post('/', upload.single('file'), postAddAPaperTemplate)
 router.get('/',authorizationMiddleware, getAllPaperTemplate);
-router.get('/:templateId/download', authorizationMiddleware, downloadTemplateAttachedFile);
+router.get('/:templateId/download', downloadTemplateAttachedFile);
 
 export const paperTemplateRouter: Router = router;

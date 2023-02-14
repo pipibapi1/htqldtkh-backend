@@ -1,6 +1,6 @@
 import express, {Router} from 'express';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
-import { deleteRemoveARequest, getListRequest, getRequestDetail, postNewRequest, putUpdateRequest }
+import { deleteRemoveARequest, getListRequest, getRequestDetail, postNewRequest, putApproveARequest, putUpdateRequest }
  from '../controllers/request.controller';
 
 const router: Router = express.Router();
@@ -194,6 +194,30 @@ const router: Router = express.Router();
   *        description: Not authorized
   *      404:
   *        description: Not found
+  * /api/request/{requestId}/approve:
+  *  put:
+  *     tags:
+  *     - request
+  *     summary: approve a request
+  *     description: vice dean approve a request
+  *     parameters:
+  *       - in: path
+  *         name: requestId
+  *         required: true
+  *         scheme:
+  *           type: string
+  *         description: _id of request in mongoDB
+  *     requestBody:
+  *      required: true
+  *     responses:
+  *      200:
+  *        description: Success
+  *      400:
+  *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
   */
 
 router.get('/', authorizationMiddleware, getListRequest);
@@ -201,5 +225,6 @@ router.post('/', authorizationMiddleware, postNewRequest);
 router.get('/:requestId', authorizationMiddleware, getRequestDetail);
 router.put('/:requestId', authorizationMiddleware, putUpdateRequest);
 router.delete('/:requestId', authorizationMiddleware, deleteRemoveARequest);
+router.put('/:requestId/approve', authorizationMiddleware, putApproveARequest);
 
 export const requestRouter: Router = router;

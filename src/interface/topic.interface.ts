@@ -43,11 +43,14 @@ export interface topicInputInterface {
 export interface updateTopicInputForFS {
     name?: string,
     type?: string,
+    status?: string,
+    isExtended?: boolean,
+    extensionTime?: number,
     period?: string,
     topicGivenId?: string,
     expense?: string,
-    startTime: string,
-    endTime: string
+    startTime?: string,
+    endTime?: string
 }
 
 export interface updateTopicInputForStudent {
