@@ -16,11 +16,11 @@ const topicSchema = new Schema({
         require: true
     },
     startTime: {
-        type: Date,
+        type: String,
         require: false
     },
     endTime: {
-        type: Date,
+        type: String,
         require: false
     },
     isExtended: {
@@ -80,7 +80,7 @@ const topicSchema = new Schema({
         default: []
     },
     otherMembers: {
-        type: [otherMemberSchema],
+        type: [Object],
         default: []
     },
     topicGivenId: {

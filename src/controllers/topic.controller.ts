@@ -114,9 +114,9 @@ export const getTopicDetail = async (req: Request, res: Response, next: NextFunc
             const instructorIdList = topic.instructorsId as string[];
             for (let index in instructorIdList) {
                 const instructorId = instructorIdList[index];
-                const instructor: instructor = await InstructorModel.find({staffId: instructorId})
-                                                            .lean();
-                topic.instructors = topic.instructors.concat([instructor]);
+                const instructor: instructor = await InstructorModel.find({_id: instructorId})
+                .lean();
+                topic.instructors = topic.instructors.concat(instructor);
             }
             res.status(200).send({topic: topic});
         }
@@ -131,12 +131,18 @@ export const postAddNewTopic = async (req: Request, res: Response, next: NextFun
         if (author.role === RoleTypeEnum.FS || author.role === RoleTypeEnum.Student) {
             const topicData: topicInputInterface = req.body.topic;
             topicData.creationDate = (new Date()).toString();
-            topicData.productPath = "";
+            topicData.productPath = "" as string;
             topicData.status = TopicStatusEnum.NEW;
-            topicData.startTime = "";
-            topicData.endTime = "";
+            topicData.startTime = "" as string;
+            topicData.endTime = "" as string;
+            topicData.topicGivenId = "" as string;
+            topicData.isExtended = false;
+            topicData.extensionTime = 0;
+            topicData.expense = 0;
+            topicData.acceptanceCouncilId = "" as string;
+            topicData.reviewCouncilId = "" as string;
             if (author.role === RoleTypeEnum.Student) {
-                topicData.studentId = author._id
+                    topicData.studentId = author._id
             }
             const topic = new TopicModel(topicData);
             const newTopic = await topic.save();

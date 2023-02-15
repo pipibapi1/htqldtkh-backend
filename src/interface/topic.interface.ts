@@ -38,6 +38,11 @@ export interface topicInputInterface {
     topicGivenId: string,
     otherMembers: otherMember[],
     instructorsId: string[],
+    isExtended: boolean,
+    extensionTime: number,
+    expense: number,
+    acceptanceCouncilId: string,
+    reviewCouncilId: string
 }
 
 export interface updateTopicInputForFS {
