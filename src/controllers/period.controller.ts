@@ -3,6 +3,7 @@ import { RoleTypeEnum } from "../enums/roleType.enum";
 import { periodInterface } from "../interface/period.interface";
 import { PeriodStatusEnum } from "../enums/periodStatus.enum";
 const PeriodModel = require("../models/period.model");
+const AllocatedExpenseModel = require('../models/allocatedExpense.model');
 import { regexInterface } from "../interface/general.interface";
 
 export const getAllPeriod = async (req: Request, res: Response, next: NextFunction) => {
@@ -43,8 +44,27 @@ export const postAddAPeriod = async (req: Request, res: Response, next: NextFunc
                 createAt: currDate
             }
             const newPeriod = new PeriodModel(info);
-            const result = await newPeriod.save();
-            res.status(200).send({period: result});
+            const result1 = await newPeriod.save()
+                .then(async(period: periodInterface) => {
+                    const lastModified: string = (new Date()).toString();
+                    const allocatedExpense = new AllocatedExpenseModel({
+                        period: period._id,
+                        lastModified: lastModified,
+                        createAt: lastModified,
+                        allocated: [],
+                        totalExpense: 0,
+                        generalExpense:0,
+                        usedExpense: 0,
+                        note: ""
+                    });
+                    const result2 = await allocatedExpense.save();
+                }
+                )
+                .catch((err: any) => {
+                    console.log(err)
+                })
+            ;
+            res.status(200).send({period: result1});
         }
         else {
             res.status(403).send({msg: 'Not authorized'})

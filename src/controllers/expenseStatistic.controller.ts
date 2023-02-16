@@ -30,16 +30,15 @@ export const getUsedExpenseByPeriodWithTimeRange = async (req: Request, res: Res
                     }
                     else{
                         check = false
-                        res.status(404).send({msg: "Expense not found"})
+                        break;
                     }
             }
             if (check) {
                 res.status(200).send({periodListWithUsedExpense: periodListWithUsedExpense});
             }
             else {
-                res.status(404).send({msg: "some student not found"})
+                res.status(404).send({msg: "not found"})
             }
-            
         }
         else {
             res.status(403).send({msg: 'Not authorized'})
