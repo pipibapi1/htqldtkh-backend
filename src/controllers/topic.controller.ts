@@ -41,7 +41,7 @@ export const getListTopic = async (req: Request, res: Response, next: NextFuncti
                 filter.studentId = req.query.student as string;
             }
             const chosenField: string[] = ["_id", "name", "type", "startTime", "endTime", "isExtended", "extensionTime",
-                                            "status", "period", "productPath", "studentId", "creationDate", "topicGivenId", "expense"];
+                                            "status", "period", "productId", "studentId", "creationDate", "topicGivenId", "expense"];
             const fullList: topicGeneralInterface[] = await TopicModel.find(filter)
                                                                     .select("_id");
             const totalPage = fullList.length % limit === 0 ? (fullList.length / limit) : (Math.floor(fullList.length / limit) + 1);
@@ -93,7 +93,7 @@ export const getTopicDetail = async (req: Request, res: Response, next: NextFunc
         const author = req.body.author;
         const topicId: string = req.params.topicId;
         const chosenField: string[] = ["_id", "name", "type", "startTime", "endTime", "isExtended", "extensionTime",
-                                        "status", "period", "productPath", "studentId", "creationDate", "topicGivenId",
+                                        "status", "period", "productId", "studentId", "creationDate", "topicGivenId",
                                         "expense", "instructorsId", "otherMembers"];
         const topic: topicGeneralInterface = await TopicModel.findById(topicId)
                                                 .select(chosenField.join(" "))
@@ -131,7 +131,7 @@ export const postAddNewTopic = async (req: Request, res: Response, next: NextFun
         if (author.role === RoleTypeEnum.FS || author.role === RoleTypeEnum.Student) {
             const topicData: topicInputInterface = req.body.topic;
             topicData.creationDate = (new Date()).toString();
-            topicData.productPath = "" as string;
+            topicData.productId = "" as string;
             topicData.status = TopicStatusEnum.NEW;
             topicData.startTime = "" as string;
             topicData.endTime = "" as string;

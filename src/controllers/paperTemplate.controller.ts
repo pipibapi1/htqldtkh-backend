@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
 import { regexInterface } from "../interface/general.interface";
 const PaperTemplateModel = require('../models/paperTemplate.model');
+const RelevantPaperModel = require('../models/relevantPaper.model');
 
 export const postAddAPaperTemplate = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -40,6 +41,45 @@ export const getAllPaperTemplate = async (req: Request, res: Response, next: Nex
                                                                                        .select(chosenField.join(" "))
                                                                                        .lean();
             res.status(200).send({templates: templates});
+        }
+        else {
+            res.status(403).send({msg: 'Not authorized'})
+        }
+    } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
+
+export const getAllPaperTemplateWithPaper = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const author = req.body.author;
+        const topicId: string = req.params.topicId;
+        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD || 
+            (author.role == RoleTypeEnum.Student && req.query.forStudent == 'true')) 
+            {
+            let filter: {[k: string]: regexInterface | string} = {};
+            if(req.query.forStudent){
+                filter.forStudent = req.query.forStudent as string
+            }
+            const chosenField: string[] = ["_id", "name"];
+            const templates : {_id?: string, name: string}[] = await PaperTemplateModel.find(filter)
+                                                                                       .select(chosenField.join(" "))
+                                                                                       .lean();
+            let templatesWithPapers : {_id?: string, name: string, paper: {_id?: string, paperFileName: string} | undefined}[] = []
+            for(let i = 0; i < templates.length; ++i){
+                const template = templates[i]
+                const chosenField: string[] = ["_id", "paperFileName"];
+                const paper: {_id?: string, paperFileName: string} | undefined = await RelevantPaperModel.findOne({templateId: template._id, topicId: topicId})
+                                                                                            .select(chosenField.join(" "))
+                                                                                            .lean();
+                const templateWithPaper : {_id?: string, name: string, paper: {_id?: string, paperFileName: string} | undefined} = {
+                    _id: template._id,
+                    name: template.name,
+                    paper: paper
+                }
+                templatesWithPapers = templatesWithPapers.concat([templateWithPaper]);
+            }                                                                           
+            res.status(200).send({templatesWithPapers: templatesWithPapers});
         }
         else {
             res.status(403).send({msg: 'Not authorized'})

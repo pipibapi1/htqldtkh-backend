@@ -1,7 +1,7 @@
 import express, {Router} from 'express';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
 import multer, { Multer } from 'multer';
-import { downloadTemplateAttachedFile, getAllPaperTemplate, postAddAPaperTemplate } from '../controllers/paperTemplate.controller';
+import { downloadTemplateAttachedFile, getAllPaperTemplate, getAllPaperTemplateWithPaper, postAddAPaperTemplate } from '../controllers/paperTemplate.controller';
 
 const upload: Multer = multer({dest: './uploads/templates', limits: {
   fields: 20,
@@ -63,11 +63,46 @@ const router: Router = express.Router();
   *        content:
   *          application/json:
   *            schema:
-  *              $ref: ''
+  *              $ref: '#/components/schemas/Template'
   *      400:
   *        description: Bad request
   *      403:
   *        description: Not authorized
+  * /api/template/withPapers/{topicId}:
+  *  get:
+  *     tags:
+  *     -  template
+  *     summary: get to download paper template with paper of a topic
+  *     description: get to download paper template with paper of a topic
+  *     parameters:
+  *       - in: path
+  *         name: topicId
+  *         required: true
+  *         scheme:
+  *           type: string
+  *         description: id of topic
+  *       - in: query
+  *         name: forStudent
+  *         schema:
+  *           type: boolean
+  *           example: true
+  *         required: false
+  *         description: the paper template for student or not
+  *     requestBody:
+  *      required: false
+  *     responses:
+  *      200:
+  *        description: Success
+  *        content:
+  *          application/json:
+  *            schema:
+  *              $ref: '#/components/schemas/TemplateWithPaper'
+  *      400:
+  *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
   * /api/template/{templateId}/download:
   *  get:
   *     tags:
@@ -99,6 +134,7 @@ const router: Router = express.Router();
   */
 router.post('/', upload.single('file'), postAddAPaperTemplate)
 router.get('/',authorizationMiddleware, getAllPaperTemplate);
+router.get('/withPapers/:topicId', authorizationMiddleware, getAllPaperTemplateWithPaper);
 router.get('/:templateId/download', downloadTemplateAttachedFile);
 
 export const paperTemplateRouter: Router = router;

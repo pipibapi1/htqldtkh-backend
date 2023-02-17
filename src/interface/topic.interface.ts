@@ -17,7 +17,7 @@ export interface topicGeneralInterface {
     studentId: string,
     student?: {_id: string, name: string}
     creationDate: string,
-    productPath: string,
+    productId: string,
     topicGivenId: string,
     otherMembers?: otherMember[],
     instructorsId?: string[],
@@ -34,7 +34,7 @@ export interface topicInputInterface {
     period: string,
     studentId: string,
     creationDate: string,
-    productPath: string,
+    productId: string,
     topicGivenId: string,
     otherMembers: otherMember[],
     instructorsId: string[],

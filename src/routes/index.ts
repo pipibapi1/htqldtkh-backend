@@ -15,6 +15,8 @@ import { topicConditionRouter } from './topicCondition.route';
 import { statisticRouter } from './statistic.route';
 import { paperTemplateRouter } from './paperTemplate.route';
 import { instructorRouter } from './instructor.route';
+import { relevantPaperRouter } from './relevantPaper.route';
+import { productRouter } from './product.route';
 
 router.use("/auth", authRouter);
 router.use("/vicedean", facultyViceDeanRouter);
@@ -29,6 +31,8 @@ router.use("/staff", staffRouter);
 router.use("/topicCondition", topicConditionRouter);
 router.use("/statistic", statisticRouter);
 router.use("/template", paperTemplateRouter);
+router.use("/paper", relevantPaperRouter);
 router.use("/instructor", instructorRouter);
+router.use("/product", productRouter)
 
 export const fullRouter: Router = router;

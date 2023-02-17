@@ -15,7 +15,7 @@ import { object, string, TypeOf, boolean, number } from "zod";
   *        - period
   *        - studentId
   *        - createionDate
-  *        - productPath
+  *        - productId
   *      properties:
   *        _id:
   *          type: string
@@ -67,7 +67,7 @@ import { object, string, TypeOf, boolean, number } from "zod";
   *        creationDate:
   *          type: string
   *          example: 01/01/2023
-  *        productPath:
+  *        productId:
   *          type: string
   *          example: 
   *    otherMemberInfo:
@@ -145,7 +145,7 @@ import { object, string, TypeOf, boolean, number } from "zod";
   *        - period
   *        - studentId
   *        - createionDate
-  *        - productPath
+  *        - productId
   *      properties:
   *        _id:
   *          type: string
@@ -197,7 +197,7 @@ import { object, string, TypeOf, boolean, number } from "zod";
   *        creationDate:
   *          type: string
   *          example: 01/01/2023
-  *        productPath:
+  *        productId:
   *          type: string
   *          example: 
   *        otherMembers:

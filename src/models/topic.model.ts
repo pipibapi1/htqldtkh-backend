@@ -44,7 +44,7 @@ const topicSchema = new Schema({
         type: String,
         require: true
     },
-    productPath: {
+    productId: {
         type: String,
         require: false
     },
