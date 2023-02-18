@@ -184,16 +184,29 @@ import { object, string, TypeOf, boolean, number } from "zod";
   *          type: string
   *          example: TPH60523
   *        student:
-  *          type: array
-  *          items: 
-  *            type: object
-  *            properties:
-  *              _id:
-  *                type: string
-  *                example: 12341234
-  *              name:
-  *                type: string
-  *                example: Minh Duy
+  *          type: object
+  *          properties:
+  *            _id:
+  *              type: string
+  *              example: 12341234
+  *            name:
+  *              type: string
+  *              example: Minh Duy
+  *            educationType:
+  *              type: string
+  *              example: Chính quy
+  *            gender:
+  *              type: string
+  *              example: Nam
+  *            email:
+  *              type: string
+  *              example: mduy@gmail.com
+  *            phoneNumber:
+  *              type: string
+  *              example: 0987654421
+  *            birthDate:
+  *              type: string
+  *              example: 01/01/2001
   *        creationDate:
   *          type: string
   *          example: 01/01/2023

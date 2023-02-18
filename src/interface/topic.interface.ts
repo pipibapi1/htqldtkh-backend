@@ -15,7 +15,16 @@ export interface topicGeneralInterface {
     status: string,
     period: string,
     studentId: string,
-    student?: {_id: string, name: string}
+    student?: {
+        _id: string, 
+        name: string,
+        studentId: string,
+        educationType: string,
+        gender: string,
+        email: string,
+        phoneNumber: string,
+        birthDate: string
+    }
     creationDate: string,
     productId: string,
     topicGivenId: string,

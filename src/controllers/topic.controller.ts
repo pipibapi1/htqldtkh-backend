@@ -61,7 +61,9 @@ export const getListTopic = async (req: Request, res: Response, next: NextFuncti
                 let topicResultList: topicGeneralInterface[] = [];
                 for (let index: number = 0; (checkStudentValid && index < chosenTopics.length); index++) {
                     let topic = chosenTopics[index];
-                    const student: {_id: string, name: string} = await StudentModel.findById(topic.studentId)
+                    const student: {_id: string, name: string, 
+                        studentId: string, educationType: string,
+                    gender: string, email: string, phoneNumber: string, birthDate: string} = await StudentModel.findById(topic.studentId)
                                                                                     .select("name")
                                                                                     .lean();
                     const period: {_id: string, period: string} = await PeriodModel.findById(topic.period)
@@ -104,8 +106,10 @@ export const getTopicDetail = async (req: Request, res: Response, next: NextFunc
             res.status(403).send({msg: "Not authorization"});
         }
         else {
-            const student: {_id: string, name: string} = await StudentModel.findById(topic.studentId)
-                                                                            .select("name")
+            const student: {_id: string, name: string, 
+                studentId: string, educationType: string,
+            gender: string, email: string, phoneNumber: string, birthDate: string} = await StudentModel.findById(topic.studentId)
+                                                                            .select("_id name studentId educationType gender email phoneNumber birthDate")
                                                                             .lean();
             const period: {_id: string, period: string} = await PeriodModel.findById(topic.period)
                                                                             .select("period")
