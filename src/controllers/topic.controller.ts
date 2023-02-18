@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
 import { TopicStatusEnum } from "../enums/topicStatus.enum";
+import { unlink } from "fs";
 
 import { regexInterface } from "../interface/general.interface";
 import { topicGeneralInterface, instructor, topicInputInterface, 
@@ -9,7 +10,8 @@ import { topicGeneralInterface, instructor, topicInputInterface,
 const TopicModel = require('../models/topic.model');
 const StudentModel = require('../models/student.model');
 const InstructorModel = require('../models/instructor.model');
-const PeriodModel = require('../models/period.model')
+const PeriodModel = require('../models/period.model');
+const RelevantPaperModel = require('../models/relevantPaper.model');
 
 
 export const getListTopic = async (req: Request, res: Response, next: NextFunction) => {
@@ -159,13 +161,21 @@ export const postAddNewTopic = async (req: Request, res: Response, next: NextFun
 export const deleteTopic = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;
-        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD) {
+        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD || author.role == RoleTypeEnum.Student) {
             const existedTopic = await TopicModel.findById(req.params.topicId)
                                                 .select("_id")
                                                 .lean();
             if (existedTopic) {
-                await TopicModel.deleteOne({_id: req.params.topicId})
-                res.status(200).send({msg: "Delete successful"})
+                await TopicModel.deleteOne({_id: req.params.topicId});
+                const paperList = await RelevantPaperModel.find({topicId: req.params.topicId})
+                                                          .select("_id paperAttachedFile")
+                                                          .lean();
+                
+                for(let i = 0; i <  paperList.length; ++i){
+                    unlink('uploads/papers/' + paperList[i].paperAttachedFile, ()=>{});
+                    await RelevantPaperModel.deleteOne({_id: paperList[i]._id})
+                }
+                res.status(200).send({msg: "Delete successful"});
             }
             else {
                 res.status(404).send({msg: "Topic not found"})
