@@ -64,7 +64,7 @@ export const getListTopic = async (req: Request, res: Response, next: NextFuncti
                     const student: {_id: string, name: string, 
                         studentId: string, educationType: string,
                     gender: string, email: string, phoneNumber: string, birthDate: string} = await StudentModel.findById(topic.studentId)
-                                                                                    .select("name")
+                                                                                    .select("_id name studentId educationType gender email phoneNumber birthDate")
                                                                                     .lean();
                     const period: {_id: string, period: string} = await PeriodModel.findById(topic.period)
                                                                                     .select("period")
