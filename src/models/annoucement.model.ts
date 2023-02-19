@@ -27,6 +27,10 @@ const annoucementSchema = new Schema({
         type: String,
         require: true
     },
+    period: {
+        type: String,
+        require: true
+    }
 }, {collection: "announcement"})
 
 let annoucementModel = mongoose.model("announcement", annoucementSchema);

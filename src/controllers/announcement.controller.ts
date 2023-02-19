@@ -13,10 +13,11 @@ export const postAddAnnouncement = async (req: Request, res: Response, next: Nex
             const announcement = new AnnouncementModel({
                 title: info.title,
                 content: info.content,
+                period: info.period,
                 createAt: createAt,
                 attachedFile: file.filename,
                 fileType: file.mimetype,
-                fileName: file.originalname
+                fileName: file.originalname,
             });
             const result = await announcement.save();
             delete result.attachedFile;
@@ -45,7 +46,7 @@ export const getListAnnouncement = async (req: Request, res: Response, next: Nex
         const start: number = limit * (pageNum - 1);
         const end: number = limit * pageNum;
         const announcementsList = await AnnouncementModel.find({})
-                                        .select("_id title content createAt fileType fileName")
+                                        .select("_id title content createAt fileType fileName period")
                                         .limit(end)
                                         .lean()
                                         .sort({createAt: -1});
