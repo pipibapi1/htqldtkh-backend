@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum} from "../enums/roleType.enum";
-import { expenseInterface, allocatedExpenseForType, usedExpenseForType, 
-    updateExpenseInterface } from "../interface/expense.interface";
+import { expenseInterface, allocatedExpenseForType} from "../interface/expense.interface";
 import { regexInterface } from "../interface/general.interface";
 import { topicExpenseInterface } from "../interface/topic.interface";
 const AllocatedExpenseModel = require('../models/allocatedExpense.model');
@@ -16,7 +15,8 @@ export const postAllocatedExpense = async (req: Request, res: Response, next: Ne
             const allocatedExpense = new AllocatedExpenseModel({
                 ...expenseInfo,
                 lastModified: lastModified,
-                createAt: lastModified
+                createAt: lastModified,
+                usedExpense: 0
             });
             const result = await allocatedExpense.save();
             res.status(200).send({expense: result})
@@ -74,7 +74,7 @@ export const getAllocatedExpenseDetail = async (req: Request, res: Response, nex
                 allocatedExpense.used = {};
                 const period = allocatedExpense.period;
                 const topicExpense: topicExpenseInterface[] = await TopicModel.find({period: period})
-                                                                .select("type expense")
+                                                                .select("type expense leaderCondition")
                                                                 .lean();
                 for (let index: number = 0; index < topicExpense.length; index++) {
                     const currTopic: topicExpenseInterface = topicExpense[index];
@@ -109,7 +109,7 @@ export const getAllocatedExpenseDetailByPeriod = async (req: Request, res: Respo
                 allocatedExpense.used = {};
                 const period = allocatedExpense.period;
                 const topicExpense: topicExpenseInterface[] = await TopicModel.find({period: period})
-                                                                .select("type expense")
+                                                                .select("type expense leaderCondition")
                                                                 .lean();
                 for (let index: number = 0; index < topicExpense.length; index++) {
                     const currTopic: topicExpenseInterface = topicExpense[index];

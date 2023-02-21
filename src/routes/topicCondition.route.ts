@@ -1,6 +1,6 @@
 import express, {Router} from 'express';
 import { getTopicCondition, postTopicCondition, deleteTopicCondition,
-    putUpdateTopicCondition } from '../controllers/topicCondition.controller';
+    putUpdateTopicCondition, getTopicTypeAvailable } from '../controllers/topicCondition.controller';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
 const router: Router = express.Router();
 
@@ -67,6 +67,42 @@ const router: Router = express.Router();
   *             properties:
   *               topicCondition:
   *                 $ref: '#/components/schemas/TopicCondition'
+  *      409:
+  *        description: Conflict
+  *      400:
+  *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
+  * /api/topicCondition/types:
+  *  get:
+  *     tags:
+  *     - topic's register condition
+  *     summary: get topic's type avaiable
+  *     description: get topic's type avaiable by leader type
+  *     parameters:
+  *       - in: query
+  *         name: leader
+  *         schema:
+  *           type: string
+  *           enum: ["chính quy", "chất lượng cao", "kỹ sư tài năng"]
+  *         required: false
+  *         description: education type of leader
+  *     requestBody:
+  *      required: false
+  *     responses:
+  *      200:
+  *        description: Success
+  *        content:
+  *          application/json:
+  *           schema:
+  *             type: object
+  *             properties:
+  *               types:
+  *                 type: array
+  *                 items: 
+  *                   type: string
   *      409:
   *        description: Conflict
   *      400:
@@ -143,6 +179,7 @@ const router: Router = express.Router();
   */
 
 router.get("/", getTopicCondition);
+router.get("/types", authorizationMiddleware, getTopicTypeAvailable);
 router.post("/", authorizationMiddleware, postTopicCondition);
 router.put("/:topicConditionId", authorizationMiddleware, putUpdateTopicCondition);
 router.delete("/:topicConditionId", authorizationMiddleware, deleteTopicCondition);

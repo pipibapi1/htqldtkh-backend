@@ -8,6 +8,7 @@ import { topicGeneralInterface, instructor, topicInputInterface,
     updateTopicInputForFS, updateTopicInputForStudent } from "../interface/topic.interface";
 
 const TopicModel = require('../models/topic.model');
+const AllocatedExpenseModel = require('../models/allocatedExpense.model');
 const StudentModel = require('../models/student.model');
 const InstructorModel = require('../models/instructor.model');
 const PeriodModel = require('../models/period.model');
@@ -198,13 +199,28 @@ export const putUpdateTopic = async (req: Request, res: Response, next: NextFunc
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD) {
             const existedTopic = await TopicModel.findById(req.params.topicId)
-                                                .select("_id")
+                                                .select("_id period")
                                                 .lean();
             if (existedTopic) {
                 const update: updateTopicInputForFS = req.body.topic;
                 const updatedTopic = await TopicModel.findOneAndUpdate({_id: req.params.topicId}, update, 
                                                                         {new : true})
                                                     .lean();
+                if (update.expense) {
+                    const periodId = existedTopic.period;
+                    const topicExpenseList: {_id: string, expense: number}[] = await TopicModel.find({period: periodId})
+                                                                        .select("expense")
+                                                                        .lean();
+                    const newExpense = topicExpenseList.reduce((prev, curr) => {
+                        return {
+                            _id: "",
+                            expense: prev.expense + curr.expense
+                        }
+                    })
+                    const expense = await AllocatedExpenseModel.findOneAndUpdate({period: periodId}, {
+                        usedExpense: newExpense.expense
+                    })
+                }
                 res.status(200).send({topic : updatedTopic})
             }
             else {

@@ -18,6 +18,10 @@ const topicConditionSchema = new Schema({
     expression: {
         type: Object,
         default: {}
+    },
+    leaderCondition: {
+        type: [String],
+        default: []
     }
 }, {collection: "topicCondition"})
 
