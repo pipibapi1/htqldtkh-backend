@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
 import { unlink } from "fs";
+import { regexInterface } from "../interface/general.interface";
 const AnnouncementModel = require('../models/annoucement.model');
 
 export const postAddAnnouncement = async (req: Request, res: Response, next: NextFunction) => {
@@ -43,9 +44,13 @@ export const getListAnnouncement = async (req: Request, res: Response, next: Nex
         let limit: number = 5;
         if (req.query.page) pageNum = parseInt(req.query.page as string);
         if (req.query.limit) limit = parseInt(req.query.limit as string);
+        let filter: {[k: string]: regexInterface | string} = {};
+        if (req.query.period) {
+            filter.period = req.query.period as string;
+        }
         const start: number = limit * (pageNum - 1);
         const end: number = limit * pageNum;
-        const announcementsList = await AnnouncementModel.find({})
+        const announcementsList = await AnnouncementModel.find(filter)
                                         .select("_id title content createAt fileType fileName period")
                                         .limit(end)
                                         .lean()

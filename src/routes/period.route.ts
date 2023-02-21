@@ -95,7 +95,7 @@ const router: Router = express.Router();
   *        description: Not found
   */
 
-router.get('/', authorizationMiddleware, getAllPeriod);
+router.get('/', getAllPeriod);
 router.post('/', authorizationMiddleware, postAddAPeriod);
 router.put('/:_id', authorizationMiddleware, putUpdateAPeriod);
 

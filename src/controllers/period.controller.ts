@@ -8,25 +8,19 @@ import { regexInterface } from "../interface/general.interface";
 
 export const getAllPeriod = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const author = req.body.author;
-        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD || author.role == RoleTypeEnum.Student) {
-            let filter: {[k: string]: regexInterface | string} = {};
-            if(req.query.year){
-                filter.year = req.query.year as string
-            }
-            if(req.query.status){
-                filter.status = req.query.status as string
-            }
-            const chosenFields: string[] = ["_id", "period", "status", "createAt", "title", "year"]
-            const periods: periodInterface[] = await PeriodModel.find(filter).select(chosenFields.join(" "))
+        let filter: {[k: string]: regexInterface | string} = {};
+        if(req.query.year){
+            filter.year = req.query.year as string
+        }
+        if(req.query.status){
+            filter.status = req.query.status as string
+        }
+        const chosenFields: string[] = ["_id", "period", "status", "createAt", "title", "year"]
+        const periods: periodInterface[] = await PeriodModel.find(filter).select(chosenFields.join(" "))
                                                                         .lean()
                                                                         .sort({period: -1});
                                                                         ;
-            res.status(200).send({periods: periods})
-        }
-        else {
-            res.status(403).send({msg: 'Not authorized'})
-        }
+        res.status(200).send({periods: periods})
     } catch (error) {
         console.log(error)
         res.status(400).send({err: error})
