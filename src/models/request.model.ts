@@ -35,6 +35,10 @@ const requestSchema = new Schema({
     period: {
         type: String,
         require: true
+    },
+    text: {
+        type: String,
+        require: true
     }
 }, {collection: "request"})
 

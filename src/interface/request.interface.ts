@@ -9,5 +9,6 @@ export interface requestInfoInterface {
     extensionTime?: number,
     createAt: string,
     period: string,
-    periodValue: string
+    periodValue: string,
+    text: string
 }

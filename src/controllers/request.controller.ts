@@ -36,7 +36,7 @@ export const getListRequest = async (req: Request, res: Response, next: NextFunc
             const fullList: requestInfoInterface[] = await RequestModel.find(filter)
             .select("_id");
             const totalPage = fullList.length % limit === 0 ? (fullList.length / limit) : (Math.floor(fullList.length / limit) + 1);
-            const chosenFields: string[] = ["_id", "status", "type", "studentId", "topicId", "extensionTime", "createAt", "period"]
+            const chosenFields: string[] = ["_id", "status", "type", "studentId", "topicId", "extensionTime", "createAt", "period", "text"]
             const requestList: requestInfoInterface[] = await RequestModel.find(filter)
                                                                 .select(chosenFields.join(" "))
                                                                 .limit(end)
@@ -106,7 +106,7 @@ export const postNewRequest = async (req: Request, res: Response, next: NextFunc
                 if (topic) {
                     if (topic.studentId == author._id) {
                         requestData.studentId = author._id;
-                        requestData.period = topic.period
+                        requestData.period = topic.period;
                         requestData.status = RequestStatusEnum.WAIT_APPROVAL;
                         requestData.createAt = (new Date()).toString();
                         const requestDoc = new RequestModel(requestData);

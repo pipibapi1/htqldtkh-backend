@@ -8,7 +8,7 @@ const formSchema = new Schema({
         require: true
     },
     markedTemplateFile: {
-        type: File,
+        type: String,
         require: true
     },
     templateId: {

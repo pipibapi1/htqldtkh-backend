@@ -1,8 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
 import { regexInterface } from "../interface/general.interface";
+import { templateInterface } from "../interface/template.interface";
+import { unlink } from "fs";
 const PaperTemplateModel = require('../models/paperTemplate.model');
 const RelevantPaperModel = require('../models/relevantPaper.model');
+const FormModel = require('../models/form.model');
 
 export const postAddAPaperTemplate = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -36,8 +39,8 @@ export const getAllPaperTemplate = async (req: Request, res: Response, next: Nex
             if(req.query.forStudent){
                 filter.forStudent = req.query.forStudent as string
             }
-            const chosenField: string[] = ["_id", "name"];
-            const templates : {_id?: string, name: string}[] = await PaperTemplateModel.find(filter)
+            const chosenField: string[] = ["_id", "name", "forStudent", "createAt", "formId"];
+            const templates : templateInterface[] = await PaperTemplateModel.find(filter)
                                                                                        .select(chosenField.join(" "))
                                                                                        .lean();
             res.status(200).send({templates: templates});
@@ -84,6 +87,38 @@ export const getAllPaperTemplateWithPaper = async (req: Request, res: Response, 
         else {
             res.status(403).send({msg: 'Not authorized'})
         }
+    } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
+
+export const deleteRemoveATemplate = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const author = req.body.author;
+        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD || 
+            author.role == RoleTypeEnum.Student) {
+                let existTemplate = await PaperTemplateModel.findById(req.params.templateId)
+                                                        .select("_id templateAttachedFile formId")
+                                                        .lean();
+            if(existTemplate){
+                await PaperTemplateModel.deleteOne({_id: req.params.templateId})
+                unlink('uploads/templates/' + existTemplate.templateAttachedFile, ()=>{});
+                if(existTemplate.formId !== ""){
+                    await FormModel.deleteOne({_id: existTemplate.formId})
+                }
+                res.status(200).send({msg: "Success"})
+            }
+            else{
+                res.status(404).send({msg: 'Template not found'})
+            }
+        }
+        else{
+            if (req.file) {
+                unlink(req.file.path, ()=>{});
+            }
+            res.status(403).send({msg: 'Not authorized'})
+        }
+
     } catch (error) {
         res.status(400).send({err: error})
     }

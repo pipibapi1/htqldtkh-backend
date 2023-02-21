@@ -1,7 +1,7 @@
 import express, {Router} from 'express';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
 import multer, { Multer } from 'multer';
-import { downloadTemplateAttachedFile, getAllPaperTemplate, getAllPaperTemplateWithPaper, postAddAPaperTemplate } from '../controllers/paperTemplate.controller';
+import { deleteRemoveATemplate, downloadTemplateAttachedFile, getAllPaperTemplate, getAllPaperTemplateWithPaper, postAddAPaperTemplate } from '../controllers/paperTemplate.controller';
 
 const upload: Multer = multer({dest: './uploads/templates', limits: {
   fields: 20,
@@ -68,6 +68,30 @@ const router: Router = express.Router();
   *        description: Bad request
   *      403:
   *        description: Not authorized
+  * /api/template/{templateId}:
+  *  delete:
+  *     tags:
+  *     - template
+  *     summary: delete a template
+  *     description: student delete a template
+  *     parameters:
+  *       - in: path
+  *         name: templateId
+  *         required: true
+  *         scheme:
+  *           type: string
+  *         description: _id of template in mongoDB
+  *     requestBody:
+  *      required: false
+  *     responses:
+  *      200:
+  *        description: Success
+  *      400:
+  *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
   * /api/template/withPapers/{topicId}:
   *  get:
   *     tags:
@@ -132,8 +156,9 @@ const router: Router = express.Router();
   *      404:
   *        description: Not found
   */
-router.post('/', upload.single('file'), postAddAPaperTemplate)
+router.post('/', upload.single('file'), postAddAPaperTemplate);
 router.get('/',authorizationMiddleware, getAllPaperTemplate);
+router.delete('/:templateId', authorizationMiddleware, deleteRemoveATemplate);
 router.get('/withPapers/:topicId', authorizationMiddleware, getAllPaperTemplateWithPaper);
 router.get('/:templateId/download', downloadTemplateAttachedFile);
 
