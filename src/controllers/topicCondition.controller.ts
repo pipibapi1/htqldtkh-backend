@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { RoleTypeEnum } from "../enums/roleType.enum";
 import { topicConditionIntf } from "../interface/topicCondition.interface";
+import { TopicTypeEnum } from "../enums/topicType.enum";
 const TopicConditionModel = require('../models/topicCondition.model')
 
 export const getTopicCondition = async (req: Request, res: Response, next: NextFunction) => {
@@ -17,6 +18,40 @@ export const getTopicCondition = async (req: Request, res: Response, next: NextF
             res.status(400).send({msg: "Not valid type"})
         }
     } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
+
+export const getTopicTypeAvailable = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const typeLeader: string = req.query.leader as string;
+        if (typeLeader) {
+            let latestConditions: topicConditionIntf[] = [];
+            const topicTypes = Object.values(TopicTypeEnum);
+            for (let index in topicTypes) {
+                const topicCondition: topicConditionIntf[] = await TopicConditionModel.find({type: topicTypes[index]})
+                                                                .limit(1)
+                                                                .sort({createAt: -1})
+                                                                .lean();
+                if (topicCondition) {
+                    latestConditions.push(topicCondition[0]);
+                }
+            }
+            const result = latestConditions.filter((condition) => {
+                if (condition.leaderCondition?.find((ele) => ele == typeLeader)) {
+                    return true
+                }
+                return false
+            }).map((condition) => {
+                return condition.type
+            })
+            res.status(200).send({types: result});
+        }
+        else {
+            res.status(400).send({msg: "Not valid type"})
+        }
+    } catch (error) {
+        console.log(error)
         res.status(400).send({err: error})
     }
 }

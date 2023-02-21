@@ -2,7 +2,8 @@ export interface topicConditionIntf {
     _id?: string,
     type: string,
     createAt?: string,
-    expression: {[k: string]: (relationExprIntf | logicExprIntf)}
+    expression: {[k: string]: (relationExprIntf | logicExprIntf)},
+    leaderCondition?: string[]
 }
 
 export interface relationExprIntf {
