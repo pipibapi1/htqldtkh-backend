@@ -103,6 +103,14 @@ export const deleteRemoveATemplate = async (req: Request, res: Response, next: N
             if(existTemplate){
                 await PaperTemplateModel.deleteOne({_id: req.params.templateId})
                 unlink('uploads/templates/' + existTemplate.templateAttachedFile, ()=>{});
+                const paperList = await RelevantPaperModel.find({templateId: req.params.templateId})
+                                                          .select("_id paperAttachedFile")
+                                                          .lean();
+                
+                for(let i = 0; i <  paperList.length; ++i){
+                    unlink('uploads/papers/' + paperList[i].paperAttachedFile, ()=>{});
+                    await RelevantPaperModel.deleteOne({_id: paperList[i]._id})
+                }
                 if(existTemplate.formId !== ""){
                     await FormModel.deleteOne({_id: existTemplate.formId})
                 }
