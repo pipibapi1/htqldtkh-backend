@@ -1,7 +1,7 @@
 import express, {Router} from 'express';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
 import multer, { Multer } from 'multer';
-import { deleteRemoveATemplate, downloadTemplateAttachedFile, getAllPaperTemplate, getAllPaperTemplateWithPaper, postAddAPaperTemplate } from '../controllers/paperTemplate.controller';
+import { deleteRemoveATemplate, downloadTemplateAttachedFile, getAllPaperTemplate, getAllPaperTemplateWithPaper, postAddAPaperTemplate, putUpdateATemplate } from '../controllers/paperTemplate.controller';
 
 const upload: Multer = multer({dest: './uploads/templates', limits: {
   fields: 20,
@@ -20,7 +20,7 @@ const router: Router = express.Router();
   *     tags:
   *     - template
   *     summary: create new template
-  *     description: vice dean create a new template
+  *     description: fs create a new template
   *     requestBody:
   *      required: true
   *      content:
@@ -69,6 +69,36 @@ const router: Router = express.Router();
   *      403:
   *        description: Not authorized
   * /api/template/{templateId}:
+  *  put:
+  *     tags:
+  *     - template
+  *     summary: update a template
+  *     description: fs update a template
+  *     parameters:
+  *       - in: path
+  *         name: templateId
+  *         required: true
+  *         scheme:
+  *           type: string
+  *         description: id of template
+  *     requestBody:
+  *      required: true
+  *      content:
+  *        application/json:
+  *           schema:
+  *             type: object
+  *             properties:
+  *               template:
+  *                 $ref: '#/components/schemas/Template'
+  *     responses:
+  *      200:
+  *        description: Success
+  *        content:
+  *          application/json:
+  *            schema:
+  *              $ref: '#/components/schemas/TemplateResponse'
+  *      400:
+  *        description: Bad request
   *  delete:
   *     tags:
   *     - template
@@ -158,6 +188,7 @@ const router: Router = express.Router();
   */
 router.post('/', upload.single('file'), postAddAPaperTemplate);
 router.get('/',authorizationMiddleware, getAllPaperTemplate);
+router.put('/:templateId', authorizationMiddleware, putUpdateATemplate)
 router.delete('/:templateId', authorizationMiddleware, deleteRemoveATemplate);
 router.get('/withPapers/:topicId', authorizationMiddleware, getAllPaperTemplateWithPaper);
 router.get('/:templateId/download', downloadTemplateAttachedFile);

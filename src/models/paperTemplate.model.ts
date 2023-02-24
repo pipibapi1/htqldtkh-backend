@@ -5,7 +5,11 @@ const paperTemplateSchema = new Schema({
     id: {
         type: String,
         require: true
-    }, 
+    },
+    templateGivenId: {
+        type: String,
+        require: true
+    },
     name: {
         type: String, 
         require: true
@@ -33,6 +37,10 @@ const paperTemplateSchema = new Schema({
     },
     formId: {
         type: String,
+        require: true
+    },
+    inUse: {
+        type: Boolean,
         require: true
     }
 }, {collection: "paperTemplate"})

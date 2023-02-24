@@ -30,6 +30,10 @@ const annoucementSchema = new Schema({
     period: {
         type: String,
         require: true
+    },
+    year: {
+        type: String,
+        require: true
     }
 }, {collection: "announcement"})
 

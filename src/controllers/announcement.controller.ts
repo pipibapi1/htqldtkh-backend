@@ -15,6 +15,7 @@ export const postAddAnnouncement = async (req: Request, res: Response, next: Nex
                 title: info.title,
                 content: info.content,
                 period: info.period,
+                year: info.year,
                 createAt: createAt,
                 attachedFile: file.filename,
                 fileType: file.mimetype,
@@ -48,10 +49,13 @@ export const getListAnnouncement = async (req: Request, res: Response, next: Nex
         if (req.query.period) {
             filter.period = req.query.period as string;
         }
+        if (req.query.year) {
+            filter.year = req.query.year as string;
+        }
         const start: number = limit * (pageNum - 1);
         const end: number = limit * pageNum;
         const announcementsList = await AnnouncementModel.find(filter)
-                                        .select("_id title content createAt fileType fileName period")
+                                        .select("_id title content createAt fileType fileName period year")
                                         .limit(end)
                                         .lean()
                                         .sort({createAt: -1});

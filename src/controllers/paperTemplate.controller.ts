@@ -13,13 +13,15 @@ export const postAddAPaperTemplate = async (req: Request, res: Response, next: N
         const createAt = new Date();
         const info = JSON.parse(req.body.info);
         const paperTemplate = new PaperTemplateModel({
+            templateGivenId: info.templateGivenId,
             name: info.name,
             forStudent: info.forStudent,
             createAt: createAt,
             templateAttachedFile: file.filename,
             templateFileType: file.mimetype,
             templateFileName: file.originalname,
-            formId: ""
+            formId: "",
+            inUse: true
         });
         const result = await paperTemplate.save();
         delete result.templateAttachedFile;
@@ -39,7 +41,7 @@ export const getAllPaperTemplate = async (req: Request, res: Response, next: Nex
             if(req.query.forStudent){
                 filter.forStudent = req.query.forStudent as string
             }
-            const chosenField: string[] = ["_id", "name", "forStudent", "createAt", "formId"];
+            const chosenField: string[] = ["_id", "templateGivenId", "name", "forStudent", "createAt", "formId", "inUse"];
             const templates : templateInterface[] = await PaperTemplateModel.find(filter)
                                                                                        .select(chosenField.join(" "))
                                                                                        .lean();
@@ -64,8 +66,11 @@ export const getAllPaperTemplateWithPaper = async (req: Request, res: Response, 
             if(req.query.forStudent){
                 filter.forStudent = req.query.forStudent as string
             }
-            const chosenField: string[] = ["_id", "name"];
-            const templates : {_id?: string, name: string}[] = await PaperTemplateModel.find(filter)
+            if(req.query.inUse){
+                filter.inUse = req.query.inUse as string
+            }
+            const chosenField: string[] = ["_id", "templateGivenId", "name"];
+            const templates : {_id?: string, templateGivenId: string, name: string}[] = await PaperTemplateModel.find(filter)
                                                                                        .select(chosenField.join(" "))
                                                                                        .lean();
             let templatesWithPapers : {_id?: string, name: string, paper: {_id?: string, paperFileName: string} | undefined}[] = []
@@ -75,8 +80,9 @@ export const getAllPaperTemplateWithPaper = async (req: Request, res: Response, 
                 const paper: {_id?: string, paperFileName: string} | undefined = await RelevantPaperModel.findOne({templateId: template._id, topicId: topicId})
                                                                                             .select(chosenField.join(" "))
                                                                                             .lean();
-                const templateWithPaper : {_id?: string, name: string, paper: {_id?: string, paperFileName: string} | undefined} = {
+                const templateWithPaper : {_id?: string, templateGivenId: string, name: string, paper: {_id?: string, paperFileName: string} | undefined} = {
                     _id: template._id,
+                    templateGivenId: template.templateGivenId,
                     name: template.name,
                     paper: paper
                 }
@@ -92,6 +98,34 @@ export const getAllPaperTemplateWithPaper = async (req: Request, res: Response, 
     }
 }
 
+export const putUpdateATemplate = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const author = req.body.author;
+        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD) {
+                let existTemplate = await PaperTemplateModel.findById(req.params.templateId)
+                                                        .select("_id")
+                                                        .lean();
+            if(existTemplate){
+                const update = req.body.template;
+                const updatedTemplate = await PaperTemplateModel.findOneAndUpdate({_id: req.params.templateId}, update, 
+                    {new : true});
+                res.status(200).send({template : updatedTemplate})
+            }
+            else{
+                res.status(404).send({msg: 'Template not found'})
+            }
+        }
+        else{
+            if (req.file) {
+                unlink(req.file.path, ()=>{});
+            }
+            res.status(403).send({msg: 'Not authorized'})
+        }
+
+    } catch (error) {
+        res.status(400).send({err: error})
+    }
+}
 export const deleteRemoveATemplate = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;
@@ -101,20 +135,21 @@ export const deleteRemoveATemplate = async (req: Request, res: Response, next: N
                                                         .select("_id templateAttachedFile formId")
                                                         .lean();
             if(existTemplate){
-                await PaperTemplateModel.deleteOne({_id: req.params.templateId})
-                unlink('uploads/templates/' + existTemplate.templateAttachedFile, ()=>{});
                 const paperList = await RelevantPaperModel.find({templateId: req.params.templateId})
-                                                          .select("_id paperAttachedFile")
+                                                          .select("_id")
                                                           .lean();
-                
-                for(let i = 0; i <  paperList.length; ++i){
-                    unlink('uploads/papers/' + paperList[i].paperAttachedFile, ()=>{});
-                    await RelevantPaperModel.deleteOne({_id: paperList[i]._id})
+                if(paperList.length === 0){
+                    await PaperTemplateModel.deleteOne({_id: req.params.templateId})
+                    unlink('uploads/templates/' + existTemplate.templateAttachedFile, ()=>{});
+                    if(existTemplate.formId !== ""){
+                        await FormModel.deleteOne({_id: existTemplate.formId})
+                    }
+                    res.status(200).send({msg: "Success"})
                 }
-                if(existTemplate.formId !== ""){
-                    await FormModel.deleteOne({_id: existTemplate.formId})
+                else
+                {
+                    res.status(409).send({msg: 'Exist relevant paper'})
                 }
-                res.status(200).send({msg: "Success"})
             }
             else{
                 res.status(404).send({msg: 'Template not found'})
@@ -147,7 +182,6 @@ export const downloadTemplateAttachedFile = async (req: Request, res: Response, 
         }
 
     } catch (error) {
-        console.log(error)
         res.status(400).send({err: error})
     }
 }
