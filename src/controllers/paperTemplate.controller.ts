@@ -142,7 +142,16 @@ export const deleteRemoveATemplate = async (req: Request, res: Response, next: N
                     await PaperTemplateModel.deleteOne({_id: req.params.templateId})
                     unlink('uploads/templates/' + existTemplate.templateAttachedFile, ()=>{});
                     if(existTemplate.formId !== ""){
-                        await FormModel.deleteOne({_id: existTemplate.formId})
+                        const existForm = await FormModel.findById(existTemplate.formId)
+                                                    .select("_id markedTemplateAttachedFile")
+                                                    .lean();
+                        if(existForm){
+                            unlink('uploads/forms/' + existForm.markedTemplateAttachedFile, ()=>{});
+                            await FormModel.deleteOne({_id: existTemplate.formId})
+                        }
+                        else{
+                            res.status(404).send({msg: 'Form not found'})
+                        }
                     }
                     res.status(200).send({msg: "Success"})
                 }

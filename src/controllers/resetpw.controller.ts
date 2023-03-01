@@ -39,14 +39,13 @@ const resetpwController = async(req: Request, res: Response, next: NextFunction)
 
                 // send mail with defined transport object
                 const msg = {
-                    from: `"Hệ thống quản lý đề tài khoa học cấp sinh viên" <${process.env.SYSTEM_EMAIL}>`, // sender address
+                    from: `"HỆ THỐNG QUẢN LÝ ĐỀ TÀI KHOA HỌC CẤP SINH VIÊN" <${process.env.SYSTEM_EMAIL}>`, // sender address
                     to: req.body.email, // list of receivers
                     subject: "Bạn đã reset mật khẩu", // Subject line
                     text: "Mật khẩu mới của tài khoản của bạn là: " + newPassword, // plain text body
                 }
                 const info = await transporter.sendMail(msg);
 
-                console.log("Message sent: %s", info.messageId);
                 res.status(200).send({msg: "Password reset successfully!"})
             }
             else{

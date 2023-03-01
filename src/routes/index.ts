@@ -17,6 +17,8 @@ import { paperTemplateRouter } from './paperTemplate.route';
 import { instructorRouter } from './instructor.route';
 import { relevantPaperRouter } from './relevantPaper.route';
 import { productRouter } from './product.route';
+import { formRouter } from './form.route';
+import { sendEmailRouter } from './sendEmail.route';
 
 router.use("/auth", authRouter);
 router.use("/vicedean", facultyViceDeanRouter);
@@ -33,6 +35,8 @@ router.use("/statistic", statisticRouter);
 router.use("/template", paperTemplateRouter);
 router.use("/paper", relevantPaperRouter);
 router.use("/instructor", instructorRouter);
-router.use("/product", productRouter)
+router.use("/product", productRouter);
+router.use("/form", formRouter);
+router.use("/sendEmail", sendEmailRouter)
 
 export const fullRouter: Router = router;

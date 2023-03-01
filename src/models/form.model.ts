@@ -3,11 +3,15 @@ const Schema = mongoose.Schema;
 const FieldSchema = require('./field.schema')
 
 const formSchema = new Schema({
-    id: {
+    markedTemplateAttachedFile: {
         type: String,
         require: true
     },
-    markedTemplateFile: {
+    markedTemplateFileType: {
+        type: String,
+        require: true
+    },
+    markedTemplateFileName: {
         type: String,
         require: true
     },
@@ -15,9 +19,14 @@ const formSchema = new Schema({
         type: String,
         require: true
     },
-    fields: {
-        type: [FieldSchema],
+    fields: { 
+        type: [Object],
         default: []
+    },
+    createAt: {
+        type: Date,
+        require: true,
+        index: -1
     }
 }, {collection: 'form'})
 
