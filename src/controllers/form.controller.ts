@@ -90,7 +90,7 @@ export const deleteRemoveAForm = async (req: Request, res: Response, next: NextF
 export const getAFormById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const author = req.body.author;
-        if (author.role == RoleTypeEnum.FS) {
+        if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.Student) {
             let existForm = await FormModel.findById(req.params.formId)
                                            .select("_id templateId fields markedTemplateFileName")
                                            .lean();

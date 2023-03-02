@@ -69,22 +69,23 @@ export const getAllPaperTemplateWithPaper = async (req: Request, res: Response, 
             if(req.query.inUse){
                 filter.inUse = req.query.inUse as string
             }
-            const chosenField: string[] = ["_id", "templateGivenId", "name"];
-            const templates : {_id?: string, templateGivenId: string, name: string}[] = await PaperTemplateModel.find(filter)
+            const chosenField: string[] = ["_id", "templateGivenId", "name", "formId"];
+            const templates : {_id?: string, templateGivenId: string, name: string, formId: string}[] = await PaperTemplateModel.find(filter)
                                                                                        .select(chosenField.join(" "))
                                                                                        .lean();
-            let templatesWithPapers : {_id?: string, name: string, paper: {_id?: string, paperFileName: string} | undefined}[] = []
+            let templatesWithPapers : {_id?: string,templateGivenId: string, name: string, paper: {_id?: string, paperFileName: string} | undefined, formId: string}[] = []
             for(let i = 0; i < templates.length; ++i){
                 const template = templates[i]
                 const chosenField: string[] = ["_id", "paperFileName"];
                 const paper: {_id?: string, paperFileName: string} | undefined = await RelevantPaperModel.findOne({templateId: template._id, topicId: topicId})
                                                                                             .select(chosenField.join(" "))
                                                                                             .lean();
-                const templateWithPaper : {_id?: string, templateGivenId: string, name: string, paper: {_id?: string, paperFileName: string} | undefined} = {
+                const templateWithPaper : {_id?: string, templateGivenId: string, name: string, paper: {_id?: string, paperFileName: string} | undefined, formId: string} = {
                     _id: template._id,
                     templateGivenId: template.templateGivenId,
                     name: template.name,
-                    paper: paper
+                    paper: paper,
+                    formId: template.formId
                 }
                 templatesWithPapers = templatesWithPapers.concat([templateWithPaper]);
             }                                                                           
