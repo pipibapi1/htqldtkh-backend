@@ -10,10 +10,6 @@ const councilMemberSchema = new Schema({
         type: String,
         require: true
     },
-    fmName: {
-        type: String,
-        require: true
-    },
     name: {
         type: String,
         require: true
@@ -33,7 +29,8 @@ const councilMemberSchema = new Schema({
         require: false
     },
     degree: {
-        type: DegreeEnum,
+        type: String,
+        enum: Object.values(DegreeEnum),
         require: false
     },
     workUnit: {

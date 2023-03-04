@@ -54,11 +54,11 @@ const topicSchema = new Schema({
     },
     acceptanceCouncilId: {
         type: String,
-        require: false
+        default: ""
     },
     reviewCouncilId: {
         type: String,
-        require: false
+        default: ""
     },
     creationDate: {
         type: Date,
