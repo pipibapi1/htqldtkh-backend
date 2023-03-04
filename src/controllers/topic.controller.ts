@@ -43,8 +43,15 @@ export const getListTopic = async (req: Request, res: Response, next: NextFuncti
             if (req.query.student) {
                 filter.studentId = req.query.student as string;
             }
+            if (req.query.reviewCouncil || req.query.reviewCouncil === "") {
+                filter.reviewCouncilId = req.query.reviewCouncil as string;
+            }
+            if (req.query.acceptanceCouncil || req.query.acceptanceCouncil === "") {
+                filter.acceptanceCouncilId = req.query.acceptanceCouncil as string;
+            }
             const chosenField: string[] = ["_id", "name", "type", "startTime", "endTime", "isExtended", "extensionTime",
-                                            "status", "period", "productId", "studentId", "creationDate", "topicGivenId", "expense"];
+                                            "status", "period", "productId", "studentId", "creationDate", "topicGivenId", 
+                                            "expense"];
             const fullList: topicGeneralInterface[] = await TopicModel.find(filter)
                                                                     .select("_id");
             const totalPage = fullList.length % limit === 0 ? (fullList.length / limit) : (Math.floor(fullList.length / limit) + 1);

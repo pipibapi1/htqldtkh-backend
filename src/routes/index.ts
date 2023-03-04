@@ -17,6 +17,7 @@ import { paperTemplateRouter } from './paperTemplate.route';
 import { instructorRouter } from './instructor.route';
 import { relevantPaperRouter } from './relevantPaper.route';
 import { productRouter } from './product.route';
+import { councilRouter } from './council.route';
 import { formRouter } from './form.route';
 import { sendEmailRouter } from './sendEmail.route';
 
@@ -36,6 +37,7 @@ router.use("/template", paperTemplateRouter);
 router.use("/paper", relevantPaperRouter);
 router.use("/instructor", instructorRouter);
 router.use("/product", productRouter);
+router.use("/council", councilRouter);
 router.use("/form", formRouter);
 router.use("/sendEmail", sendEmailRouter)
 
