@@ -143,6 +143,26 @@ export const putUpdateAForm = async (req: Request, res: Response, next: NextFunc
     }
 }
 
+export const getFormMarkedTemplateAttachedFile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const formId: string = req.params.formId;
+        const form = await FormModel.findById(formId)
+                                    .select("markedTemplateAttachedFile")
+                                    .lean();
+        if (form) {
+            const file: string = form.markedTemplateAttachedFile;
+            delete form.markedTemplateAttachedFile;
+            res.status(200).sendFile(file , {root: "uploads/forms/"});
+        }
+        else {
+            res.status(404).send({ msg: "Form marked template attached file not found" });
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({err: error})
+    }
+}
+
 export const downloadFormMarkedTemplateAttachedFile = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const formId: string = req.params.formId;

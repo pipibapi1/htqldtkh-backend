@@ -1,7 +1,7 @@
 import express, {Router} from 'express';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
 import multer, { Multer } from 'multer';
-import { deleteRemoveAForm, downloadFormMarkedTemplateAttachedFile, getAFormById, postAddAForm, putUpdateAForm } from '../controllers/form.controller';
+import { deleteRemoveAForm, downloadFormMarkedTemplateAttachedFile, getAFormById, getFormMarkedTemplateAttachedFile, postAddAForm, putUpdateAForm } from '../controllers/form.controller';
 
 const upload: Multer = multer({dest: './uploads/forms', limits: {
     fields: 20,
@@ -125,6 +125,37 @@ const router: Router = express.Router();
   *        description: Not authorized
   *      404:
   *        description: Not found
+  * /api/form/{formId}/markedTemplateFile:
+  *  get:
+  *     tags:
+  *     - form
+  *     summary: get form marked template file
+  *     description: get form marked template file
+  *     parameters:
+  *       - in: path
+  *         name: formId
+  *         required: true
+  *         scheme:
+  *           type: string
+  *         description: id of form
+  *     requestBody:
+  *      required: false
+  *     responses:
+  *      200:
+  *        description: Success
+  *        content:
+  *          application/octet-stream:
+  *            schema:
+  *              type: string
+  *              format: binary
+  *      409:
+  *        description: Conflict
+  *      400:
+  *        description: Bad request
+  *      403:
+  *        description: Not authorized
+  *      404:
+  *        description: Not found
   * /api/form/{formId}/download:
   *  get:
   *     tags:
@@ -159,6 +190,7 @@ router.post('/', upload.single('file'), authorizationMiddleware, postAddAForm);
 router.get('/:formId', authorizationMiddleware, getAFormById);
 router.put('/:formId', authorizationMiddleware, putUpdateAForm);
 router.delete('/:formId', authorizationMiddleware, deleteRemoveAForm);
+router.get('/:formId/markedTemplateFile', getFormMarkedTemplateAttachedFile);
 router.get('/:formId/download', downloadFormMarkedTemplateAttachedFile);
 
 export const formRouter: Router = router;
