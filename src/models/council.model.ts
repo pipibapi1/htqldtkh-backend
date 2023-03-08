@@ -43,10 +43,6 @@ const councilSchema = new Schema({
         type: Number,
         default: 0
     },
-    numTopics: {
-        type: Number,
-        default: 0
-    }, 
     lastModified: {
         type: String,
         require: true

@@ -34,7 +34,6 @@ export const sendEmail = async (req: Request, res: Response, next: NextFunction)
             res.status(200).send({msg: "Send email successfully"})
         }
         else{
-
             const info = JSON.parse(req.body.info);
             let transporter = nodemailer.createTransport({
                 service: 'gmail',

@@ -8,7 +8,7 @@ export interface CouncilInfoIntf {
     date: string,
     place: string,
     numMembers: number,
-    numTopics: number,
+    numTopics?: number,
     lastModified: string
 }
 
@@ -45,13 +45,17 @@ export interface CouncilDetailIntf {
 }
 
 export interface TopicInfoIntf {
+    _id: string,
     topicGivenId: string,
     name: string,
+    type: string,
     studentId: string,
     studentName?: string,
     acceptanceResult?: string,
     reviewResult?: string,
-    expense?: number
+    expense?: number,
+    instructorsId?: string[],
+    instructorsName?: string[]
 }
 
 export interface CouncilMemberIntf {
