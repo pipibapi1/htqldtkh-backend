@@ -8,6 +8,7 @@ import { CouncilTypeEnum } from "../enums/councilType.enum";
 const CouncilModel = require('../models/council.model');
 const TopicModel = require('../models/topic.model');
 const StudentModel = require('../models/student.model');
+const InstructorModel = require('../models/instructor.model');
 
 interface topicReviewCouncilInfo {
     _id: string,
@@ -65,34 +66,58 @@ export const getCouncilDetail = async (req: Request, res: Response, next: NextFu
                     filter = {
                         reviewCouncilId: council._id
                     }
-                    const chosenField = ["_id", "name", "topicGivenId", "reviewResult", "studentId"]
+                    const chosenField = ["name", "topicGivenId", "reviewResult", "studentId", "instructorsId", 
+                                        "type"]
                     let topicArray: TopicInfoIntf[] = await TopicModel.find(filter)
-                                                            .select(chosenField.join(" "))
-                                                            .lean();
-                    for (let index in topicArray) {
+                                                        .select(chosenField.join(" "))
+                                                        .lean();
+                    for (let index = 0; index < topicArray.length; index++) {
                         const currTopic = topicArray[index];
                         const leader: {name: string} = await StudentModel.findById(currTopic.studentId)
                                                             .select("name")
                                                             .lean();
                         topicArray[index].studentName = leader.name;
+                        currTopic.instructorsName = [];
+                        const instructorIdList = currTopic.instructorsId? currTopic.instructorsId : [];
+                        for(let instructorIdx = 0; instructorIdx < instructorIdList.length; instructorIdx++) {
+                            const instructorId = instructorIdList[instructorIdx]
+                            const instructor: {_id: string, name: string} = await InstructorModel.findById(instructorId)
+                                                                                .select("name")
+                                                                                .lean();
+                            currTopic.instructorsName.push(instructor.name);
+                        }
+                        delete currTopic.instructorsId;
                     }
                     council.topicGeneralInfos = topicArray;
+                    council.numTopics = topicArray.length;
                     res.status(200).send({council: council})
                 }
                 else {
                     filter = {
                         acceptanceCouncilId: council._id
                     }
-                    const chosenField = ["_id", "name", "topicGivenId", "acceptanceResult", "studentId"]
+                    const chosenField = ["name", "topicGivenId", "acceptanceResult", "studentId", "instructorsId", 
+                                        "type"]
                     let topicArray: TopicInfoIntf[] = await TopicModel.find(filter)
-                                                            .select(chosenField.join(" "))
-                                                            .lean();
-                    for (let index in topicArray) {
+                                                        .select(chosenField.join(" "))
+                                                        .lean();
+                    console.log(topicArray)
+                    for (let index = 0; index < topicArray.length; index++) {
                         const currTopic = topicArray[index];
                         const leader: {name: string} = await StudentModel.findById(currTopic.studentId)
                                                             .select("name")
                                                             .lean();
                         topicArray[index].studentName = leader.name;
+                        currTopic.instructorsName = [];
+                        const instructorIdList = currTopic.instructorsId? currTopic.instructorsId : [];
+                        for(let instructorIdx = 0; instructorIdx < instructorIdList.length; instructorIdx++) {
+                            const instructorId = instructorIdList[instructorIdx]
+                            const instructor: {_id: string, name: string} = await InstructorModel.findById(instructorId)
+                                                                                .select("name")
+                                                                                .lean();
+                            currTopic.instructorsName.push(instructor.name);
+                        }
+                        delete currTopic.instructorsId;
                     }
                     council.topicGeneralInfos = topicArray;
                     res.status(200).send({council: council})
@@ -130,8 +155,8 @@ export const getListCouncil = async (req: Request, res: Response, next: NextFunc
                 }
             }
             if (filter) {
-                const chosenField = ['name', 'status', 'time', 'date', 'place', 'numMembers',
-                                    'numTopics', 'lastModified']
+                const chosenField = ['name', 'status', 'time', 'date', 'place', 'numMembers', 
+                                    'lastModified']
                 const councilList: CouncilInfoIntf[] = await CouncilModel.find(filter)
                                                             .select(chosenField.join(" "))
                                                             .limit(end)
@@ -140,7 +165,21 @@ export const getListCouncil = async (req: Request, res: Response, next: NextFunc
                     res.status(200).send({councils: []});
                 }
                 else {
-                    const chosenCouncils = councilList.slice(start, end);                
+                    const chosenCouncils = councilList.slice(start, end);
+                    for (let idx in chosenCouncils) {
+                        const currCouncil = chosenCouncils[idx];
+                        let topicFilter = {};
+                        if (type === CouncilTypeEnum.XD) {
+                            topicFilter = {
+                                reviewCouncilId: currCouncil._id,
+                                period: periodId
+                            }
+                        }
+                        const topicsInCouncil = await TopicModel.find(topicFilter)
+                                                        .select("_id")
+                                                        .lean();
+                        currCouncil.numTopics = topicsInCouncil.length;
+                    }              
                     res.status(200).send({councils: chosenCouncils});
                 }
             }
@@ -238,47 +277,6 @@ export const postAddTopicToCouncil = async (req: Request, res: Response, next: N
                     const topicId = topicList[index];
                     await TopicModel.findOneAndUpdate({_id: topicId}, update);
                 }
-                existedCouncil.numTopics = existedCouncil.numTopics + topicList.length;
-                await existedCouncil.save();
-                res.status(200).send({council: existedCouncil});
-            }
-            else {
-                res.status(404).send({msg: 'Council not found'})
-            }
-        }
-        else {
-            res.status(403).send({msg: 'Not authorized'})
-        }
-    } catch (error) {
-        res.status(400).send({err: error})
-    }
-}
-
-export const deleteTopicInCouncil = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const author = req.body.author;
-        if (author.role === RoleTypeEnum.FS) {
-            const councilId = req.params.councilId;
-            let existedCouncil = await CouncilModel.findById(councilId);
-            if (existedCouncil) {
-                const topicList: string[] = req.body.topics;
-                let update = {};
-                if (existedCouncil.type === CouncilTypeEnum.XD) {
-                    update = {
-                        reviewCouncilId: ""
-                    }
-                }
-                else {
-                    update = {
-                        acceptanceCouncilId: ""
-                    }
-                }
-                for (let index in topicList) {
-                    const topicId = topicList[index];
-                    await TopicModel.findOneAndUpdate({_id: topicId}, update);
-                }
-                existedCouncil.numTopics = existedCouncil.numTopics - topicList.length;
-                await existedCouncil.save();
                 res.status(200).send({council: existedCouncil});
             }
             else {

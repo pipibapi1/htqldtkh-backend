@@ -209,6 +209,10 @@ import { object, string, TypeOf, number } from "zod";
   *        expense:
   *          type: number
   *          example: 5000000
+  *        instructorsName:
+  *          type: array
+  *          items:
+  *            type: string
   *    CouncilUpdateData:
   *      type: object
   *      properties:

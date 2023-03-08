@@ -1,6 +1,6 @@
 import express, {Router} from 'express';
 import { getCouncilDetail, getListCouncil, postNewCouncil, postAddTopicToCouncil, 
-    deleteCouncil, deleteTopicInCouncil, putUpdateCouncil, getCouncilStatistics } from '../controllers/council.controller';
+    deleteCouncil, putUpdateCouncil, getCouncilStatistics } from '../controllers/council.controller';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
 
 const router: Router = express.Router();
@@ -212,6 +212,7 @@ const router: Router = express.Router();
   *        description: Bad request
   *      404:
   *        description: Not found
+  * /api/council/{_id}/topic/{topicId}:
   *  delete:
   *     tags:
   *     - council
@@ -225,17 +226,15 @@ const router: Router = express.Router();
   *           example: 0123456789abcdef
   *         required: true
   *         description: _id of council
+  *       - in: path
+  *         name: topicId
+  *         schema:
+  *           type: string
+  *           example: 0123456789abcdef
+  *         required: true
+  *         description: _id of topic
   *     requestBody:
-  *      required: true
-  *      content:
-  *        application/json:
-  *           schema:
-  *             type: object
-  *             properties:
-  *               topics:
-  *                  type: array
-  *                  items: 
-  *                    type: string
+  *      required: false
   *     responses:
   *      200:
   *        description: Success
@@ -310,6 +309,5 @@ router.get("/:councilId", authorizationMiddleware, getCouncilDetail);
 router.put("/:councilId", authorizationMiddleware, putUpdateCouncil);
 router.delete("/:councilId", authorizationMiddleware, deleteCouncil);
 router.post("/:councilId/topic", authorizationMiddleware, postAddTopicToCouncil);
-router.delete("/:councilId/topic",authorizationMiddleware, deleteTopicInCouncil);
 
 export const councilRouter: Router = router;
