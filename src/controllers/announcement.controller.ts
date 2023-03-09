@@ -42,7 +42,7 @@ export const postAddAnnouncement = async (req: Request, res: Response, next: Nex
 export const getListAnnouncement = async (req: Request, res: Response, next: NextFunction) => {
     try {
         let pageNum: number = 1;
-        let limit: number = 5;
+        let limit: number = 9999999;
         if (req.query.page) pageNum = parseInt(req.query.page as string);
         if (req.query.limit) limit = parseInt(req.query.limit as string);
         let filter: {[k: string]: regexInterface | string} = {};
