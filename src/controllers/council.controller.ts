@@ -101,7 +101,6 @@ export const getCouncilDetail = async (req: Request, res: Response, next: NextFu
                     let topicArray: TopicInfoIntf[] = await TopicModel.find(filter)
                                                         .select(chosenField.join(" "))
                                                         .lean();
-                    console.log(topicArray)
                     for (let index = 0; index < topicArray.length; index++) {
                         const currTopic = topicArray[index];
                         const leader: {name: string} = await StudentModel.findById(currTopic.studentId)
@@ -172,6 +171,12 @@ export const getListCouncil = async (req: Request, res: Response, next: NextFunc
                         if (type === CouncilTypeEnum.XD) {
                             topicFilter = {
                                 reviewCouncilId: currCouncil._id,
+                                period: periodId
+                            }
+                        }
+                        else {
+                            topicFilter = {
+                                acceptanceCouncilId: currCouncil._id,
                                 period: periodId
                             }
                         }

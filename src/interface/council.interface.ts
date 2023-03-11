@@ -65,5 +65,6 @@ export interface CouncilMemberIntf {
     workUnit: string,
     role: string,
     gender: string,
-    email: string
+    email: string,
+    phoneNumber: string
 }
