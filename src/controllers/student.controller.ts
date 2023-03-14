@@ -126,9 +126,9 @@ export const putUpdateAStudent = async (req: Request, res: Response, next: NextF
             if (student) {
                 const changeableFields: string[] = ['name', 'gender', 'phoneNumber', 'email', 'username',
                                             'password', 'image', 'studentId', 'educationType', 
-                                            'accountStatus', 'birthDate'];
+                                            'accountStatus', 'birthDate', "numNotification"];
                 for (let field in changeableFields) {
-                    if (req.body.student[changeableFields[field]]){
+                    if (req.body.student[changeableFields[field]] !== undefined){
                         if (changeableFields[field] == 'password') {
                             let hashPassword = await hash(req.body.student.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
                             student.password = hashPassword;
