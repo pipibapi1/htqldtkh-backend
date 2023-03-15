@@ -20,6 +20,7 @@ import { productRouter } from './product.route';
 import { councilRouter } from './council.route';
 import { formRouter } from './form.route';
 import { sendEmailRouter } from './sendEmail.route';
+import { notificationRouter } from './notification.route';
 
 router.use("/auth", authRouter);
 router.use("/vicedean", facultyViceDeanRouter);
@@ -39,6 +40,7 @@ router.use("/instructor", instructorRouter);
 router.use("/product", productRouter);
 router.use("/council", councilRouter);
 router.use("/form", formRouter);
-router.use("/sendEmail", sendEmailRouter)
+router.use("/sendEmail", sendEmailRouter);
+router.use("/notification", notificationRouter)
 
 export const fullRouter: Router = router;

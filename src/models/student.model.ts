@@ -73,6 +73,39 @@ const studentSchema = new Schema({
     birthDate: {
         type: String,
         require: true
+    },
+    notifications: {
+        default: [],
+        type: [{
+            author: {
+                type: String,
+                require: true
+            },
+            subject: {
+                type: String,
+                require: true
+            },
+            content: {
+                type: String,
+                require: false
+            },
+            createAt: {
+                type: Date,
+                require: true
+            },
+            redirect: {
+                type: String,
+                require: false
+            },
+            isRead: {
+                type: Boolean,
+                default: false
+            }
+        }]
+    },
+    numNotification: {
+        type: Number,
+        default: 0
     }
 }, {collection: "student"})
 
