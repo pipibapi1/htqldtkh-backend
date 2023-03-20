@@ -26,11 +26,11 @@ const signUpController = async (req: Request, res: Response, next: NextFunction)
                 let hashPassword = await hash(req.body.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
                 const newAccountNotification: NotificationIntf = {
                     author: "Hệ thống",
-                    subject: "Tài khoản đang chờ được xét duyệt.",
+                    subject: "Tài khoản đang chờ được xét duyệt",
                     content: "Tài khoản của bạn cần được thư ký khoa duyệt để sử dụng đầy đủ"
                         + " tính năng. Bạn vẫn có thể thay đổi thông tin cá nhân trước khi tài"
                         + " khoản được duyệt. Sau khi được duyệt, mọi thông tin tài khoản của"
-                        + " bạn sẽ không được phép thay đổi.",
+                        + " bạn sẽ không được phép thay đổi",
                     createAt: (new Date()).toString(),
                     redirect: "/personalInfo",
                     isRead: false

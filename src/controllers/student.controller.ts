@@ -3,9 +3,12 @@ import { RoleTypeEnum } from "../enums/roleType.enum";
 import { hash } from "bcrypt";
 import { StudentAccountStatusEnum } from "../enums/studentAccountStatus.enum";
 import { regexInterface } from "../interface/general.interface";
-const StudentModel = require('../models/student.model');
 import dotenv from 'dotenv';
+import { NotificationIntf } from "../interface/notification.interface";
 dotenv.config();
+const StudentModel = require('../models/student.model');
+const nodemailer = require("nodemailer");
+
 
 export const getListStudent = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -133,6 +136,23 @@ export const putUpdateAStudent = async (req: Request, res: Response, next: NextF
                             let hashPassword = await hash(req.body.student.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
                             student.password = hashPassword;
                         }
+                        else if (changeableFields[field] == 'accountStatus'){
+                            const notification: NotificationIntf = {
+                                author: "Hệ thống",
+                                subject: "Tài khoản đã được xét duyệt",
+                                content: "Tài khoản của bạn đã được xét duyệt. Bây giờ bạn có thể đăng ký đề tài mới và tạo các yêu cầu phát sinh.",
+                                createAt: (new Date()).toString(),
+                                redirect: "/personalInfo",
+                                isRead: false
+                            }
+                
+                            let currentNotifications = student.notifications;
+                            currentNotifications = currentNotifications.concat([notification]);
+                            student.notifications = currentNotifications;
+                            student.numNotification = student.numNotification + 1;
+
+                            student[changeableFields[field]] = req.body.student[changeableFields[field]]
+                        }
                         else student[changeableFields[field]] = req.body.student[changeableFields[field]]
                     }
                 }
@@ -158,6 +178,23 @@ export const deleteAStudent = async (req: Request, res: Response, next: NextFunc
             const existedStudent = await StudentModel.findById(req.params._id);
             if (existedStudent) {
                 await StudentModel.deleteOne({_id: req.params._id})
+                let transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    host: 'smtp.gmail.com',
+                    secure: false,
+                    auth: {
+                        user: process.env.SYSTEM_EMAIL,
+                        pass: process.env.SYSTEM_EMAIL_APP_PASSWORD,
+                    }
+                });
+        
+                const msg = {
+                    from: `"HỆ THỐNG QUẢN LÝ ĐỀ TÀI KHOA HỌC CẤP SINH VIÊN" <${process.env.SYSTEM_EMAIL}>`,
+                    to: existedStudent.email,
+                    subject: "Tài khoản của bạn đã bị xóa",
+                    text: "Tài khoản của bạn đã bị xóa do không đạt tiêu chuẩn để được phê duyệt",
+                }
+                await transporter.sendMail(msg);
                 res.status(200).send({msg: "Success"})
             }
             else {

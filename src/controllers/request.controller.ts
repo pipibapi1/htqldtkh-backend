@@ -5,6 +5,7 @@ import { regexInterface } from "../interface/general.interface";
 import { requestInfoInterface } from "../interface/request.interface";
 import { RequestTypeEnum } from "../enums/requestType.enum";
 import { TopicStatusEnum } from "../enums/topicStatus.enum";
+import { NotificationIntf } from "../interface/notification.interface";
 const RequestModel = require('../models/request.model');
 const StudentModel = require('../models/student.model');
 const TopicModel = require('../models/topic.model');
@@ -100,8 +101,8 @@ export const postNewRequest = async (req: Request, res: Response, next: NextFunc
             const requestData: requestInfoInterface = req.body.request;
             const existedSameRequestForSameTopic = await RequestModel.findOne({type: requestData.type, topicId: requestData.topicId})
             if(!existedSameRequestForSameTopic){
-                const topic: {_id: string, studentId: string, period: string} = await TopicModel.findById(requestData.topicId)
-                                                                                .select("studentId period")
+                const topic: {_id: string, studentId: string, name:string, period: string} = await TopicModel.findById(requestData.topicId)
+                                                                                .select("studentId name period")
                                                                                 .lean();
                 if (topic) {
                     if (topic.studentId == author._id) {
@@ -111,6 +112,27 @@ export const postNewRequest = async (req: Request, res: Response, next: NextFunc
                         requestData.createAt = (new Date()).toString();
                         const requestDoc = new RequestModel(requestData);
                         const newRequest = await requestDoc.save();
+                        const notification: NotificationIntf = {
+                            author: "Hệ thống",
+                            subject: "Đã tạo yêu cầu thành công",
+                            content: "Bạn đã tạo thành công yêu cầu " + requestData.type + " cho đề tài " + topic.name + ".",
+                            createAt: (new Date()).toString(),
+                            redirect: "/myRequest",
+                            isRead: false
+                        }
+            
+                        const student = await StudentModel.findById(requestData.studentId)
+                        if(student){
+                            let currentNotifications = student.notifications;
+                            currentNotifications = currentNotifications.concat([notification]);
+                            student.notifications = currentNotifications;
+                            student.numNotification = student.numNotification + 1;
+            
+                            await student.save();
+                        }
+                        else{
+                            res.status(404).send({msg: 'Student not found'})
+                        }
                         res.status(200).send({request: newRequest})
                     }
                     else {
@@ -142,8 +164,30 @@ export const putUpdateRequest = async (req: Request, res: Response, next: NextFu
             if (request) {
                 if (req.body.request.status) {
                     request.status = req.body.request.status
-                };
+                }
+                const topic: {_id?: string, name: string} = await TopicModel.findById(request.topicId).select("name").lean();
                 const updatedRequest = await request.save();
+                const notification: NotificationIntf = {
+                    author: "Hệ thống",
+                    subject: "Yêu cầu đã bị từ chối",
+                    content: "Yêu cầu " + request.type + " cho đề tài " + topic.name + " đã bị từ chối.",
+                    createAt: (new Date()).toString(),
+                    redirect: "/myRequest",
+                    isRead: false
+                }
+    
+                const student = await StudentModel.findById(request.studentId)
+                if(student){
+                    let currentNotifications = student.notifications;
+                    currentNotifications = currentNotifications.concat([notification]);
+                    student.notifications = currentNotifications;
+                    student.numNotification = student.numNotification + 1;
+    
+                    await student.save();
+                }
+                else{
+                    res.status(404).send({msg: 'Student not found'})
+                }
                 res.status(200).send({request: updatedRequest})
             }
             else {
@@ -207,10 +251,10 @@ export const putApproveARequest = async (req: Request, res: Response, next: Next
                 if(existedRequest.type === RequestTypeEnum.CANCEL_PROJECT){
                     chosenTopic.status = TopicStatusEnum.CANCELED
 
-                    const newTopic = await TopicModel.findOneAndUpdate({_id: existedRequest.topicId}, chosenTopic, 
+                    await TopicModel.findOneAndUpdate({_id: existedRequest.topicId}, chosenTopic, 
                         {new : true})
                     existedRequest.status = RequestStatusEnum.APPROVED;
-                    const newRequest = await existedRequest.save();
+                    await existedRequest.save();
                     res.status(200).send({msg: "approve successfully"})
                 }
                 else if(existedRequest.type === RequestTypeEnum.EXTEND_PROJECT){
@@ -221,21 +265,42 @@ export const putApproveARequest = async (req: Request, res: Response, next: Next
                     const newEndTime = new Date(endTime.setMonth(endTime.getMonth() + existedRequest.extensionTime));
                     chosenTopic.endTime = newEndTime
 
-                    const newTopic = await TopicModel.findOneAndUpdate({_id: existedRequest.topicId}, chosenTopic, 
+                    await TopicModel.findOneAndUpdate({_id: existedRequest.topicId}, chosenTopic, 
                         {new : true})
                     existedRequest.status = RequestStatusEnum.APPROVED;
-                    const newRequest = await existedRequest.save();
+                    await existedRequest.save();
                     res.status(200).send({msg: "approve successfully"})
                 }
                 else{
                     
                     existedRequest.status = RequestStatusEnum.APPROVED;
-                    const newRequest = await existedRequest.save();
+                    await existedRequest.save();
                     res.status(200).send({msg: "approve successfully"})
                 }
-            
-            }
+
+                const notification: NotificationIntf = {
+                    author: "Hệ thống",
+                    subject: "Yêu cầu đã được phê duyệt",
+                    content: "Yêu cầu " + existedRequest.type + " cho đề tài " + chosenTopic.name + " đã được phê duyệt.",
+                    createAt: (new Date()).toString(),
+                    redirect: "/myRequest",
+                    isRead: false
+                }
     
+                const student = await StudentModel.findById(existedRequest.studentId)
+                if(student){
+                    let currentNotifications = student.notifications;
+                    currentNotifications = currentNotifications.concat([notification]);
+                    student.notifications = currentNotifications;
+                    student.numNotification = student.numNotification + 1;
+    
+                    await student.save();
+                }
+                else{
+                    res.status(404).send({msg: 'Student not found'})
+                }
+
+            }
             else {
                 res.status(404).send({err: "Request not existed"})
             }

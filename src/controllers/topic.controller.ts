@@ -6,6 +6,7 @@ import { unlink } from "fs";
 import { regexInterface } from "../interface/general.interface";
 import { topicGeneralInterface, instructor, topicInputInterface, 
     updateTopicInputForFS, updateTopicInputForStudent } from "../interface/topic.interface";
+import { NotificationIntf } from "../interface/notification.interface";
 
 const TopicModel = require('../models/topic.model');
 const AllocatedExpenseModel = require('../models/allocatedExpense.model');
@@ -160,6 +161,29 @@ export const postAddNewTopic = async (req: Request, res: Response, next: NextFun
             }
             const topic = new TopicModel(topicData);
             const newTopic = await topic.save();
+
+            const notification: NotificationIntf = {
+                author: "Hệ thống",
+                subject: "Đã đăng ký thành công đề tài",
+                content: "Bạn đã đăng ký mới thành công đề tài " + topicData.name + "."
+                    + " Sau khi đề tài được xét duyệt thành công thì bạn có thể bắt đầu làm đề tài",
+                createAt: (new Date()).toString(),
+                redirect: "/myTopic",
+                isRead: false
+            }
+
+            const student = await StudentModel.findById(newTopic.studentId)
+            if(student){
+                let currentNotifications = student.notifications;
+                currentNotifications = currentNotifications.concat([notification]);
+                student.notifications = currentNotifications;
+                student.numNotification = student.numNotification + 1;
+
+                await student.save();
+            }
+            else{
+                res.status(404).send({msg: 'Student not found'})
+            }
             res.status(200).send({topic: newTopic})
         }
         else {
@@ -206,8 +230,9 @@ export const putUpdateTopic = async (req: Request, res: Response, next: NextFunc
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD) {
             const existedTopic = await TopicModel.findById(req.params.topicId)
-                                                .select("_id period")
+                                                .select("_id period studentId name")
                                                 .lean();
+            let notExistStudent: boolean = false;
             if (existedTopic) {
                 const update: updateTopicInputForFS = req.body.topic;
                 const updatedTopic = await TopicModel.findOneAndUpdate({_id: req.params.topicId}, update, 
@@ -224,11 +249,40 @@ export const putUpdateTopic = async (req: Request, res: Response, next: NextFunc
                             expense: prev.expense + curr.expense
                         }
                     })
-                    const expense = await AllocatedExpenseModel.findOneAndUpdate({period: periodId}, {
+                    await AllocatedExpenseModel.findOneAndUpdate({period: periodId}, {
                         usedExpense: newExpense.expense
                     })
                 }
-                res.status(200).send({topic : updatedTopic})
+                if(update.topicGivenId && update.startTime && update.endTime && update.status === TopicStatusEnum.CARRY_OUT){
+                    const notification: NotificationIntf = {
+                        author: "Hệ thống",
+                        subject: "Đề tài " + existedTopic.name + " đã được bắt đầu",
+                        content: "Đề tài " + existedTopic.name + " đã được chuyển sang trạng thái " + update.status + "."
+                            + " Bây giờ bạn có thể bắt đầu thực hiện và nộp sản phẩm đề tài",
+                        createAt: (new Date()).toString(),
+                        redirect: "/myTopic",
+                        isRead: false
+                    }
+        
+                    const student = await StudentModel.findById(existedTopic.studentId)
+                    if(student){
+                        let currentNotifications = student.notifications;
+                        currentNotifications = currentNotifications.concat([notification]);
+                        student.notifications = currentNotifications;
+                        student.numNotification = student.numNotification + 1;
+        
+                        await student.save();
+                    }
+                    else{
+                        notExistStudent = true;
+                    }
+                }
+                if(notExistStudent){
+                    res.status(404).send({msg: 'Student not found'})
+                }
+                else{
+                    res.status(200).send({topic : updatedTopic})
+                }
             }
             else {
                 res.status(404).send({msg: "Topic not found"})

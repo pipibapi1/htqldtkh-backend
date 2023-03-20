@@ -3,7 +3,9 @@ import { RoleTypeEnum } from "../enums/roleType.enum";
 import { hash } from "bcrypt";
 import { regexInterface } from "../interface/general.interface";
 const FacultyViceDeanModel = require('../models/facultyViceDean.model');
+const nodemailer = require("nodemailer");
 import dotenv from 'dotenv';
+import { NotificationIntf } from "../interface/notification.interface";
 dotenv.config();
 
 export const getAllFacultyViceDean = async (req: Request, res: Response, next: NextFunction) => {
@@ -80,10 +82,20 @@ export const postAddFacultyViceDean = async (req: Request, res: Response, next: 
             }
             else {
                 let hashPassword = await hash(req.body.viceDean.password, parseInt(process.env.BCRYPT_SALT_ROUND as string));
+                const notification: NotificationIntf = {
+                    author: "Hệ thống",
+                    subject: "Tài khoản được tạo mới bởi Khoa",
+                    content: "Đây là tài khoản được tạo bởi Khoa với thông tin mặc định ban đầu. Bạn có thể cập nhật thông tin trong phần quản lý thông tin cá nhân",
+                    createAt: (new Date()).toString(),
+                    redirect: "/personalInfo",
+                    isRead: false
+                }
                 const newViceDean = new FacultyViceDeanModel({
                     ...req.body.viceDean,
                     password: hashPassword,
-                    accountCreationDate: currentTime
+                    accountCreationDate: currentTime,
+                    notifications: [notification],
+                    numNotification: 1
                 });
                 const result = await newViceDean.save();
                 res.status(200).send({viceDean: result})
@@ -104,6 +116,7 @@ export const putUpdateAFacultyViceDean = async (req: Request, res: Response, nex
             if (viceDean) {
                 const changeableField: string[] = ['name', 'gender', 'email', 'phoneNumber',
                                             'username', 'password', 'image', 'staffId', 'birthDate', 'rawPassword']
+                let signInInfoChange: boolean = false;
                 for (let field in changeableField){
                     if (req.body.viceDean[changeableField[field]]) {
                         if (changeableField[field] == 'password') {
@@ -113,8 +126,49 @@ export const putUpdateAFacultyViceDean = async (req: Request, res: Response, nex
                         else {
                             viceDean[changeableField[field]] = req.body.viceDean[changeableField[field]]
                         }
+
+                        if(changeableField[field] == 'password' || changeableField[field] == 'username'){
+                            signInInfoChange = true;
+                        }
                     }
                 }
+
+                if(signInInfoChange){
+                    const notification: NotificationIntf = {
+                        author: "Hệ thống",
+                        subject: "Thông tin đăng nhập của tài khoản đã được cập nhật",
+                        content: "Thông tin đăng nhập của tài khoản đã được cập nhật và gửi vào email đăng ký của tài khoản này",
+                        createAt: (new Date()).toString(),
+                        redirect: "/personalInfo",
+                        isRead: false
+                    }
+        
+                    let currentNotifications = viceDean.notifications;
+                    currentNotifications = currentNotifications.concat([notification]);
+                    viceDean.notifications = currentNotifications;
+                    viceDean.numNotification = viceDean.numNotification + 1;
+                    
+                    let transporter = nodemailer.createTransport({
+                        service: 'gmail',
+                        host: 'smtp.gmail.com',
+                        secure: false,
+                        auth: {
+                            user: process.env.SYSTEM_EMAIL,
+                            pass: process.env.SYSTEM_EMAIL_APP_PASSWORD,
+                        }
+                    });
+            
+                    const msg = {
+                        from: `"HỆ THỐNG QUẢN LÝ ĐỀ TÀI KHOA HỌC CẤP SINH VIÊN" <${process.env.SYSTEM_EMAIL}>`,
+                        to: viceDean.email,
+                        subject: "Thông tin đăng nhập của tài khoản đã được cập nhật",
+                        text: "Thông tin đăng nhập mới của tài khoản là: \n"
+                        + "Tên đăng nhập: " + viceDean.username + "\n"
+                        + "Mật khẩu: " + viceDean.rawPassword,
+                    }
+                    await transporter.sendMail(msg);
+                }
+
                 const currentViceDean = await viceDean.save();
                 res.status(200).send({viceDean: currentViceDean})
             }
@@ -135,6 +189,23 @@ export const deleteRemoveAFacultyViceDean = async (req: Request, res: Response, 
             const existedViceDean = await FacultyViceDeanModel.findById(req.params._id).lean();
             if (existedViceDean) {
                 await FacultyViceDeanModel.deleteOne({_id: req.params._id})
+                let transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    host: 'smtp.gmail.com',
+                    secure: false,
+                    auth: {
+                        user: process.env.SYSTEM_EMAIL,
+                        pass: process.env.SYSTEM_EMAIL_APP_PASSWORD,
+                    }
+                });
+        
+                const msg = {
+                    from: `"HỆ THỐNG QUẢN LÝ ĐỀ TÀI KHOA HỌC CẤP SINH VIÊN" <${process.env.SYSTEM_EMAIL}>`,
+                    to: existedViceDean.email,
+                    subject: "Tài khoản của bạn đã bị xóa",
+                    text: "Tài khoản của bạn đã bị xóa bởi Khoa",
+                }
+                await transporter.sendMail(msg);
                 res.status(200).send({msg: "Success"})
             }
             else {

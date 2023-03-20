@@ -44,7 +44,7 @@ const resetpwController = async(req: Request, res: Response, next: NextFunction)
                     subject: "Bạn đã reset mật khẩu", // Subject line
                     text: "Mật khẩu mới của tài khoản của bạn là: " + newPassword, // plain text body
                 }
-                const info = await transporter.sendMail(msg);
+                await transporter.sendMail(msg);
 
                 res.status(200).send({msg: "Password reset successfully!"})
             }

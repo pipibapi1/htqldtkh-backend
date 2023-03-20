@@ -1,6 +1,6 @@
 import express, {Router} from 'express';
 import multer from 'multer';
-import { sendEmail } from '../controllers/sendEmail.controller';
+import { resultAndFeedback } from '../controllers/resultAndFeedback.controller';
 
 const upload = multer({
     storage: multer.memoryStorage()
@@ -10,14 +10,14 @@ const router: Router = express.Router();
 /**
   * @openapi
   * tags:
-  *   - name: sendEmail
-  *     description: For sending email
-  * /api/sendEmail:
+  *   - name: resultAndFeedback
+  *     description: For sending results and feedbacks
+  * /api/resultAndFeedback:
   *  post:
   *     tags:
-  *     - sendEmail
-  *     summary: send email
-  *     description: user send email
+  *     - resultAndFeedback
+  *     summary: For sending results and feedbacks
+  *     description: user sends results and feedbacks
   *     requestBody:
   *      required: true
   *      content:
@@ -36,6 +36,6 @@ const router: Router = express.Router();
   *      400:
   *        description: Bad request
   */
-router.post('/',upload.single('file'), sendEmail);
+router.post('/',upload.single('file'), resultAndFeedback);
 
-export const sendEmailRouter: Router = router;
+export const resultAndFeedbackRouter: Router = router;

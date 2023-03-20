@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 const nodemailer = require("nodemailer");
+import { NotificationIntf } from "../interface/notification.interface";
 import dotenv from 'dotenv';
-
+const StudentModel = require('../models/student.model');
 dotenv.config();
 
-export const sendEmail = async (req: Request, res: Response, next: NextFunction) => {
+export const resultAndFeedback = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const info = JSON.parse(req.body.info);
         if(req.file){
@@ -51,7 +52,36 @@ export const sendEmail = async (req: Request, res: Response, next: NextFunction)
             }
             await transporter.sendMail(msg);
         }
-        res.status(200).send({msg: "successfully"})
+        const notification: NotificationIntf = {
+            author: "Hệ thống",
+            subject: info.subject,
+            content: "Chi tiết đã được gửi vào email đăng ký của bạn",
+            createAt: (new Date()).toString(),
+            redirect: "/myTopic",
+            isRead: false
+        }
+
+        const student = await StudentModel.findById(info.studentId)
+        let notExistStudent: boolean = false;
+        if(student){
+            let currentNotifications = student.notifications;
+            currentNotifications = currentNotifications.concat([notification]);
+            student.notifications = currentNotifications;
+            student.numNotification = student.numNotification + 1;
+
+            await student.save();
+        }
+        else{
+            notExistStudent = true
+        }
+        if(notExistStudent){
+            res.status(404).send({msg: 'Student not found'})
+        }
+        else{
+
+            res.status(200).send({msg: "result notified successfully"})
+        }
+       
     } catch (error) {
         res.status(400).send({err: error})
     }

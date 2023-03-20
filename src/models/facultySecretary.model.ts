@@ -70,6 +70,10 @@ const facultySecretarySchema = new Schema({
             redirect: {
                 type: String,
                 require: false
+            },
+            isRead: {
+                type: Boolean,
+                default: false
             }
         }]
     },

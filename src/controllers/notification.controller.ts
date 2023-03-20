@@ -22,7 +22,44 @@ export const getUnreadNotification = async (req: Request, res: Response, next: N
             let numNotification = userInfo.numNotification? userInfo.numNotification : 0;
             numNotification = (numNotification > 20)? 20 : numNotification;
             const totalLength = userInfo.notifications?.length;
-            const notificationsList = userInfo.notifications.slice(totalLength - numNotification, totalLength);
+            const notificationsList: NotificationIntf[] = userInfo.notifications.slice(totalLength - numNotification, totalLength)
+                                                                                .sort((a,b) => {
+                                                                                    return (new Date(b.createAt)).getTime() - (new Date(a.createAt)).getTime();
+                                                                                });
+            res.status(200).send({
+                numNotification: numNotification,
+                notifications: notificationsList
+            })
+        }
+        else if(author.role == RoleTypeEnum.FVD ){
+            const userId = author._id;
+            const userInfo: UserInfo = await ViceDeanModel.findById(userId)
+                                    .select("numNotification notifications")
+                                    .lean();
+            let numNotification = userInfo.numNotification? userInfo.numNotification : 0;
+            numNotification = (numNotification > 20)? 20 : numNotification;
+            const totalLength = userInfo.notifications?.length;
+            const notificationsList: NotificationIntf[] = userInfo.notifications.slice(totalLength - numNotification, totalLength)
+                                                                                .sort((a,b) => {
+                                                                                    return (new Date(b.createAt)).getTime() - (new Date(a.createAt)).getTime();
+                                                                                });
+            res.status(200).send({
+                numNotification: numNotification,
+                notifications: notificationsList
+            })
+        }
+        else if(author.role == RoleTypeEnum.FS){
+            const userId = author._id;
+            const userInfo: UserInfo = await SecretaryModel.findById(userId)
+                                    .select("numNotification notifications")
+                                    .lean();
+            let numNotification = userInfo.numNotification? userInfo.numNotification : 0;
+            numNotification = (numNotification > 20)? 20 : numNotification;
+            const totalLength = userInfo.notifications?.length;
+            const notificationsList: NotificationIntf[] = userInfo.notifications.slice(totalLength - numNotification, totalLength)
+                                                                                .sort((a,b) => {
+                                                                                    return (new Date(b.createAt)).getTime() - (new Date(a.createAt)).getTime();
+                                                                                });
             res.status(200).send({
                 numNotification: numNotification,
                 notifications: notificationsList
