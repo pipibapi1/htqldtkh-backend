@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { TopicTypeEnum } from '../enums/topicType.enum';
 import { TopicStatusEnum } from '../enums/topicStatus.enum';
 import { TopicResultEnum } from '../enums/topicResult.enum';
+import { string } from 'zod';
 const Schema = mongoose.Schema;
 const otherMemberSchema = require('./otherMember.schema');
 
@@ -77,6 +78,10 @@ const topicSchema = new Schema({
     },
     instructorsId: {
         type: [String],
+        default: []
+    },
+    instructors: {
+        type: [Object],
         default: []
     },
     otherMembers: {

@@ -107,7 +107,7 @@ export const getTopicDetail = async (req: Request, res: Response, next: NextFunc
         const topicId: string = req.params.topicId;
         const chosenField: string[] = ["_id", "name", "type", "startTime", "endTime", "isExtended", "extensionTime",
                                         "status", "period", "productId", "studentId", "creationDate", "topicGivenId",
-                                        "expense", "instructorsId", "otherMembers"];
+                                        "expense", "instructors", "otherMembers"];
         const topic: topicGeneralInterface = await TopicModel.findById(topicId)
                                                 .select(chosenField.join(" "))
                                                 .lean();
@@ -124,15 +124,7 @@ export const getTopicDetail = async (req: Request, res: Response, next: NextFunc
                                                                             .select("period")
                                                                             .lean();                                                                
             topic.student = student;
-            topic.periodValue = period.period
-            topic.instructors = [];
-            const instructorIdList = topic.instructorsId as string[];
-            for (let index in instructorIdList) {
-                const instructorId = instructorIdList[index];
-                const instructor: instructor = await InstructorModel.find({_id: instructorId})
-                .lean();
-                topic.instructors = topic.instructors.concat(instructor);
-            }
+            topic.periodValue = period.period;
             res.status(200).send({topic: topic});
         }
     } catch (error) {
