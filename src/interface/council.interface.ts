@@ -1,3 +1,5 @@
+import { instructor } from "./topic.interface"
+
 export interface CouncilInfoIntf {
     _id: string,
     name: string,
@@ -54,6 +56,7 @@ export interface TopicInfoIntf {
     acceptanceResult?: string,
     reviewResult?: string,
     expense?: number,
+    instructors?: instructor[],
     instructorsId?: string[],
     instructorsName?: string[]
 }

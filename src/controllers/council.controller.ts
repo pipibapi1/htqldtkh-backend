@@ -4,6 +4,7 @@ import { CouncilStatusEnum } from "../enums/councilStatus.enum";
 import { CouncilInfoIntf, CouncilDetailIntf, CouncilMemberIntf, 
     TopicInfoIntf, CouncilInputIntf } from "../interface/council.interface";
 import { CouncilTypeEnum } from "../enums/councilType.enum";
+import { TopicStatusEnum } from "../enums/topicStatus.enum";
 
 const CouncilModel = require('../models/council.model');
 const TopicModel = require('../models/topic.model');
@@ -66,8 +67,7 @@ export const getCouncilDetail = async (req: Request, res: Response, next: NextFu
                     filter = {
                         reviewCouncilId: council._id
                     }
-                    const chosenField = ["name", "topicGivenId", "reviewResult", "studentId", "instructorsId", 
-                                        "type"]
+                    const chosenField = ["name", "topicGivenId", "reviewResult", "instructors", "studentId", "type"]
                     let topicArray: TopicInfoIntf[] = await TopicModel.find(filter)
                                                         .select(chosenField.join(" "))
                                                         .lean();
@@ -78,15 +78,12 @@ export const getCouncilDetail = async (req: Request, res: Response, next: NextFu
                                                             .lean();
                         topicArray[index].studentName = leader.name;
                         currTopic.instructorsName = [];
-                        const instructorIdList = currTopic.instructorsId? currTopic.instructorsId : [];
-                        for(let instructorIdx = 0; instructorIdx < instructorIdList.length; instructorIdx++) {
-                            const instructorId = instructorIdList[instructorIdx]
-                            const instructor: {_id: string, name: string} = await InstructorModel.findById(instructorId)
-                                                                                .select("name")
-                                                                                .lean();
+                        const instructorList = currTopic.instructors?currTopic.instructors:[];
+                        for(let instructorIdx = 0; instructorIdx < instructorList.length; instructorIdx++) {
+                            const instructor = instructorList[instructorIdx];
                             currTopic.instructorsName.push(instructor.name);
                         }
-                        delete currTopic.instructorsId;
+                        delete currTopic.instructors;
                     }
                     council.topicGeneralInfos = topicArray;
                     council.numTopics = topicArray.length;
@@ -96,8 +93,7 @@ export const getCouncilDetail = async (req: Request, res: Response, next: NextFu
                     filter = {
                         acceptanceCouncilId: council._id
                     }
-                    const chosenField = ["name", "topicGivenId", "acceptanceResult", "studentId", "instructorsId", 
-                                        "type"]
+                    const chosenField = ["name", "topicGivenId", "acceptanceResult", "studentId", "instructors", "type"]
                     let topicArray: TopicInfoIntf[] = await TopicModel.find(filter)
                                                         .select(chosenField.join(" "))
                                                         .lean();
@@ -108,12 +104,9 @@ export const getCouncilDetail = async (req: Request, res: Response, next: NextFu
                                                             .lean();
                         topicArray[index].studentName = leader.name;
                         currTopic.instructorsName = [];
-                        const instructorIdList = currTopic.instructorsId? currTopic.instructorsId : [];
-                        for(let instructorIdx = 0; instructorIdx < instructorIdList.length; instructorIdx++) {
-                            const instructorId = instructorIdList[instructorIdx]
-                            const instructor: {_id: string, name: string} = await InstructorModel.findById(instructorId)
-                                                                                .select("name")
-                                                                                .lean();
+                        const instructorList = currTopic.instructors?currTopic.instructors:[];
+                        for(let instructorIdx = 0; instructorIdx < instructorList.length; instructorIdx++) {
+                            const instructor = instructorList[instructorIdx];
                             currTopic.instructorsName.push(instructor.name);
                         }
                         delete currTopic.instructorsId;
@@ -305,7 +298,8 @@ export const getCouncilStatistics = async (req: Request, res: Response, next: Ne
             if (type && period) {
                 if (type === CouncilTypeEnum.XD) {
                     const topicNeedCouncilFilter = {
-                        period: period
+                        period: period,
+                        status: TopicStatusEnum.READY
                     }
                     const topicNeedCouncil: topicReviewCouncilInfo[] = await TopicModel.find(topicNeedCouncilFilter)
                                                                     .select("reviewCouncilId")
@@ -330,7 +324,8 @@ export const getCouncilStatistics = async (req: Request, res: Response, next: Ne
                 }
                 else {
                     const topicNeedCouncilFilter = {
-                        period: period
+                        period: period,
+                        status: TopicStatusEnum.DUE_TO_ACCEPT
                     }
                     const topicNeedCouncil: topicAcceptanceCouncilInfo[] = await TopicModel.find(topicNeedCouncilFilter)
                                                                     .select("acceptanceCouncilId")
