@@ -7,9 +7,14 @@ import swaggerDocs from './src/utils/swagger.util';
 var cors = require('cors')
 import bodyParser from 'body-parser';
 
+import { updateTopicStatusScheduler } from './src/schedulers/updateTopicStatus.scheduler';
+
 dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || '5000';
+
+// node-cron scheduler
+updateTopicStatusScheduler.start();
 
 app.use(cors());
 

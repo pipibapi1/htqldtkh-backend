@@ -11,7 +11,6 @@ import { NotificationIntf } from "../interface/notification.interface";
 const TopicModel = require('../models/topic.model');
 const AllocatedExpenseModel = require('../models/allocatedExpense.model');
 const StudentModel = require('../models/student.model');
-const InstructorModel = require('../models/instructor.model');
 const PeriodModel = require('../models/period.model');
 const RelevantPaperModel = require('../models/relevantPaper.model');
 
