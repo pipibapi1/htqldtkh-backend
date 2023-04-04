@@ -3,7 +3,14 @@ export interface topicConditionIntf {
     type: string,
     createAt?: string,
     expression: {[k: string]: (relationExprIntf | logicExprIntf)},
-    leaderCondition?: string[]
+    leaderCondition?: string[],
+    instructorCondition: instructorConditionIntf
+}
+
+export interface instructorConditionIntf {
+    degree: string[],
+    academyRank: string[],
+    approveWay: string
 }
 
 export interface relationExprIntf {
