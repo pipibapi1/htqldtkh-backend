@@ -9,6 +9,8 @@ import { object, string, TypeOf, boolean, number } from "zod";
   *        - type
   *        - createAt
   *        - expression
+  *        - leaderCondition
+  *        - instructionCondition
   *      properties:
   *        _id:
   *          type: string
@@ -20,5 +22,11 @@ import { object, string, TypeOf, boolean, number } from "zod";
   *          type: string
   *          example: 01/01/2023
   *        expression:
+  *          type: object
+  *        leaderCondition:
+  *          type: array
+  *          items: 
+  *            type: string
+  *        instructionCondition:
   *          type: object
   */
