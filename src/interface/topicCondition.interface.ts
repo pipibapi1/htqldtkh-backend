@@ -19,7 +19,21 @@ export interface relationExprIntf {
 
 export interface logicExprIntf{
     operator: string,
-    object: string,
-    leftExpr: {variable: string, weight?: string}[],
+    object: topicMemberObject,
+    leftExpr: variableIntf[],
     rightValue: string
+}
+
+interface variableIntf {
+    variable: string, 
+    weight?: string,
+    key: string,
+    subjectName?: string,
+    subjectId?: string
+}
+
+interface topicMemberObject {
+    name: string,
+    quantity?: string,
+    compare?: string
 }
