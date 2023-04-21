@@ -1,0 +1,26 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "./index.ts",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/"
+        }
+    ],
+    "regions": ["sin1"],
+    "installCommand": "npm install",
+    "env": {
+        "DB_CONNECTION_STRING" : "mongodb+srv://pipibapi1:13111620@cluster0.zfknm.mongodb.net/htqldtkh_db",
+        "NODE_ENV": "production",
+        "PORT": "8000",
+        "JWT_SECRET": "ht!@ql-dtkh_secret",
+        "BCRYPT_SALT_ROUND": "10",
+        "SYSTEM_EMAIL": "htqldtkh@gmail.com",
+        "SYSTEM_EMAIL_APP_PASSWORD": "xctmrnyubayyhpbi"
+    }
+}

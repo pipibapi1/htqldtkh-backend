@@ -47,6 +47,7 @@ export interface topicInputInterface {
     topicGivenId: string,
     otherMembers: otherMember[],
     instructorsId: string[],
+    instructors?: instructor[],
     isExtended: boolean,
     extensionTime: number,
     expense: number,
@@ -93,7 +94,7 @@ export interface instructor {
     gender: string,
     email: string,
     phoneNumber: string,
-    birthDate: string,
+    birthDate?: string,
     academyRank: string,
     degree: string
 }

@@ -1,0 +1,43 @@
+POST http://localhost:8000/api/topic
+authorization:JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2luaCB2acOqbiIsIl9pZCI6IjY0MjdkN2ViYmU3ODVlZDI0YzM2NGVhNyIsInN0dWRlbnRJZCI6IjIxMTAyMjAiLCJlbWFpbCI6ImxlcXVvY2RhaUBnbWFpbC5jb20iLCJpYXQiOjE2ODE4OTM2NjR9.R5sb0UBC8HwJNj5-hLVO5_B-_0yIKkPCxm5qPUZxZVs
+
+{
+    "topic": {
+        "name": "Hệ thống thử 1",
+        "type": "Chính quy",
+        "period": "63efa36a1c711759b6a7e463",
+        "status": "",
+        "studentId": "",
+        "creationDate": "",
+        "productId": "",
+        "topicGivenId": "",
+        "instructorsId": ["FAKESTAFFID002"],
+        "instructors": [
+            {
+                "staffId": "FAKESTAFFID002",
+                "name": "Quản Thành Thơ",
+                "gender": "Nam",
+                "email": "qttho@hcmut.edu.vn",
+                "phoneNumber": "38647256",
+                "academyRank": "Phó giáo sư",
+                "degree": "Tiến sỹ"
+            }
+        ],
+        "isExtended": false,
+        "extensionTime": 0,
+        "expense": 0,
+        "acceptanceCouncilId": "",
+        "reviewCouncilId": "",
+        "otherMembers": [
+            {
+                "studentId": "1912916",
+                "name": "Phạm Minh Duy",
+                "gender": "Nam",
+                "email": "duy.pham1711a@hcmut.edu.vn",
+                "phoneNumber": "",
+                "educationType": "Chính quy",
+                "birthDate": "2001-11-17"
+            }
+        ]
+    }
+}

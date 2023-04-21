@@ -64,6 +64,7 @@ export const authorizationMiddleware = async (req: Request, res: Response, next:
             res.status(403).send({msg: "Token not found"})
         }
     } catch (error) {
+        console.log(error);
         res.status(400).send({msg: "authorize failed"})
     }
 }

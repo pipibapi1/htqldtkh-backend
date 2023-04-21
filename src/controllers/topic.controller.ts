@@ -148,10 +148,11 @@ export const postAddNewTopic = async (req: Request, res: Response, next: NextFun
             topicData.acceptanceCouncilId = "" as string;
             topicData.reviewCouncilId = "" as string;
             if (author.role === RoleTypeEnum.Student) {
-                    topicData.studentId = author._id
+                topicData.studentId = author._id
             }
             const topic = new TopicModel(topicData);
             const newTopic = await topic.save();
+            delete newTopic.notifications;
 
             const notification: NotificationIntf = {
                 author: "Hệ thống",
@@ -182,6 +183,7 @@ export const postAddNewTopic = async (req: Request, res: Response, next: NextFun
         }
     } catch (error) {
         res.status(400).send({err: error})
+        console.log(error);
     }
 }
 
