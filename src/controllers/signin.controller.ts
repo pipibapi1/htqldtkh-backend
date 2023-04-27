@@ -23,6 +23,7 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
                     }, process.env.JWT_SECRET as string)
                     delete student.username;
                     delete student.password;
+                    delete student.notifications;
                     const result = {
                         ...student,
                         token: token,
@@ -51,6 +52,7 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
                     }, process.env.JWT_SECRET as string)
                     delete secretary.username;
                     delete secretary.password;
+                    delete secretary.notifications;
                     const result = {
                         ...secretary,
                         token: token,
@@ -79,6 +81,7 @@ const signInController = async (req: Request, res: Response, next: NextFunction)
                     }, process.env.JWT_SECRET as string)
                     delete viceDean.username;
                     delete viceDean.password;
+                    delete viceDean.notifications;
                     const result = {
                         ...viceDean,
                         token: token,

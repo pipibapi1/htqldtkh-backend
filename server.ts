@@ -1,20 +1,8 @@
 import express, {Express} from 'express';
-import dotenv from 'dotenv';
 import { fullRouter } from './src/routes';
-// connect database
-import "./db-connection"
-import swaggerDocs from './src/utils/swagger.util';
 var cors = require('cors')
 import bodyParser from 'body-parser';
-
-import { updateTopicStatusScheduler } from './src/schedulers/updateTopicStatus.scheduler';
-
-dotenv.config();
 const app: Express = express();
-const port = process.env.PORT || '5000';
-
-// node-cron scheduler
-updateTopicStatusScheduler.start();
 
 app.use(cors());
 
@@ -40,8 +28,5 @@ app.use(express.static('public'));
 import testAuth from './src/controllers/testAuth.controller';
 app.get("/", testAuth);
 app.use('/api', fullRouter);
-
-// generate swagger api docs
-swaggerDocs(app, port);
 
 module.exports = app;
