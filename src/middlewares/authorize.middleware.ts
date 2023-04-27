@@ -29,7 +29,7 @@ export const authorizationMiddleware = async (req: Request, res: Response, next:
             let author: student | staff = jwt.verify(token, process.env.JWT_SECRET as string);
             let check: boolean = false;
             if (author.role == RoleTypeEnum.Student) {
-                const user = await StudentModel.findById(author._id)
+                const user = await StudentModel.findOne({_id: author._id as string})
                                             .select("_id studentId email")
                                             .lean();
                 if ((user.studentId === (author as student).studentId) && (user.email === author.email)) {
@@ -64,7 +64,7 @@ export const authorizationMiddleware = async (req: Request, res: Response, next:
             res.status(403).send({msg: "Token not found"})
         }
     } catch (error) {
-        console.log(error);
+        console.log(error)
         res.status(400).send({msg: "authorize failed"})
     }
 }

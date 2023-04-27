@@ -1,4 +1,4 @@
-POST http://localhost:8000/api/topic
+POST http://103.130.214.250:8000/api/topic
 authorization:JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2luaCB2acOqbiIsIl9pZCI6IjY0MjdkN2ViYmU3ODVlZDI0YzM2NGVhNyIsInN0dWRlbnRJZCI6IjIxMTAyMjAiLCJlbWFpbCI6ImxlcXVvY2RhaUBnbWFpbC5jb20iLCJpYXQiOjE2ODE4OTM2NjR9.R5sb0UBC8HwJNj5-hLVO5_B-_0yIKkPCxm5qPUZxZVs
 
 {
@@ -40,4 +40,26 @@ authorization:JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2luaCB2acOqb
             }
         ]
     }
+}
+###
+
+POST http://103.130.214.250:8000/api/auth/signin
+Accept:application/json
+Content-Type:application/json
+
+{
+  "username": "staff1",
+  "password": "12345678",
+  "role": "thư ký khoa"
+}
+###
+
+POST http://localhost:8000/api/auth/signin
+Accept:application/json
+Content-Type:application/json
+
+{
+  "username": "staff1",
+  "password": "12345678",
+  "role": "thư ký khoa"
 }

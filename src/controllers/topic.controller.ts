@@ -152,7 +152,6 @@ export const postAddNewTopic = async (req: Request, res: Response, next: NextFun
             }
             const topic = new TopicModel(topicData);
             const newTopic = await topic.save();
-            delete newTopic.notifications;
 
             const notification: NotificationIntf = {
                 author: "Hệ thống",
@@ -165,25 +164,28 @@ export const postAddNewTopic = async (req: Request, res: Response, next: NextFun
             }
 
             const student = await StudentModel.findById(newTopic.studentId)
+                                    .select("_id")
+                                    .lean();
             if(student){
-                let currentNotifications = student.notifications;
-                currentNotifications = currentNotifications.concat([notification]);
-                student.notifications = currentNotifications;
-                student.numNotification = student.numNotification + 1;
-
-                await student.save();
+                await StudentModel.findOneAndUpdate({_id: newTopic.studentId}, {
+                    $push: {
+                        notifications: notification
+                    },
+                    $inc: {
+                        numNotification: 1
+                    }
+                })
+                res.status(200).send({topic: newTopic})
             }
             else{
                 res.status(404).send({msg: 'Student not found'})
             }
-            res.status(200).send({topic: newTopic})
         }
         else {
             res.status(403).send({msg: "Not authorization"})
         }
     } catch (error) {
         res.status(400).send({err: error})
-        console.log(error);
     }
 }
 
