@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { TopicTypeEnum } from '../enums/topicType.enum';
 import { InstructorConditionApproveWayEnum } from '../enums/instructorConditionApproveWay.enum';
+import { ConditionRequireLevelEnum } from '../enums/conditionRequireDegree.enum';
 const Schema = mongoose.Schema;
 
 const topicConditionSchema = new Schema({
@@ -38,19 +39,12 @@ const topicConditionSchema = new Schema({
                 default: InstructorConditionApproveWayEnum.ALL
             }
         }
+    },
+    requireLevel: {
+        type: String,
+        default: ConditionRequireLevelEnum.REQUIRED,
+        enum: Object.values(ConditionRequireLevelEnum)
     }
-    // instructorDegreeCondition: {
-    //     type: [String],
-    //     default: []
-    // },
-    // instructorAcademyRankCondition: {
-    //     type: [String],
-    //     default: []
-    // },
-    // instructorConditionApproveWay: {
-    //     type: String,
-    //     enum: Object.values(InstructorConditionApproveWayEnum)
-    // }
 }, {collection: "topicCondition"})
 
 let topicConditionModel = mongoose.model("topicCondition", topicConditionSchema);

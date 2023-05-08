@@ -38,8 +38,9 @@ export const getTopicTypeAvailable = async (req: Request, res: Response, next: N
                 }
             }
             const result = latestConditions.filter((condition) => {
-                if (condition.leaderCondition?.find((ele) => ele == typeLeader)) {
-                    return true
+                if (condition.leaderCondition?.find((ele) => ele == typeLeader))
+                {
+                    return true;
                 }
                 return false
             }).map((condition) => {
@@ -51,7 +52,6 @@ export const getTopicTypeAvailable = async (req: Request, res: Response, next: N
             res.status(400).send({msg: "Not valid type"})
         }
     } catch (error) {
-        console.log(error)
         res.status(400).send({err: error})
     }
 }
