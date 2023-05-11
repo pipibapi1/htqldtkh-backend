@@ -1,4 +1,4 @@
-import {afterAll, beforeAll, describe, expect, test} from '@jest/globals';
+import {afterAll, beforeAll, describe, expect, test, beforeEach} from '@jest/globals';
 import mongoose from 'mongoose';
 import supertest from 'supertest';
 import { topicInputInterface } from '../../src/interface/topic.interface';
@@ -9,6 +9,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { initStudentCollection } from '../init_data/student';
 import { initTopicCollection } from '../init_data/topic';
+import { TopicInfoIntf } from '../../src/interface/council.interface';
+import { initPeriodColection } from '../init_data/period';
 
 const TopicModel = require('../../src/models/topic.model');
 const app = require('../../server');
@@ -24,7 +26,8 @@ describe('topic', () => {
         mongoose.set('strictQuery', false);
         mongoose.connect(process.env.DB_CONNECTION_STRING as string);
         connection = mongoose.connection;
-        connection.useDb('htqldtkh_db')
+        connection.useDb('htqldtkh_db');
+        await initPeriodColection();
         await initStudentCollection();
         await initTopicCollection();
     })
@@ -116,20 +119,20 @@ describe('topic', () => {
             }
         
             test('should response topic same with expected', async () => {
-                const response = request.post(TOPIC_URL)
+                const response = await request.post(TOPIC_URL)
                                     .set("Authorization", STUDENT_TOKEN)
                                     .send({topic: newTopic})
-                                    .then((result) => {
-                                        return result.body.topic;
-                                    })
-                expect(response).resolves.toMatchObject(expected)
+                if (response.body.topic?._id){
+                    await TopicModel.deleteOne({_id: response.body.topic._id});
+                }
+                expect(response.body.topic).toMatchObject(expected)
             }, 3000)
         
             test('should write new topic to database', async () => {
                 const response = await request.post(TOPIC_URL)
                                     .set("Authorization", STUDENT_TOKEN)
                                     .send({topic: newTopic});
-                const checkTopicInDb = await TopicModel.findOne({_id: response.body.topic?._id});
+                const checkTopicInDb = await TopicModel.findOneAndDelete({_id: response.body.topic?._id});
                 expect(checkTopicInDb).not.toBeNull();
             }, 3000)
         })
@@ -216,20 +219,20 @@ describe('topic', () => {
             }
         
             test('should response topic same with expected', async () => {
-                const response = request.post(TOPIC_URL)
+                const response = await request.post(TOPIC_URL)
                                     .set("Authorization", SECRETARY_TOKEN)
-                                    .send({topic: newTopic})
-                                    .then((result) => {
-                                        return result.body.topic;
-                                    })
-                expect(response).resolves.toMatchObject(expected)
+                                    .send({topic: newTopic});
+                if (response.body.topic?._id){
+                    await TopicModel.deleteOne({_id: response.body.topic._id});
+                }
+                expect(response.body.topic).toMatchObject(expected)
             }, 3000)
         
             test('should write new topic to database', async () => {
                 const response = await request.post(TOPIC_URL)
                                     .set("Authorization", SECRETARY_TOKEN)
                                     .send({topic: newTopic});
-                const checkTopicInDb = await TopicModel.findOne({_id: response.body.topic?._id});
+                const checkTopicInDb = await TopicModel.findOneAndDelete({_id: response.body.topic?._id});
                 expect(checkTopicInDb).not.toBeNull();
             }, 3000)
         })
@@ -278,8 +281,14 @@ describe('topic', () => {
         
             test('leader student should get topic same with expected', async () => {
                 const response = await request.get(`${TOPIC_URL}/${TEST_TOPIC_ID}`)
-                                    .set('Authorization', STUDENT_TOKEN)
+                                    .set('Authorization', STUDENT_TOKEN);
                 expect(response.body.topic).toMatchObject(expected)
+            }, 3000)
+        
+            test('leader student cannot get topic of another leader', async () => {
+                const response = await request.get(`${TOPIC_URL}/64493abceeb51a44b8a2c004`)
+                                    .set('Authorization', STUDENT_TOKEN);
+                expect(response.status).not.toBe(200);
             }, 3000)
         
             test('secretary should get topic same with expected', async () => {
@@ -287,6 +296,161 @@ describe('topic', () => {
                                     .set('Authorization', SECRETARY_TOKEN)
                 expect(response.body.topic).toMatchObject(expected)
             }, 3000)
+        })
+        
+        describe('get a list topic', () => {
+        
+            test('secretary should get list topic same with expected', async () => {
+                const response = await request.get(`${TOPIC_URL}/?page=1&limit=5&period=63efa36a1c711759b6a7e463`)
+                                    .set('Authorization', SECRETARY_TOKEN);
+                const topicList: TopicInfoIntf[] = response.body.topics;
+                const topicIdList = topicList.map((topic) => {
+                    return topic._id;
+                })
+                const expected: string[] = ["64493abceeb51a44b8a2bff6", "64493abceeb51a44b8a2bff8", 
+                                            "64493abceeb51a44b8a2c004", "64493abceeb51a44b8a2c006"]
+                expect(topicIdList).toEqual(expected);
+            }, 3000)
+                    
+            test('secretary should get empty list when out range', async () => {
+                const response = await request.get(`${TOPIC_URL}/?page=5&limit=5&period=63efa36a1c711759b6a7e463`)
+                                    .set('Authorization', SECRETARY_TOKEN);
+                const topicList: TopicInfoIntf[] = response.body.topics;
+                const topicIdList = topicList.map((topic) => {
+                    return topic._id;
+                })
+                const expected: string[] = []
+                expect(topicIdList).toEqual(expected);
+            }, 3000)
+                                
+            test('secretary filter topic by type', async () => {
+                const response = await request.get(`${TOPIC_URL}/?period=63efa36a1c711759b6a7e463&type=${encodeURI(TopicTypeEnum.CQ)}`)
+                                    .set('Authorization', SECRETARY_TOKEN);
+                const topicList: TopicInfoIntf[] = response.body.topics;
+                const topicIdList = topicList.map((topic) => {
+                    return topic._id;
+                })
+                const expected: string[] = ["64493abceeb51a44b8a2c004", "64493abceeb51a44b8a2c006"]
+                expect(topicIdList).toEqual(expected);
+            }, 3000)
+                                            
+            test('secretary filter topic by status', async () => {
+                console.log(encodeURI(TopicStatusEnum.NEW))
+                const response = await request.get(`${TOPIC_URL}/?period=63efa36a1c711759b6a7e463&status=${encodeURI(TopicStatusEnum.NEW)}`)
+                                    .set('Authorization', SECRETARY_TOKEN);
+                const topicList: TopicInfoIntf[] = response.body.topics;
+                const topicIdList = topicList.map((topic) => {
+                    return topic._id;
+                })
+                const expected: string[] = ["64493abceeb51a44b8a2bff6", "64493abceeb51a44b8a2c004"]
+                expect(topicIdList).toEqual(expected);
+            }, 3000)   
+
+            test('secretary filter topic by leader id', async () => {
+                const response = await request.get(`${TOPIC_URL}/?period=63efa36a1c711759b6a7e463&student=6427d7ebbe785ed24c364ea7`)
+                                    .set('Authorization', SECRETARY_TOKEN);
+                const topicList: TopicInfoIntf[] = response.body.topics;
+                const topicIdList = topicList.map((topic) => {
+                    return topic._id;
+                })
+                const expected: string[] = ["64493abceeb51a44b8a2bff6", "64493abceeb51a44b8a2bff8"]
+                expect(topicIdList).toEqual(expected);
+            }, 3000)
+
+            test('leader can get list topic of that leader', async () => {
+                const response = await request.get(`${TOPIC_URL}/?period=63efa36a1c711759b6a7e463&student=6427d7ebbe785ed24c364ea7`)
+                                    .set('Authorization', STUDENT_TOKEN);
+                const topicList: TopicInfoIntf[] = response.body.topics;
+                const topicIdList = topicList.map((topic) => {
+                    return topic._id;
+                })
+                const expected: string[] = ["64493abceeb51a44b8a2bff6", "64493abceeb51a44b8a2bff8"]
+                expect(topicIdList).toEqual(expected);
+            }, 3000)
+            
+            test('leader can not get list topic of other leader', async () => {
+                const response = await request.get(`${TOPIC_URL}/?period=63efa36a1c711759b6a7e463`)
+                                    .set('Authorization', STUDENT_TOKEN);
+                expect(response.status).not.toEqual(200);
+            }, 3000)
+        })
+    })
+
+    describe('put topic', () => {
+        
+        test('secretary should get new topic after update', async () => {
+            const update: {[k: string] : any} = {
+                status: TopicStatusEnum.READY,
+                startTime: "2022-02-01T00:00:00.000Z",
+                endTime: "2022-08-01T00:00:00.000Z",
+                acceptanceCouncilId: "1234561231",
+                reviewCouncilId: "12232213",
+                acceptanceResult: TopicResultEnum.QUALIFIED,
+                reviewResult: TopicResultEnum.QUALIFIED,
+                topicGivenId: "DTKH-HK222-001"
+            }
+            const response = await request.put(`${TOPIC_URL}/${TEST_TOPIC_ID}`)
+                                        .set('Authorization', SECRETARY_TOKEN)
+                                        .send({topic: update});
+            expect(response.body.topic).toMatchObject(update);
+        })
+
+        test('data should be write on database', async () => {
+            const update: {[k: string] : any} = {
+                status: TopicStatusEnum.READY,
+                startTime: "2022-02-01T00:00:00.000Z",
+                endTime: "2022-08-01T00:00:00.000Z",
+                acceptanceCouncilId: "1234561231",
+                reviewCouncilId: "12232213",
+                acceptanceResult: TopicResultEnum.QUALIFIED,
+                reviewResult: TopicResultEnum.QUALIFIED,
+                topicGivenId: "DTKH-HK222-001"
+            }
+            const response = await request.put(`${TOPIC_URL}/${TEST_TOPIC_ID}`)
+                        .set('Authorization', SECRETARY_TOKEN)
+                        .send({topic: update});
+            const topicInDb = await TopicModel.findById(response.body.topic?._id);
+            expect(topicInDb).toMatchObject(update);
+        })
+
+    })
+
+    describe('delete topic', () => {
+
+        beforeEach(async () => {
+            await initTopicCollection();
+        })
+
+        test('leader can delete topic in "new" status', async () => {
+            const response = await request.delete(`${TOPIC_URL}/${TEST_TOPIC_ID}`)
+                                        .set('Authorization', STUDENT_TOKEN);
+            expect(response.status).toEqual(200)
+        })
+        
+        test('leader should delete topic on database', async () => {
+            const response = await request.delete(`${TOPIC_URL}/${TEST_TOPIC_ID}`)
+                                        .set('Authorization', STUDENT_TOKEN);
+            const existedTopic = await TopicModel.find({_id: TEST_TOPIC_ID})
+                                        .lean()
+                                        .select("_id");
+            expect(existedTopic.length).toEqual(0)
+        })
+
+        test('leader cannot delete topic of another leader', async () => {
+            const response = await request.delete(`${TOPIC_URL}/64493abceeb51a44b8a2c004`)
+                                        .set('Authorization', STUDENT_TOKEN);
+
+            expect(response.status).not.toEqual(200);
+        })
+
+        
+        test('leader cannot delete topic of another leader on database', async () => {
+            const response = await request.delete(`${TOPIC_URL}/64493abceeb51a44b8a2c004`)
+                                        .set('Authorization', STUDENT_TOKEN);
+            const existedTopic = TopicModel.findById("64493abceeb51a44b8a2c004")
+                                        .lean()
+                                        .select("_id");
+            expect(existedTopic).not.toBeNull();
         })
     })
 })
