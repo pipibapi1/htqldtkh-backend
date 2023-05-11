@@ -194,19 +194,24 @@ export const deleteTopic = async (req: Request, res: Response, next: NextFunctio
         const author = req.body.author;
         if (author.role == RoleTypeEnum.FS || author.role == RoleTypeEnum.FVD || author.role == RoleTypeEnum.Student) {
             const existedTopic = await TopicModel.findById(req.params.topicId)
-                                                .select("_id")
+                                                .select("_id studentId status")
                                                 .lean();
             if (existedTopic) {
-                await TopicModel.deleteOne({_id: req.params.topicId});
-                const paperList = await RelevantPaperModel.find({topicId: req.params.topicId})
-                                                          .select("_id paperAttachedFile")
-                                                          .lean();
-                
-                for(let i = 0; i <  paperList.length; ++i){
-                    unlink('uploads/papers/' + paperList[i].paperAttachedFile, ()=>{});
-                    await RelevantPaperModel.deleteOne({_id: paperList[i]._id})
+                if (author.role === RoleTypeEnum.Student && existedTopic.studentId !== author._id) {
+                    res.status(403).send({msg: "Not authorization"})
                 }
-                res.status(200).send({msg: "Delete successful"});
+                else {
+                    await TopicModel.deleteOne({_id: req.params.topicId});
+                    const paperList = await RelevantPaperModel.find({topicId: req.params.topicId})
+                                                              .select("_id paperAttachedFile")
+                                                              .lean();
+                    
+                    for(let i = 0; i <  paperList.length; ++i){
+                        unlink('uploads/papers/' + paperList[i].paperAttachedFile, ()=>{});
+                        await RelevantPaperModel.deleteOne({_id: paperList[i]._id})
+                    }
+                    res.status(200).send({msg: "Delete successful"});
+                }
             }
             else {
                 res.status(404).send({msg: "Topic not found"})
