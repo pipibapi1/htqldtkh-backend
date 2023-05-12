@@ -63,7 +63,7 @@ import { object, string, TypeOf } from "zod";
   *        role:
   *          type: string
   *          example: sinh viên
-  *          enum: [sinh viên, thư ký khoa, phó chủ nhiệm khoa]
+  *          enum: [sinh viên, giáo vụ, cán bộ quản lý]
   *    AuthResponse:
   *      type: object
   *      properties:

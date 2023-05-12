@@ -50,7 +50,7 @@ Content-Type:application/json
 {
   "username": "staff1",
   "password": "12345678",
-  "role": "thư ký khoa"
+  "role": "giáo vụ"
 }
 ###
 
@@ -61,5 +61,5 @@ Content-Type:application/json
 {
   "username": "staff1",
   "password": "12345678",
-  "role": "thư ký khoa"
+  "role": "giáo vụ"
 }
