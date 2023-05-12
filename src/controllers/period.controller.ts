@@ -22,7 +22,6 @@ export const getAllPeriod = async (req: Request, res: Response, next: NextFuncti
                                                                         ;
         res.status(200).send({periods: periods})
     } catch (error) {
-        console.log(error)
         res.status(400).send({err: error})
     }
 }
@@ -39,7 +38,7 @@ export const postAddAPeriod = async (req: Request, res: Response, next: NextFunc
             }
             const newPeriod = new PeriodModel(info);
             const result1 = await newPeriod.save()
-                .then(async(period: periodInterface) => {
+                .then(async (period: periodInterface) => {
                     const lastModified: string = (new Date()).toString();
                     const allocatedExpense = new AllocatedExpenseModel({
                         period: period._id,
@@ -52,12 +51,12 @@ export const postAddAPeriod = async (req: Request, res: Response, next: NextFunc
                         note: ""
                     });
                     const result2 = await allocatedExpense.save();
+                    return period;
                 }
                 )
                 .catch((err: any) => {
                     console.log(err)
-                })
-            ;
+                });
             res.status(200).send({period: result1});
         }
         else {

@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import { TopicStatusEnum } from "../../src/enums/topicStatus.enum";
 
 const mongoose = require('mongoose');
 const initTopic = [{
@@ -10,7 +11,7 @@ const initTopic = [{
 	"isExtended": false,
 	"extensionTime": 0,
 	"expense": 0,
-	"status": "Tạo mới",
+	"status": TopicStatusEnum.NEW,
 	"period": "63efa36a1c711759b6a7e463",
 	"productId": "",
 	"studentId": "6427d7ebbe785ed24c364ea7",
@@ -56,12 +57,12 @@ const initTopic = [{
 	"isExtended": false,
 	"extensionTime": 0,
 	"expense": 0,
-	"status": "Tạo mới",
+	"status": TopicStatusEnum.READY,
 	"period": "63efa36a1c711759b6a7e463",
 	"productId": "",
 	"studentId": "6427d7ebbe785ed24c364ea7",
 	"acceptanceCouncilId": "",
-	"reviewCouncilId": "",
+	"reviewCouncilId": "64562df79ed8dbcbf591ad64",
 	"creationDate": new Date("2023-04-26T14:52:44.000Z"),
 	"acceptanceResult": "Đang chờ",
 	"reviewResult": "Đang chờ",
@@ -101,7 +102,7 @@ const initTopic = [{
 	"isExtended": false,
 	"extensionTime": 0,
 	"expense": 0,
-	"status": "Tạo mới",
+	"status": TopicStatusEnum.NEW,
 	"period": "63efa36a1c711759b6a7e463",
 	"productId": "",
 	"studentId": "641b292640220cc79148bd8c",
@@ -146,7 +147,7 @@ const initTopic = [{
 	"isExtended": false,
 	"extensionTime": 0,
 	"expense": 0,
-	"status": "Tạo mới",
+	"status": TopicStatusEnum.READY,
 	"period": "63efa36a1c711759b6a7e463",
 	"productId": "",
 	"studentId": "641b292640220cc79148bd8c",

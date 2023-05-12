@@ -2,6 +2,7 @@ export interface topicConditionIntf {
     _id?: string,
     type: string,
     createAt?: string,
+    requireLevel: string,
     expression: {[k: string]: (relationExprIntf | logicExprIntf)},
     leaderCondition?: string[],
     instructorCondition: instructorConditionIntf
