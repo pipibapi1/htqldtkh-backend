@@ -57,9 +57,10 @@ export const getListTopic = async (req: Request, res: Response, next: NextFuncti
             let totalPage: number = 0;
             let topicsList: topicGeneralInterface[] = [];
             if (req.query.textSearch) {
-                fullList = await TopicModel.find({ $text: { $search: req.query.textSearch } }).find(filter).select("_id");
+                const pattern = `\"${req.query.textSearch}\"`;
+                fullList = await TopicModel.find({ $text: { $search: pattern } }).find(filter).select("_id");
                 totalPage = fullList.length % limit === 0 ? (fullList.length / limit) : (Math.floor(fullList.length / limit) + 1);
-                topicsList = await TopicModel.find({ $text: { $search: req.query.textSearch } }).find(filter)
+                topicsList = await TopicModel.find({ $text: { $search: pattern } }).find(filter)
                     .select(chosenField.join(" "))
                     .limit(end)
                     .lean()
