@@ -1,6 +1,8 @@
-import express, {Router} from 'express';
-import { getListTopic, getTopicDetail, postAddNewTopic,
-  putUpdateTopic, deleteTopic } from '../controllers/topic.controller';
+import express, { Router } from 'express';
+import {
+  getListTopic, getTopicDetail, postAddNewTopic,
+  putUpdateTopic, deleteTopic
+} from '../controllers/topic.controller';
 import { authorizationMiddleware } from '../middlewares/authorize.middleware';
 
 const router: Router = express.Router();
@@ -61,6 +63,12 @@ const router: Router = express.Router();
   *           type: boolean
   *         required: false
   *         description: is topic extend time
+  *       - in: query
+  *         name: textSearch
+  *         schema:
+  *           type: string
+  *         required: false
+  *         description: the text to search on name or topicGivenId
   *     requestBody:
   *      required: false
   *     responses:
