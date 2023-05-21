@@ -157,7 +157,7 @@ export const postAddNewTopic = async (req: Request, res: Response, next: NextFun
             const topicData: topicInputInterface = req.body.topic;
             topicData.creationDate = (new Date()).toString();
             topicData.productId = "" as string;
-            topicData.status = TopicStatusEnum.NEW;
+            topicData.status = (topicData.status === TopicStatusEnum.WAIT_APPROVED)? TopicStatusEnum.WAIT_APPROVED : TopicStatusEnum.NEW;
             topicData.startTime = "" as string;
             topicData.endTime = "" as string;
             topicData.topicGivenId = "" as string;

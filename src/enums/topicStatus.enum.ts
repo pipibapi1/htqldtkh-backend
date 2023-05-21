@@ -1,4 +1,5 @@
 export const TopicStatusEnum = {
+    WAIT_APPROVED: "Chờ được cho phép",
     NEW: "Tạo mới",
     READY: "Sẵn sàng xét duyệt",
     FAIL_REVIEW: "Rớt xét duyệt",
