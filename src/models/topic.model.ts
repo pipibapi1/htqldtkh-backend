@@ -92,8 +92,8 @@ const topicSchema = new Schema({
         type: String,
         min: 1
     }
-}, {collection: 'topic'})
-
+}, { collection: 'topic' })
+topicSchema.index({ name: 'text', topicGivenId: 'text' });
 let topicModel = mongoose.model('topic', topicSchema);
 
 module.exports = topicModel

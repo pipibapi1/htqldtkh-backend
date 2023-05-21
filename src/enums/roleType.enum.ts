@@ -1,5 +1,5 @@
 export const RoleTypeEnum = {
     Student: "sinh viên",
-    FS: "thư ký khoa",
-    FVD: "phó chủ nhiệm khoa"
+    FS: "giáo vụ",
+    FVD: "cán bộ quản lý"
 } as const;

@@ -11,14 +11,14 @@ dotenv.config();
 const signUpController = async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (req.body.role == RoleTypeEnum.Student) {
-            const existedStudent = await StudentModel.findOne({username : req.body.username});
-            const existedStudentEmail = await StudentModel.findOne({email: req.body.email});
+            const existedStudent = await StudentModel.findOne({ username: req.body.username });
+            const existedStudentEmail = await StudentModel.findOne({ email: req.body.email });
             if (existedStudent || existedStudentEmail) {
-                if(existedStudent){
-                    res.status(400).send({msg: "existed username"})
+                if (existedStudent) {
+                    res.status(400).send({ msg: "existed username" })
                 }
-                if(existedStudentEmail){
-                    res.status(400).send({msg: "existed email"})
+                if (existedStudentEmail) {
+                    res.status(400).send({ msg: "existed email" })
                 }
             }
             else {
@@ -27,7 +27,7 @@ const signUpController = async (req: Request, res: Response, next: NextFunction)
                 const newAccountNotification: NotificationIntf = {
                     author: "Hệ thống",
                     subject: "Tài khoản đang chờ được xét duyệt",
-                    content: "Tài khoản của bạn cần được thư ký khoa duyệt để sử dụng đầy đủ"
+                    content: "Tài khoản của bạn cần được giáo vụ khoa duyệt để sử dụng đầy đủ"
                         + " tính năng. Bạn vẫn có thể thay đổi thông tin cá nhân trước khi tài"
                         + " khoản được duyệt. Sau khi được duyệt, mọi thông tin tài khoản của"
                         + " bạn sẽ không được phép thay đổi",
@@ -61,14 +61,14 @@ const signUpController = async (req: Request, res: Response, next: NextFunction)
                     token: token,
                     role: RoleTypeEnum.Student
                 }
-                res.status(200).send({user: result})
+                res.status(200).send({ user: result })
             }
         }
         else {
-            res.status(400).send({msg: "Not suitable role"})
+            res.status(400).send({ msg: "Not suitable role" })
         }
-    } catch (e:any) {
-        res.status(400).send({err: e})
+    } catch (e: any) {
+        res.status(400).send({ err: e })
     }
 };
 
