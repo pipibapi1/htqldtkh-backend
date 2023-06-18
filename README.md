@@ -16,8 +16,6 @@
 
 #### cors: to enable cors
 
-## 1 Setup
-
 ### 1. Setup packages
 Run command
 ```bash
@@ -26,20 +24,9 @@ cp .env_setup .env
 
 ```bash
 npm install
-npm install -g migrate-mongo (this is optional to use CLI)
 ```
 
-### 2. Migrate MongoDB
-Run command
-```bash
-cd src/database
-```
-
-```bash
-migrate-mongo up
-```
-
-### 3. Run server
+### 2. Run server
 Run command
 ```bash
 npm run build
