@@ -1,3 +1,6 @@
 .env_setup
 .env
 dist/
+unit_test/
+docker/
+vercel.json

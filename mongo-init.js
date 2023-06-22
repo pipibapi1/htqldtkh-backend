@@ -1,14 +1,9 @@
 const { ObjectId } = require("mongodb");
-db = db.getSiblingDB('admin');
-db.createUser({
-  user: 'admin',
-  pwd: 'htqldtkh_cse',
-  roles: [{role: 'readWrite', db: 'htqldtkh_db',}],
-});
 
 db = db.getSiblingDB('htqldtkh_db');
+
 db.createCollection('facultySecretary');
-db.collection('facultySecretary').insertMany([
+db.facultySecretary.insertMany([
   {
     "_id": new ObjectId("63b947c224213638b201493d"),
     "name": "Giáo vụ khoa",

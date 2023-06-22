@@ -8,7 +8,7 @@ FROM node:16-alpine as final
 WORKDIR /app
 
 ENV PORT=8000
-ENV DB_URL=mongodb://localhost:27017
+ENV DB_URL=mongodb://mongodb:27017
 ENV DB_NAME=htqldtkh_db
 ENV DB_CONNECTION_STRING=mongodb://mongodb:27017/htqldtkh_db
 ENV JWT_SECRET=ht!@ql-dtkh_secret
