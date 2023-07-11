@@ -25,8 +25,9 @@ app.use(express.static('public'));
 
 //route
 // For testing
-import testAuth from './src/controllers/testAuth.controller';
-app.get("/", testAuth);
+app.get("/", (req: any, res: any) => {
+    res.status(200).send({msg: "hello world"})
+});
 app.use('/api', fullRouter);
 
 module.exports = app;
